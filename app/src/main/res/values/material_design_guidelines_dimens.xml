@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        # Material Design Dimensions
+
+        These dimensions are provided as per Material Design Guidelines
+        to adhere to a 8 dp baseline grid. (With the exception of the
+        toolbar and notification bar.).
+
+        ## References
+
+        - https://www.google.com/design/spec/layout/metrics-keylines.html
+        - https://material.io/guidelines/style/typography.html#typography-typeface
+    -->
+
+    <!-- Margins & Padding, 8 dp baseline, https://material.io/guidelines/layout/metrics-keylines.html#metrics-keylines-baseline-grids -->
+    <dimen name="button_top_bottom_padding">8dp</dimen>
+    <dimen name="margin_padding_size_xsmall">2dp</dimen>
+    <dimen name="margin_padding_size_small">4dp</dimen>
+    <dimen name="margin_padding_size_medium">8dp</dimen>
+    <dimen name="margin_padding_size_large">12dp</dimen>
+    <dimen name="margin_padding_size_xlarge">16dp</dimen>
+    <dimen name="margin_padding_size_xxlarge">20dp</dimen>
+    <dimen name="margin_padding_size_xxxlarge">24dp</dimen>
+    <dimen name="margin_padding_size_xxxxlarge">40dp</dimen>
+
+    <dimen name="default_fields_space">8dp</dimen>
+    <!-- Launcher Icon Size, https://developer.android.com/guide/practices/ui_guidelines/icon_design_launcher.html#size -->
+
+    <!-- Touch Target Size, https://material.io/guidelines/layout/metrics-keylines.html#metrics-keylines-touch-target-size-->
+
+    <!-- Toolbar, 4 dp baseline, https://material.io/guidelines/layout/metrics-keylines.html#metrics-keylines-baseline-grids -->
+
+    <!-- Font sizes, https://material.io/guidelines/style/typography.html#typography-typeface -->
+    <dimen name="text_size_xmicro">8sp</dimen>
+    <dimen name="text_size_micro">10sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_medium">14sp</dimen>
+    <dimen name="text_size_large">16sp</dimen>
+    <dimen name="text_size_xlarge">26sp</dimen>
+    <dimen name="text_size_xxlarge">32sp</dimen>
+    <dimen name="text_size_xxxlarge">48sp</dimen>
+    <dimen name="text_size_large_title">20sp</dimen>
+
+    <dimen name="icon_size_xsmall">12dp</dimen>
+    <dimen name="icon_size_small">16dp</dimen>
+    <dimen name="icon_size_medium">22dp</dimen>
+    <dimen name="icon_size_large">30dp</dimen>
+    <dimen name="icon_size_xlarge">42dp</dimen>
+    <dimen name="icon_size_xxlarge">56dp</dimen>
+    <dimen name="icon_size_xxxlarge">60dp</dimen>
+
+    <dimen name="menu_size">90dp</dimen>
+
+    <dimen name="dialog_size_width">420dp</dimen>
+
+</resources>

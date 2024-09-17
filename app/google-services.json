@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "623964360858",
+    "project_id": "localinformant-ce93b",
+    "storage_bucket": "localinformant-ce93b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:623964360858:android:3bdc92b79746e2e3030f23",
+        "android_client_info": {
+          "package_name": "com.example.localinformant"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEbnNowJC7nY8bd9JyZsBLKRPeltHi8y8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
