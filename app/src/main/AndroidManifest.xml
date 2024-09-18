@@ -13,6 +13,9 @@
         android:theme="@style/Theme.LocalInformant"
         tools:targetApi="31">
         <activity
+            android:name=".views.activities.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.activities.UsersListAdminActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
@@ -20,7 +23,7 @@
             android:name=".views.activities.RegisterActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".views.activities.LoginActivity"
             android:exported="false"

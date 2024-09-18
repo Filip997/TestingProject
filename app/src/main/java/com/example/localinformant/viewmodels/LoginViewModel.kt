@@ -3,26 +3,45 @@ package com.example.localinformant.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.localinformant.models.LoginUserResponse
-import com.example.localinformant.repositories.LoginRepository
-import kotlinx.coroutines.launch
+import com.example.localinformant.repositories.FirebaseAuthRepository
+import com.google.firebase.auth.FirebaseUser
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class LoginViewModel : ViewModel() {
 
-    private val loginRepository = LoginRepository()
+    private val loginRepository = FirebaseAuthRepository()
 
-    private val loginUserMutable = MutableLiveData<LoginUserResponse>()
-    val loginUserLiveData: LiveData<LoginUserResponse> = loginUserMutable
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean> = _isLoading
+    private val _loginSuccessful = MutableLiveData(false)
+    val loginSuccessful = _loginSuccessful
+    private var _loginMessage = MutableLiveData("")
+    val loginMessage = _loginMessage
+    private val disposables = CompositeDisposable()
+    val user: FirebaseUser? by lazy { loginRepository.currentUser() }
 
-    private val isLoadingMutable = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = isLoadingMutable
+    fun login(email: String, password: String) {
 
-    fun loginUserWithEmailAndPassword(email: String, password: String) {
-        viewModelScope.launch {
-            isLoadingMutable.postValue(true)
-            loginRepository.loginUserWithEmailAndPassword(email, password, loginUserMutable)
-            isLoadingMutable.postValue(false)
-        }
+        val disposable = loginRepository.loginWithEmail(email, password)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                _loginSuccessful.value = true
+                _isLoading.value = false
+            }, {
+                _loginMessage.value = it.localizedMessage?.toString() ?: it.message.toString()
+                _loginSuccessful.value = false
+                _isLoading.value = false
+            })
+        disposables.add(disposable)
     }
+
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.dispose()
+    }
+
 }

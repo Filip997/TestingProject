@@ -20,11 +20,11 @@ class LoginChooserActivity : AppCompatActivity() {
     }
 
     private fun setupButtonClicks() {
-        binding.btnPerson.setOnClickListener {
+        binding.individualCard.setOnClickListener {
             goToLoginActivity(AppConstants.PERSON)
         }
 
-        binding.btnCompany.setOnClickListener {
+        binding.companyCard.setOnClickListener {
             goToLoginActivity(AppConstants.COMPANY)
         }
     }
