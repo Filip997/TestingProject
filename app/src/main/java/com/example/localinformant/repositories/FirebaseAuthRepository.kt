@@ -61,6 +61,7 @@ class FirebaseAuthRepository {
                         val data = hashMapOf(
                             AppConstants.FIRST_NAME to request.firstName,
                             AppConstants.LAST_NAME to request.lastName,
+                            AppConstants.FULL_NAME to "${request.firstName} ${request.lastName}",
                             AppConstants.EMAIL to request.email,
                             AppConstants.PASSWORD to request.password
                         )

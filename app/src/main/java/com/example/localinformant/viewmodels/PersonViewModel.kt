@@ -15,12 +15,12 @@ class PersonViewModel : ViewModel() {
     private val personsMutable = MutableLiveData<List<Person>>()
     val personsLiveData: LiveData<List<Person>> = personsMutable
 
-    private val personMutable = MutableLiveData<Person>()
-    val personLiveData: LiveData<Person> = personMutable
+    private val personMutable = MutableLiveData<Person?>()
+    val personLiveData: LiveData<Person?> = personMutable
 
-    fun searchPersonsByName(nameQuery: String) {
+    fun searchPersonsByName() {
         viewModelScope.launch {
-            val persons = personRepository.searchPersonsByName(nameQuery)
+            val persons = personRepository.searchPersonsByName()
             personsMutable.postValue(persons)
         }
     }

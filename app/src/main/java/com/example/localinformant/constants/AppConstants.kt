@@ -8,6 +8,7 @@ object AppConstants {
     const val COMPANIES = "companies"
     const val FIRST_NAME = "firstName"
     const val LAST_NAME = "lastName"
+    const val FULL_NAME = "fullName"
     const val EMAIL = "email"
     const val PASSWORD = "password"
     const val COMPANY_NAME = "companyName"

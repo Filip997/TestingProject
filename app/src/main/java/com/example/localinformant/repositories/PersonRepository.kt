@@ -14,25 +14,32 @@ class PersonRepository {
     private val auth = Firebase.auth
     private val db = Firebase.firestore
 
-    suspend fun searchPersonsByName(nameQuery: String): List<Person> =
+    /*suspend fun searchPersonsByName(): List<Person> =
         withContext(Dispatchers.IO) {
             try {
                 val querySnapshot = db.collection(AppConstants.PERSONS)
-                    .orderBy("name")
-                    .startAt(nameQuery)
-                    .endAt(nameQuery + "\uf8ff")
+                    .orderBy("fullName")
                     .get()
                     .await()
 
-                querySnapshot.documents.mapNotNull { documentSnapshot ->
+                *//*querySnapshot.documents.mapNotNull { documentSnapshot ->
                     documentSnapshot.toObject(Person::class.java)
-                }
+                }*//*
             } catch (e: Exception) {
                 listOf<Person>()
             }
-        }
+        }*/
 
-    suspend fun getCurrentPerson(): Person? =
+    suspend fun searchPersonsByName(): List<Person> {
+        return db.collection(AppConstants.PERSONS)
+            .orderBy("fullName")
+            .get()
+            .await()
+            .toObjects(Person::class.java)
+    }
+
+
+        suspend fun getCurrentPerson(): Person? =
         withContext(Dispatchers.IO) {
             try {
                 val documentSnapshot = db.collection(AppConstants.PERSONS)

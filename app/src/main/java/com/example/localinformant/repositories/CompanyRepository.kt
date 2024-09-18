@@ -2,6 +2,7 @@ package com.example.localinformant.repositories
 
 import com.example.localinformant.constants.AppConstants
 import com.example.localinformant.models.Company
+import com.example.localinformant.models.Person
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
@@ -14,13 +15,11 @@ class CompanyRepository {
     private val auth = Firebase.auth
     private val db = Firebase.firestore
 
-    suspend fun searchCompaniesByName(nameQuery: String): List<Company> =
+    /*suspend fun searchCompaniesByName(): List<Company> =
         withContext(Dispatchers.IO) {
             try {
                 val querySnapshot = db.collection(AppConstants.COMPANIES)
                     .orderBy("companyName")
-                    .startAt(nameQuery)
-                    .endAt(nameQuery + "\uf8ff")
                     .get()
                     .await()
 
@@ -30,7 +29,15 @@ class CompanyRepository {
             } catch (e: Exception) {
                 listOf<Company>()
             }
-        }
+        }*/
+
+    suspend fun searchCompaniesByName(): List<Company> {
+        return db.collection(AppConstants.COMPANIES)
+            .orderBy("companyName")
+            .get()
+            .await()
+            .toObjects(Company::class.java)
+    }
 
     suspend fun getCurrentCompany(): Company? =
         withContext(Dispatchers.IO) {

@@ -1,5 +1,6 @@
 package com.example.localinformant.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,19 +19,24 @@ class UserViewModel : ViewModel() {
     private val usersMutable = MutableLiveData<List<User>>()
     val usersLiveData: LiveData<List<User>> = usersMutable
 
-    fun searchUsersByName(nameQuery: String) {
+    fun searchUsersByName() {
         viewModelScope.launch {
-            val persons = personRepository.searchPersonsByName(nameQuery)
-            val companies = companyRepository.searchCompaniesByName(nameQuery)
+            //Log.d("searchUserNameQuery", nameQuery)
+
+            val persons = personRepository.searchPersonsByName()
+            val companies = companyRepository.searchCompaniesByName()
+
+            Log.d("searchUserPerson", persons.toString() ?: "")
+            Log.d("searchUserCompany", companies.toString() ?: "")
 
             val users = ArrayList<User>()
 
             persons.forEach {
-                users.add(User(it.id!!, "${it.firstName} ${it.lastName}", AppConstants.PERSON))
+                users.add(User("", it.fullName, AppConstants.PERSON))
             }
 
             companies.forEach {
-                users.add(User(it.id, it.name, AppConstants.COMPANY))
+                users.add(User("", it.companyName, AppConstants.COMPANY))
             }
 
             usersMutable.postValue(users)

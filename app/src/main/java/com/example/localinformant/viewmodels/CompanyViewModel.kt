@@ -15,12 +15,12 @@ class CompanyViewModel : ViewModel() {
     private val companiesMutable = MutableLiveData<List<Company>>()
     val companiesLiveData: LiveData<List<Company>> = companiesMutable
 
-    private val companyMutable = MutableLiveData<Company>()
-    val companyLiveData: LiveData<Company> = companyMutable
+    private val companyMutable = MutableLiveData<Company?>()
+    val companyLiveData: LiveData<Company?> = companyMutable
 
-    fun findCompaniesByName(nameQuery: String) {
+    fun findCompaniesByName() {
         viewModelScope.launch {
-            val companies = companyRepository.searchCompaniesByName(nameQuery)
+            val companies = companyRepository.searchCompaniesByName()
             companiesMutable.postValue(companies)
         }
     }
