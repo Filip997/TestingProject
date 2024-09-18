@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseUser
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
@@ -26,9 +27,6 @@ class LoginViewModel : ViewModel() {
     private var _loginMessage = MutableLiveData("")
     val loginMessage = _loginMessage
 
-    private val _signedOut = MutableLiveData(false)
-    val signedOut = _signedOut
-
     private val _userDeleted = MutableLiveData(false)
     val userDeleted = _userDeleted
 
@@ -39,83 +37,37 @@ class LoginViewModel : ViewModel() {
     val changePasswordMessage = _changePasswordMessage
 
     val user: FirebaseUser? by lazy { loginRepository.currentUser() }
-    private val disposables = CompositeDisposable()
 
 
     fun login(email: String, password: String) {
-
-        val disposable = loginRepository.loginWithEmail(email, password)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                _loginSuccessful.value = true
-                _isLoading.value = false
-            }, {
-                _loginMessage.value = it.localizedMessage?.toString() ?: it.message.toString()
-                _loginSuccessful.value = false
-                _isLoading.value = false
-            })
-        disposables.add(disposable)
+        viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.postValue(true)
+            val authResponse = loginRepository.loginWithEmail(email, password)
+            _loginSuccessful.postValue(authResponse.isSuccessful)
+            _loginMessage.postValue(authResponse.message)
+            _isLoading.postValue(false)
+        }
     }
 
     fun deleteUser(userType: String) {
-        viewModelScope.launch {
-            _isLoading.value = true
-            val disposable = loginRepository.deleteUser()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    loginRepository.logout() // logout from firebase auth
-                    _signedOut.value = true
-                    _userDeleted.value = true
-                }, {
-                    Log.d(ContentValues.TAG, it.message.toString())
-                })
+        viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.postValue(true)
             user?.uid?.let {
-                val disposableDeleteData = loginRepository.deleteUserData(it,userType)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-
-                    }, {throwable ->
-                        Log.d(ContentValues.TAG, throwable.message.toString())
-                    })
-                disposables.add(disposableDeleteData)
+                loginRepository.deleteUserData(it,userType)
             }
-            disposables.add(disposable)
-            _isLoading.value = false
+            val authResponse = loginRepository.deleteUser()
+            _userDeleted.postValue(authResponse.isSuccessful)
+            _isLoading.postValue(false)
         }
     }
 
     fun changePassword(oldPassword: String, newPassword: String) {
-        _isLoading.value = true
-
-        val disposable = loginRepository.changePassword(oldPassword, newPassword)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                _changeSuccessful.value = true
-                _isLoading.value = false
-            }, {
-                _changePasswordMessage.value = it.message.toString()
-                _changeSuccessful.value = false
-                _isLoading.value = false
-            })
-
-        disposables.add(disposable)
-    }
-
-
-    fun logout() {
-        viewModelScope.launch {
-            loginRepository.logout()
-            _signedOut.value = true
+        viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.postValue(true)
+            val authResponse = loginRepository.changePassword(oldPassword, newPassword)
+            _changeSuccessful.postValue(authResponse.isSuccessful)
+            _changePasswordMessage.postValue(authResponse.message)
+            _isLoading.postValue(false)
         }
     }
-
-    override fun onCleared() {
-        super.onCleared()
-        disposables.dispose()
-    }
-
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.localinformant.repositories.FirebaseAuthRepository
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MyAccountViewModel : ViewModel() {
@@ -16,9 +17,9 @@ class MyAccountViewModel : ViewModel() {
     val signedOut = _signedOut
 
     fun logout() {
-        viewModelScope.launch {
+        viewModelScope.launch (Dispatchers.IO){
             loginRepository.logout()
-            _signedOut.value = true
+            _signedOut.postValue(true)
         }
     }
 

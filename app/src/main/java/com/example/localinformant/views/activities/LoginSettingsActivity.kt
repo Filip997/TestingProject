@@ -5,18 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.example.localinformant.R
 import com.example.localinformant.constants.AppConstants
 import com.example.localinformant.constants.IntentKeys
-import com.example.localinformant.databinding.ActivityLoginBinding
 import com.example.localinformant.databinding.ActivityLoginSettingsBinding
 import com.example.localinformant.viewmodels.LoginViewModel
 import com.google.android.material.R.style.MaterialAlertDialog_MaterialComponents
@@ -27,6 +20,7 @@ class LoginSettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginSettingsBinding
     private lateinit var loginViewModel: LoginViewModel
     private var userType = ""
+    private var deletePressed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +32,7 @@ class LoginSettingsActivity : AppCompatActivity() {
             AppConstants.SHARED_PREFS,
             Context.MODE_PRIVATE
         )
-        userType =  sharedPreferences.getString(IntentKeys.USER_TYPE,"").toString()
+        userType = sharedPreferences.getString(IntentKeys.USER_TYPE, "").toString()
         setupButtonClicks()
         setupViewModels()
     }
@@ -60,8 +54,8 @@ class LoginSettingsActivity : AppCompatActivity() {
                     dialog.dismiss()
                 }
                 .setPositiveButton(getString(R.string.login_settings_delete_account_yes)) { _, _ ->
+                    deletePressed = true
                     loginViewModel.deleteUser(userType)
-                    loginViewModel.logout()
                 }
                 .show()
         }
@@ -73,7 +67,6 @@ class LoginSettingsActivity : AppCompatActivity() {
 
 
     private fun setupViewModels() {
-        loginViewModel.signedOut.observe(this) { signedOut -> // Sign out success observable
             loginViewModel.userDeleted.observe(this) { userDeleted ->
                 if (userDeleted) {
                     Toast.makeText(
@@ -81,16 +74,13 @@ class LoginSettingsActivity : AppCompatActivity() {
                         getString(R.string.login_settings_account_deleted),
                         Toast.LENGTH_SHORT
                     ).show()
-                    if (signedOut) {
-                        val intent = Intent(this, LoginActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        startActivity(intent)
-                        finish()
-                    }
+                    val intent = Intent(this, LoginActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    finish()
                 }
-            }
         }
 
 

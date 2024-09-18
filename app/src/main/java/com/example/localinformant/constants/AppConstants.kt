@@ -2,7 +2,7 @@ package com.example.localinformant.constants
 
 object AppConstants {
 
-    const val PERSON = "person"
+    const val PERSON = "persons"
     const val COMPANY = "company"
     const val PERSONS = "persons"
     const val COMPANIES = "companies"
