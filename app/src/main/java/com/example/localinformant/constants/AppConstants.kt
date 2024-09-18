@@ -12,4 +12,5 @@ object AppConstants {
     const val PASSWORD = "password"
     const val COMPANY_NAME = "companyName"
     const val COMPANY_EMAIL = "companyEmail"
+    const val SHARED_PREFS = "sharedPrefs"
 }
