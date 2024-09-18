@@ -4,6 +4,7 @@ import com.example.localinformant.constants.AppConstants
 import com.example.localinformant.models.RegisterCompanyRequest
 import com.example.localinformant.models.RegisterPersonRequest
 import com.google.firebase.Firebase
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
@@ -113,6 +114,63 @@ class FirebaseAuthRepository {
                         emitter.onError(task.exception!!)
                     }
 
+                }
+        }
+
+    fun changePassword(oldPassword: String, newPassword: String) =
+        Completable.create { emitter ->
+            val user = auth.currentUser!!
+            val email = user.email
+            email?.let {
+                val credential = EmailAuthProvider.getCredential(email, oldPassword)
+                user.reauthenticate(credential)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            user.updatePassword(newPassword)
+                                .addOnCompleteListener {
+                                    if (!emitter.isDisposed) {
+                                        if (it.isSuccessful)
+                                            emitter.onComplete()
+                                        else
+                                            emitter.onError(it.exception!!)
+                                    }
+                                }
+                        } else {
+                            if (!emitter.isDisposed)
+                                emitter.onError(task.exception!!)
+                        }
+                    }
+            }
+
+
+        }
+
+    fun deleteUser(): Completable =
+        Completable.create { emitter ->
+            auth.currentUser!!
+                .delete()
+                .addOnCompleteListener { task ->
+                    if (!emitter.isDisposed) {
+                        if (task.isSuccessful)
+                            emitter.onComplete()
+                        else
+                            emitter.onError(task.exception!!)
+                    }
+                }
+        }
+
+    fun deleteUserData(userId: String, userType: String): Completable =
+        Completable.create { emitter ->
+            db.collection(userType)
+                .document(userId)
+                .delete()
+                .addOnCompleteListener {
+                    if (!emitter.isDisposed) {
+                        if (it.isSuccessful)
+                            emitter.onComplete()
+                        else
+                            emitter.onError(it.exception!!)
+                    }
                 }
         }
 

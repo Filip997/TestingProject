@@ -39,11 +39,17 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
         setupViewModels()
+        setupUI()
+        setupButtonClicks()
 
         if (intent.hasExtra(IntentKeys.USER_TYPE)) {
             userType = intent.getStringExtra(IntentKeys.USER_TYPE)
-            setupUI()
-            setupButtonClicks()
+        } else {
+            val sharedPreferences = getSharedPreferences(
+                AppConstants.SHARED_PREFS,
+                Context.MODE_PRIVATE
+            )
+            userType =  sharedPreferences.getString(IntentKeys.USER_TYPE,"").toString()
         }
         binding.logInBt.isEnabled = emailFilled && passwordFilled && emailFormatCorrect
     }
@@ -107,7 +113,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setupViewModels() {
-
         loginViewModel.isLoading.observe(this) { loading -> // Loading observable for the progress bar
             if (loading)
                 binding.logInProgressbar.visibility = View.VISIBLE

@@ -14,7 +14,9 @@ import com.example.localinformant.R
 import com.example.localinformant.constants.IntentKeys
 import com.example.localinformant.databinding.FragmentMyAccountBinding
 import com.example.localinformant.viewmodels.MyAccountViewModel
+import com.example.localinformant.views.activities.ChangePasswordActivity
 import com.example.localinformant.views.activities.LoginActivity
+import com.example.localinformant.views.activities.LoginSettingsActivity
 import com.example.localinformant.views.activities.MainActivity
 
 class MyAccountFragment : Fragment() {
@@ -35,6 +37,7 @@ class MyAccountFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupButtonClicks()
         setupViewModels()
+        binding.accountEmailTv.text = accountViewModel.user?.email.toString()
     }
 
 
@@ -42,7 +45,7 @@ class MyAccountFragment : Fragment() {
 
 
         binding.accountLoginSettingsLayout.setOnClickListener {
-            // TODO: Da se implementira naredniot screen
+            startActivity(Intent(context, LoginSettingsActivity::class.java))
         }
 
         binding.accountLogoutLayout.setOnClickListener {

@@ -490,43 +490,8 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
         }
-
-//        registerViewModel.registerUserLiveData.observe(this) { result ->
-//            if (result.isSuccessful) {
-//                val intent = Intent(this@RegisterActivity, MainActivity::class.java)
-//                intent.putExtra(IntentKeys.USER_TYPE, userType)
-//                startActivity(intent)
-//                finish()
-//            } else {
-//                showAlertDialog(
-//                    "Registration failed",
-//                    result.message ?: "Couldn't register user",
-//                    "Cancel"
-//                )
-//            }
-//        }
-
-//        registerViewModel.isLoading.observe(this) { result ->
-//            if (result) {
-//                binding.progressBar.visibility = View.VISIBLE
-//            } else {
-//                binding.progressBar.visibility = View.GONE
-//            }
-//        }
     }
 
-    private fun showAlertDialog(title: String, message: String, btnText: String) {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(title)
-            .setMessage(message)
-            .setCancelable(false)
-            .setNegativeButton(btnText) { dialog, _ ->
-                dialog.cancel()
-            }
-
-        val alertDialog = builder.create()
-        alertDialog.show()
-    }
 
     private fun checkPassword(password: String): Boolean {
         var hasUppercase = false
