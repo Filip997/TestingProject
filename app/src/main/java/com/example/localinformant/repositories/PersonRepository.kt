@@ -1,5 +1,6 @@
 package com.example.localinformant.repositories
 
+import android.util.Log
 import com.example.localinformant.constants.AppConstants
 import com.example.localinformant.models.Person
 import com.google.firebase.Firebase
@@ -39,7 +40,7 @@ class PersonRepository {
     }
 
 
-        suspend fun getCurrentPerson(): Person? =
+    suspend fun getCurrentPerson(): Person? =
         withContext(Dispatchers.IO) {
             try {
                 val documentSnapshot = db.collection(AppConstants.PERSONS)
@@ -52,4 +53,14 @@ class PersonRepository {
                 null
             }
         }
+
+    suspend fun updatePersonToken(token: String) {
+        withContext(Dispatchers.IO) {
+            try {
+                db.collection(AppConstants.PERSONS).document(auth.currentUser?.uid!!).update("token", token)
+            } catch (e: Exception) {
+                Log.d("updatePersonToken", e.printStackTrace().toString())
+            }
+        }
+    }
 }

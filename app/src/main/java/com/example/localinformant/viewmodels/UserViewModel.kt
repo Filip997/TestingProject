@@ -9,6 +9,8 @@ import com.example.localinformant.constants.AppConstants
 import com.example.localinformant.models.User
 import com.example.localinformant.repositories.CompanyRepository
 import com.example.localinformant.repositories.PersonRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
 class UserViewModel : ViewModel() {
@@ -18,6 +20,9 @@ class UserViewModel : ViewModel() {
 
     private val usersMutable = MutableLiveData<List<User>>()
     val usersLiveData: LiveData<List<User>> = usersMutable
+
+    private val newTokenMutable = MutableSharedFlow<String>()
+    val newTokenFlow: SharedFlow<String> = newTokenMutable
 
     fun searchUsersByName() {
         viewModelScope.launch {
@@ -40,6 +45,12 @@ class UserViewModel : ViewModel() {
             }
 
             usersMutable.postValue(users)
+        }
+    }
+
+    fun setNewToken(token: String) {
+        viewModelScope.launch {
+            newTokenMutable.emit(token)
         }
     }
 }

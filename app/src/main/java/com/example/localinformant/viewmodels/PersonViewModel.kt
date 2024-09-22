@@ -31,4 +31,10 @@ class PersonViewModel : ViewModel() {
             personMutable.postValue(person)
         }
     }
+
+    fun updatePersonToken(token: String) {
+        viewModelScope.launch {
+            personRepository.updatePersonToken(token)
+        }
+    }
 }

@@ -1,41 +1,71 @@
 package com.example.localinformant.views.activities
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.localinformant.R
 import com.example.localinformant.constants.AppConstants
+import com.example.localinformant.constants.FirebaseApiConstants
 import com.example.localinformant.constants.IntentKeys
 import com.example.localinformant.constants.NavFunctions.isFragmentInBackStack
 import com.example.localinformant.constants.NavFunctions.popUpDefaultNavigation
+import com.example.localinformant.constants.PreferencesManager
 import com.example.localinformant.databinding.ActivityMainBinding
+import com.example.localinformant.viewmodels.CompanyViewModel
+import com.example.localinformant.viewmodels.PersonViewModel
+import com.example.localinformant.viewmodels.UserViewModel
 import com.example.localinformant.views.fragments.HomeFragment
 import com.example.localinformant.views.fragments.MyAccountFragment
 import com.example.localinformant.views.fragments.NotificationsFragment
 import com.example.localinformant.views.fragments.SearchFragment
 import com.google.android.material.navigation.NavigationBarView
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private lateinit var personViewModel: PersonViewModel
+    private lateinit var companyViewModel: CompanyViewModel
+    private lateinit var userViewModel: UserViewModel
     private var userType: String? = null
     private lateinit var navController: NavController
     private val bundle = Bundle()
+
+    private val newTokenReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val newToken = intent?.getStringExtra(IntentKeys.USER_TOKEN)
+
+            userViewModel.setNewToken(newToken!!)
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(newTokenReceiver, IntentFilter(AppConstants.NEW_TOKEN))
+
+        personViewModel = ViewModelProvider(this)[PersonViewModel::class.java]
+        companyViewModel = ViewModelProvider(this)[CompanyViewModel::class.java]
+        userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
 
         if (intent.hasExtra(IntentKeys.USER_TYPE)) {
             userType = intent.getStringExtra(IntentKeys.USER_TYPE)
@@ -49,10 +79,35 @@ class MainActivity : AppCompatActivity() {
 
         bundle.putString(IntentKeys.USER_TYPE, userType)
 
+        FirebaseMessaging.getInstance().subscribeToTopic(FirebaseApiConstants.TOPIC)
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            if (it.isSuccessful) {
+                if (userType == AppConstants.PERSON) {
+                    personViewModel.updatePersonToken(it.result)
+                } else if (userType == AppConstants.COMPANY) {
+                    companyViewModel.updateCompanyToken(it.result)
+                }
+            }
+        }
+
+        setupViewModels()
         setNavigation()
         setBottomNavMenu()
 
 
+    }
+
+    private fun setupViewModels() {
+        lifecycleScope.launch {
+            userViewModel.newTokenFlow.collect { token ->
+                if (userType == AppConstants.PERSON) {
+                    personViewModel.updatePersonToken(token)
+                } else if (userType == AppConstants.COMPANY) {
+                    companyViewModel.updateCompanyToken(token)
+                }
+            }
+        }
     }
 
     private fun setNavigation() {
@@ -120,6 +175,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(newTokenReceiver)
     }
 
 //    private fun setupBottomNavigationMenu() {

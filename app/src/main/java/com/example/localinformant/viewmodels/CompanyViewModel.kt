@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.localinformant.models.Company
 import com.example.localinformant.repositories.CompanyRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
 class CompanyViewModel : ViewModel() {
@@ -29,6 +31,12 @@ class CompanyViewModel : ViewModel() {
         viewModelScope.launch {
             val company = companyRepository.getCurrentCompany()
             companyMutable.postValue(company)
+        }
+    }
+
+    fun updateCompanyToken(token: String) {
+        viewModelScope.launch {
+            companyRepository.updateCompanyToken(token)
         }
     }
 }

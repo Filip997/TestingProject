@@ -1,5 +1,6 @@
 package com.example.localinformant.repositories
 
+import android.util.Log
 import com.example.localinformant.constants.AppConstants
 import com.example.localinformant.models.Company
 import com.example.localinformant.models.Person
@@ -52,4 +53,14 @@ class CompanyRepository {
                 null
             }
         }
+
+    suspend fun updateCompanyToken(token: String) {
+        withContext(Dispatchers.IO) {
+            try {
+                db.collection(AppConstants.COMPANIES).document(auth.currentUser?.uid!!).update("token", token)
+            } catch (e: Exception) {
+                Log.d("updateCompanyToken", e.printStackTrace().toString())
+            }
+        }
+    }
 }
