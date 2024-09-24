@@ -10,6 +10,10 @@
         android:icon="@drawable/ic_search"/>
 
     <item
+        android:id="@+id/createPost"
+        android:title="" />
+
+    <item
         android:id="@+id/notificationsFragment"
         android:title="Notifications"
         android:icon="@drawable/ic_notifications"/>

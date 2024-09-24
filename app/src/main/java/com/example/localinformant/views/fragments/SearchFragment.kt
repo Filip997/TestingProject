@@ -8,7 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.localinformant.R
+import com.example.localinformant.constants.IntentKeys
+import com.example.localinformant.constants.NavFunctions.isFragmentInBackStack
+import com.example.localinformant.constants.NavFunctions.popUpDefaultNavigation
 import com.example.localinformant.databinding.FragmentMyAccountBinding
 import com.example.localinformant.databinding.FragmentSearchBinding
 import com.example.localinformant.models.User
@@ -19,6 +26,7 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
+    private lateinit var navController: NavController
 
     private lateinit var userViewModel: UserViewModel
 
@@ -33,7 +41,13 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener {
 
         userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
 
-        searchUsersAdapter = SearchUsersAdapter(requireContext(), searchListUsers)
+        navController = findNavController()
+
+        searchUsersAdapter = SearchUsersAdapter(
+            requireContext(),
+            searchListUsers,
+            { userId, userType -> onUserClicked(userId, userType) }
+            )
         binding.rvSearchUsers.layoutManager = LinearLayoutManager(requireContext())
         binding.rvSearchUsers.adapter = searchUsersAdapter
 
@@ -66,5 +80,16 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener {
                 searchUsersAdapter.updateList(usersList)
             }
         }
+    }
+
+    private fun onUserClicked(userId: String, userType: String) {
+        val bundle = Bundle()
+        bundle.putString(IntentKeys.USER_ID, userId)
+        bundle.putString(IntentKeys.USER_TYPE, userType)
+
+        navController.navigate(
+            R.id.userAccountFragment, bundle,
+            popUpDefaultNavigation()
+        )
     }
 }

@@ -37,11 +37,11 @@ class UserViewModel : ViewModel() {
             val users = ArrayList<User>()
 
             persons.forEach {
-                users.add(User("", it.fullName, AppConstants.PERSON))
+                users.add(User(it.id, it.fullName, AppConstants.PERSON))
             }
 
             companies.forEach {
-                users.add(User("", it.companyName, AppConstants.COMPANY))
+                users.add(User(it.id, it.companyName, AppConstants.COMPANY))
             }
 
             usersMutable.postValue(users)

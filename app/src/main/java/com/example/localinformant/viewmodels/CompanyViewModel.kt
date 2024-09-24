@@ -34,6 +34,13 @@ class CompanyViewModel : ViewModel() {
         }
     }
 
+    fun getCompanyById(id: String) {
+        viewModelScope.launch {
+            val person = companyRepository.getCompanyById(id)
+            companyMutable.postValue(person)
+        }
+    }
+
     fun updateCompanyToken(token: String) {
         viewModelScope.launch {
             companyRepository.updateCompanyToken(token)

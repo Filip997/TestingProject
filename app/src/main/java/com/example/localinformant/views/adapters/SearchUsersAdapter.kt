@@ -9,7 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.localinformant.databinding.SearchUsersAdapterDesignBinding
 import com.example.localinformant.models.User
 
-class SearchUsersAdapter(context: Context, private var users: MutableList<User>) : RecyclerView.Adapter<SearchUsersAdapter.SearchUserViewHolder>(), Filterable {
+class SearchUsersAdapter(context: Context,
+                         private var users: MutableList<User>,
+                         private val onUserClicked: (String, String) -> Unit
+) : RecyclerView.Adapter<SearchUsersAdapter.SearchUserViewHolder>(), Filterable {
 
     var usersListFiltered = users
     var usersListFull = users
@@ -17,6 +20,7 @@ class SearchUsersAdapter(context: Context, private var users: MutableList<User>)
     class SearchUserViewHolder(binding: SearchUsersAdapterDesignBinding) : RecyclerView.ViewHolder(binding.root) {
         var profilePicture = binding.civSearchUserProfilePicture
         var userName = binding.tvSearchUserName
+        var cardView = binding.searchCardView
     }
 
     fun updateList(newList: List<User>) {
@@ -35,6 +39,10 @@ class SearchUsersAdapter(context: Context, private var users: MutableList<User>)
 
     override fun onBindViewHolder(holder: SearchUserViewHolder, position: Int) {
         holder.userName.text = users[position].name
+
+        holder.cardView.setOnClickListener {
+            onUserClicked.invoke(users[position].id, users[position].type)
+        }
     }
 
     override fun getFilter(): Filter {
@@ -47,7 +55,7 @@ class SearchUsersAdapter(context: Context, private var users: MutableList<User>)
                 else {
                     val filteredList: MutableList<User> = mutableListOf()
                     for (item in users) {
-                        if (item.name.lowercase().contains(charString))
+                        if (item.name.lowercase().startsWith(charString))
                             filteredList.add(item)
                     }
                     filteredList

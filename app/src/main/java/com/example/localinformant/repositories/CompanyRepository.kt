@@ -54,6 +54,21 @@ class CompanyRepository {
             }
         }
 
+    suspend fun getCompanyById(id: String): Company? =
+        withContext(Dispatchers.IO) {
+            try {
+                val documentSnapshot = db.collection(AppConstants.COMPANIES)
+                    .document(id)
+                    .get()
+                    .await()
+
+                documentSnapshot.toObject(Company::class.java)
+            } catch (e: Exception) {
+                Log.d("companyById", e.message.toString())
+                null
+            }
+        }
+
     suspend fun updateCompanyToken(token: String) {
         withContext(Dispatchers.IO) {
             try {

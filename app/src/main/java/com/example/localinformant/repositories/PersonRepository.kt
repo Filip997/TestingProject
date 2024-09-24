@@ -54,6 +54,20 @@ class PersonRepository {
             }
         }
 
+    suspend fun getPersonById(id: String): Person? =
+        withContext(Dispatchers.IO) {
+            try {
+                val documentSnapshot = db.collection(AppConstants.PERSONS)
+                    .document(id)
+                    .get()
+                    .await()
+
+                documentSnapshot.toObject(Person::class.java)
+            } catch (e: Exception) {
+                null
+            }
+        }
+
     suspend fun updatePersonToken(token: String) {
         withContext(Dispatchers.IO) {
             try {

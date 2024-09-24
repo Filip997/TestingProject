@@ -54,7 +54,8 @@ class FirebaseAuthRepository {
                 AppConstants.LAST_NAME to request.lastName,
                 AppConstants.FULL_NAME to "${request.firstName} ${request.lastName}",
                 AppConstants.EMAIL to request.email,
-                AppConstants.TOKEN to ""
+                AppConstants.TOKEN to "",
+                AppConstants.FOLLOWING to 0
             )
             db.collection(AppConstants.PERSONS).document(currentUser.uid).set(data).await()
             authResponse.user?.sendEmailVerification()
@@ -67,17 +68,19 @@ class FirebaseAuthRepository {
     suspend fun registerCompanyWithEmail(request: RegisterCompanyRequest): LoginUserResponse {
         try {
             val authResponse =
-                auth.createUserWithEmailAndPassword(request.email, request.password).await()
+                auth.createUserWithEmailAndPassword(request.companyEmail, request.password).await()
             val currentUser = auth.currentUser
             val data = hashMapOf(
+                AppConstants.ID to currentUser?.uid!!,
                 AppConstants.COMPANY_NAME to request.companyName,
                 AppConstants.COMPANY_EMAIL to request.companyEmail,
                 AppConstants.FIRST_NAME to request.firstName,
                 AppConstants.LAST_NAME to request.lastName,
                 AppConstants.EMAIL to request.email,
-                AppConstants.PASSWORD to request.password
+                AppConstants.TOKEN to "",
+                AppConstants.FOLLOWERS to 0
             )
-            db.collection(AppConstants.COMPANIES).document(currentUser?.uid!!).set(data).await()
+            db.collection(AppConstants.COMPANIES).document(currentUser.uid).set(data).await()
             authResponse.user?.sendEmailVerification()
             return LoginUserResponse(true, "")
         } catch (e: Exception) {

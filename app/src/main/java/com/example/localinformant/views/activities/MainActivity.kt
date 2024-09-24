@@ -7,7 +7,15 @@ import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.PopupWindow
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -25,16 +33,21 @@ import com.example.localinformant.constants.NavFunctions.isFragmentInBackStack
 import com.example.localinformant.constants.NavFunctions.popUpDefaultNavigation
 import com.example.localinformant.constants.PreferencesManager
 import com.example.localinformant.databinding.ActivityMainBinding
+import com.example.localinformant.databinding.CreatePostPopUpDesignBinding
+import com.example.localinformant.models.PostRequest
 import com.example.localinformant.viewmodels.CompanyViewModel
 import com.example.localinformant.viewmodels.PersonViewModel
+import com.example.localinformant.viewmodels.PostViewModel
 import com.example.localinformant.viewmodels.UserViewModel
 import com.example.localinformant.views.fragments.HomeFragment
 import com.example.localinformant.views.fragments.MyAccountFragment
 import com.example.localinformant.views.fragments.NotificationsFragment
 import com.example.localinformant.views.fragments.SearchFragment
 import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,10 +55,12 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var personViewModel: PersonViewModel
     private lateinit var companyViewModel: CompanyViewModel
+    private lateinit var postViewModel: PostViewModel
     private lateinit var userViewModel: UserViewModel
     private var userType: String? = null
     private lateinit var navController: NavController
     private val bundle = Bundle()
+    private var currentFragment: Fragment = HomeFragment()
 
     private val newTokenReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -65,6 +80,7 @@ class MainActivity : AppCompatActivity() {
 
         personViewModel = ViewModelProvider(this)[PersonViewModel::class.java]
         companyViewModel = ViewModelProvider(this)[CompanyViewModel::class.java]
+        postViewModel = ViewModelProvider(this)[PostViewModel::class.java]
         userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
 
         if (intent.hasExtra(IntentKeys.USER_TYPE)) {
@@ -94,8 +110,7 @@ class MainActivity : AppCompatActivity() {
         setupViewModels()
         setNavigation()
         setBottomNavMenu()
-
-
+        setCreatePostClickListener()
     }
 
     private fun setupViewModels() {
@@ -108,25 +123,49 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        postViewModel.createPostLiveData.observe(this) { response ->
+            Toast.makeText(this, response.message, Toast.LENGTH_SHORT).show()
+        }
+
+        postViewModel.isLoading.observe(this) { isLoading ->
+            if (isLoading) {
+                binding.progressBar.visibility = View.VISIBLE
+            } else {
+                binding.progressBar.visibility = View.GONE
+            }
+        }
     }
 
     private fun setNavigation() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.findNavController()
+
     }
 
     private fun setBottomNavMenu() {
-        binding.bottomNavMenu.setupWithNavController(navController)
+        binding.bottomNavView.setupWithNavController(navController)
 
-        binding.bottomNavMenu.setOnItemSelectedListener {
+        if (userType == AppConstants.PERSON) {
+            binding.bottomNavView.menu.getItem(0).title = "Home"
+            binding.bottomNavView.menu.removeItem(R.id.createPost)
+            binding.fabCreatePost.visibility = View.GONE
+        } else {
+            binding.bottomNavView.menu.getItem(0).title = "My posts"
+            binding.fabCreatePost.visibility = View.VISIBLE
+        }
+
+        binding.bottomNavView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.homeFragment -> {
+                    currentFragment = HomeFragment()
+
                     if (navController.isFragmentInBackStack(R.id.homeFragment)) {
                         navController.popBackStack(R.id.homeFragment, false)
                     } else {
                         navController.navigate(
-                            R.id.homeFragment, bundleOf(),
+                            R.id.homeFragment, bundle,
                             popUpDefaultNavigation()
                         )
                     }
@@ -134,11 +173,13 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.searchFragment -> {
+                    currentFragment = SearchFragment()
+
                     if (navController.isFragmentInBackStack(R.id.searchFragment)) {
                         navController.popBackStack(R.id.searchFragment, false)
                     } else {
                         navController.navigate(
-                            R.id.searchFragment, bundleOf(),
+                            R.id.searchFragment, bundle,
                             popUpDefaultNavigation()
                         )
                     }
@@ -147,11 +188,13 @@ class MainActivity : AppCompatActivity() {
 
 
                 R.id.notificationsFragment -> {
+                    currentFragment = NotificationsFragment()
+
                     if (navController.isFragmentInBackStack(R.id.notificationsFragment)) {
                         navController.popBackStack(R.id.notificationsFragment, false)
                     } else {
                         navController.navigate(
-                            R.id.notificationsFragment, bundleOf(),
+                            R.id.notificationsFragment, bundle,
                             popUpDefaultNavigation()
                         )
                     }
@@ -159,11 +202,13 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.myAccountFragment -> {
+                    currentFragment = MyAccountFragment()
+
                     if (navController.isFragmentInBackStack(R.id.myAccountFragment)) {
                         navController.popBackStack(R.id.myAccountFragment, false)
                     } else {
                         navController.navigate(
-                            R.id.myAccountFragment, bundleOf(),
+                            R.id.myAccountFragment, bundle,
                             popUpDefaultNavigation()
                         )
                     }
@@ -174,6 +219,57 @@ class MainActivity : AppCompatActivity() {
                     false
                 }
             }
+        }
+    }
+
+    private fun setCreatePostClickListener() {
+        if (userType == AppConstants.COMPANY) {
+            binding.fabCreatePost.setOnClickListener {
+                //val currentFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+
+                Log.d("currentFragment", currentFragment.toString())
+
+                if (currentFragment is HomeFragment) {
+                    Log.d("currentFragmentIf", currentFragment.toString())
+                    createPopUpWindow()
+                }
+            }
+        }
+    }
+
+    private fun createPopUpWindow() {
+        val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(R.layout.create_post_pop_up_design, null)
+
+        val screenWidth = resources.displayMetrics.widthPixels
+
+        val width = screenWidth - 2 * 30
+        val height = LinearLayout.LayoutParams.WRAP_CONTENT
+        val focusable = true
+
+        val createPostPopUpWindow = PopupWindow(view, width, height, focusable)
+        createPostPopUpWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+
+        val btnPost: Button = view.findViewById(R.id.btn_post)
+        val btnCancel: Button = view.findViewById(R.id.btn_cancel)
+        val etPost: TextInputEditText = view.findViewById(R.id.et_post)
+
+        btnPost.setOnClickListener {
+            val uuid = UUID.randomUUID().toString()
+            val postText = etPost.text.toString()
+
+            postViewModel.createPost(
+                PostRequest(
+                    uuid,
+                    postText
+                )
+            )
+
+            createPostPopUpWindow.dismiss()
+        }
+
+        btnCancel.setOnClickListener {
+            createPostPopUpWindow.dismiss()
         }
     }
 

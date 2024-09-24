@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_searchFragment_to_myAccountFragment"
             app:destination="@id/myAccountFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_userAccountFragment"
+            app:destination="@+id/userAccountFragment"/>
     </fragment>
     <fragment
         android:id="@+id/notificationsFragment"
@@ -64,5 +67,14 @@
         <action
             android:id="@+id/action_myAccountFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userAccountFragment"
+        android:name="com.example.localinformant.views.fragments.UserAccountFragment"
+        android:label="fragment_user_account"
+        tools:layout="@layout/fragment_user_account">
+        <action
+            android:id="@+id/action_userAccountFragment_to_searchFragment"
+            app:destination="@+id/searchFragment"/>
     </fragment>
 </navigation>
