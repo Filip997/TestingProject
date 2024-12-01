@@ -59,7 +59,9 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.activity:activity-ktx:1.9.2")
     implementation("androidx.activity:activity-ktx:1.9.2")
+    implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
+    //RxJava
     implementation ("io.reactivex.rxjava2:rxjava:2.2.21")
     implementation ("io.reactivex.rxjava2:rxandroid:2.1.1")
     implementation("androidx.navigation:navigation-fragment-ktx:2.8.0")

@@ -20,6 +20,7 @@ class UserAccountFragment : Fragment() {
     private lateinit var companyViewModel: CompanyViewModel
 
     private var userType: String? = null
+    private var accountUserType: String? = null
     private var userId: String? = null
 
     override fun onCreateView(
@@ -30,6 +31,10 @@ class UserAccountFragment : Fragment() {
 
         if (arguments?.containsKey(IntentKeys.USER_TYPE)!!) {
             userType = arguments?.getString(IntentKeys.USER_TYPE)
+        }
+
+        if (arguments?.containsKey(IntentKeys.ACCOUNT_USER_TYPE)!!) {
+            accountUserType = arguments?.getString(IntentKeys.ACCOUNT_USER_TYPE)
         }
 
         if (arguments?.containsKey(IntentKeys.USER_ID)!!) {
@@ -46,13 +51,13 @@ class UserAccountFragment : Fragment() {
     }
 
     private fun setupUI() {
-        if (userType == AppConstants.PERSON) {
+        if (accountUserType == AppConstants.PERSON) {
             binding.layoutButtons.visibility = View.GONE
             binding.layoutPosts.visibility = View.GONE
 
             personViewModel.getPersonById(userId ?: "")
-        } else if (userType == AppConstants.COMPANY) {
-            binding.layoutButtons.visibility = View.VISIBLE
+        } else if (accountUserType == AppConstants.COMPANY) {
+            binding.layoutButtons.visibility = if (userType == AppConstants.PERSON) View.VISIBLE else View.GONE
             binding.layoutPosts.visibility = View.VISIBLE
 
             companyViewModel.getCompanyById(userId ?: "")

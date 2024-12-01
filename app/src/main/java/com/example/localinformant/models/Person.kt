@@ -7,5 +7,5 @@ data class Person(
     val fullName: String = "",
     val email: String = "",
     val token: String = "",
-    val following: Int = 0
+    val following: List<String> = listOf()
 )

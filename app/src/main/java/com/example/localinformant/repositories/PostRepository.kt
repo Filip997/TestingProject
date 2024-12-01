@@ -1,8 +1,11 @@
 package com.example.localinformant.repositories
 
 import com.example.localinformant.constants.AppConstants
+import com.example.localinformant.constants.PreferencesManager
+import com.example.localinformant.models.Comment
 import com.example.localinformant.models.Company
 import com.example.localinformant.models.CreatePostResponse
+import com.example.localinformant.models.Post
 import com.example.localinformant.models.PostRequest
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -36,6 +39,48 @@ class PostRepository {
             return CreatePostResponse(true, "Post successfully created")
         } catch (e: Exception) {
             return CreatePostResponse(false, e.message.toString())
+        }
+    }
+
+    suspend fun getCurrentCompanyPosts(): List<Post> {
+        try {
+            val currentUserId = auth.currentUser?.uid!!
+
+            val postList = db.collection(AppConstants.POSTS).whereEqualTo(AppConstants.COMPANY_ID, currentUserId).get().await()
+                .toObjects(Post::class.java)
+
+            return postList
+        } catch (e: Exception) {
+            return listOf()
+        }
+    }
+
+    suspend fun getPostsByCompanyId(companyId: String): List<Post> {
+        try {
+            val postList = db.collection(AppConstants.POSTS).whereEqualTo(AppConstants.COMPANY_ID, companyId).get().await()
+                .toObjects(Post::class.java)
+
+            return postList
+        } catch (e: Exception) {
+            return listOf()
+        }
+    }
+
+    suspend fun getAllPostsByFollowedCompaniesFromCurrentPerson(): List<Post> {
+        try {
+            val allPosts = mutableListOf<Post>()
+            val currentPerson = PreferencesManager.getPerson()
+
+            for (companyId in currentPerson.following) {
+                val postList = db.collection(AppConstants.POSTS).whereEqualTo(AppConstants.COMPANY_ID, companyId).get().await()
+                    .toObjects(Post::class.java)
+
+                allPosts.addAll(postList)
+            }
+
+            return allPosts
+        } catch (e: Exception) {
+            return listOf()
         }
     }
 }

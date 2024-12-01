@@ -30,6 +30,7 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private lateinit var userViewModel: UserViewModel
 
+    private var userType: String? = null
     private lateinit var searchUsersAdapter: SearchUsersAdapter
     private var searchListUsers = mutableListOf<User>()
 
@@ -38,6 +39,10 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
+
+        if (arguments?.containsKey(IntentKeys.USER_TYPE)!!) {
+            userType = arguments?.getString(IntentKeys.USER_TYPE)
+        }
 
         userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
 
@@ -82,10 +87,11 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener {
         }
     }
 
-    private fun onUserClicked(userId: String, userType: String) {
+    private fun onUserClicked(userId: String, accountUserType: String) {
         val bundle = Bundle()
         bundle.putString(IntentKeys.USER_ID, userId)
-        bundle.putString(IntentKeys.USER_TYPE, userType)
+        bundle.putString(IntentKeys.USER_TYPE, this.userType)
+        bundle.putString(IntentKeys.ACCOUNT_USER_TYPE, accountUserType)
 
         navController.navigate(
             R.id.userAccountFragment, bundle,

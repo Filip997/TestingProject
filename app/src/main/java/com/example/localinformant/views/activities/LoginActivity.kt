@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.localinformant.R
 import com.example.localinformant.constants.AppConstants
 import com.example.localinformant.constants.IntentKeys
+import com.example.localinformant.constants.PreferencesManager
 import com.example.localinformant.databinding.ActivityLoginBinding
 import com.example.localinformant.viewmodels.LoginViewModel
 import com.google.android.material.textfield.TextInputLayout
@@ -107,7 +108,11 @@ class LoginActivity : AppCompatActivity() {
         binding.logInBt.setOnClickListener {
             email = binding.logInEmailCard.editText?.text.toString()
             val password = binding.logInPasswordCard.editText?.text.toString()
-            loginViewModel.login(email, password)
+            if (userType == AppConstants.PERSON) {
+                loginViewModel.loginPerson(email, password)
+            } else if (userType == AppConstants.COMPANY) {
+                loginViewModel.loginCompany(email, password)
+            }
             loginPressed = true
         }
     }
@@ -120,17 +125,13 @@ class LoginActivity : AppCompatActivity() {
                 binding.logInProgressbar.visibility = View.GONE
         }
 
-        loginViewModel.loginSuccessful.observe(this) { loginSuccessful -> // Successful login observable
+        loginViewModel.loginPersonResponse.observe(this) { loginResponse -> // Successful login observable
             if (loginPressed) {
                 loginPressed = false
-                if (loginSuccessful) {
-                    val sharedPreferences = getSharedPreferences(
-                        AppConstants.SHARED_PREFS,
-                        Context.MODE_PRIVATE
-                    )
-                    sharedPreferences.edit()
-                        .putString(IntentKeys.USER_TYPE,userType)
-                        .apply()
+                if (loginResponse.isSuccessful) {
+                    PreferencesManager.putUserType(userType ?: "")
+                    PreferencesManager.putPerson(loginResponse.person!!)
+
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     intent.putExtra(IntentKeys.USER_TYPE, userType)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -139,14 +140,42 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 } else {
-                    val message: String = if (loginViewModel.loginMessage.value?.contains(getString(R.string.there_is_no_user))!!)
+                    val message: String = if (loginResponse.message?.contains(getString(R.string.there_is_no_user))!!)
                         getString(R.string.no_user_in_database)
-                    else if (loginViewModel.loginMessage.value?.contains(getString(R.string.a_network_error))!!)
+                    else if (loginResponse.message.contains(getString(R.string.a_network_error)))
                         getString(R.string.no_internet_connection)
-                    else if (loginViewModel.loginMessage.value?.contains(getString(R.string.the_password_is_invalid))!!)
+                    else if (loginResponse.message.contains(getString(R.string.the_password_is_invalid)))
                         getString(R.string.wrong_password)
                     else
-                        loginViewModel.loginMessage.value.toString()
+                        loginResponse.message.toString()
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        loginViewModel.loginCompanyResponse.observe(this) { loginResponse -> // Successful login observable
+            if (loginPressed) {
+                loginPressed = false
+                if (loginResponse.isSuccessful) {
+                    PreferencesManager.putUserType(userType ?: "")
+                    PreferencesManager.putCompany(loginResponse.company!!)
+
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    intent.putExtra(IntentKeys.USER_TYPE, userType)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    val message: String = if (loginResponse.message?.contains(getString(R.string.there_is_no_user))!!)
+                        getString(R.string.no_user_in_database)
+                    else if (loginResponse.message.contains(getString(R.string.a_network_error)))
+                        getString(R.string.no_internet_connection)
+                    else if (loginResponse.message.contains(getString(R.string.the_password_is_invalid)))
+                        getString(R.string.wrong_password)
+                    else
+                        loginResponse.message.toString()
                     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                 }
             }

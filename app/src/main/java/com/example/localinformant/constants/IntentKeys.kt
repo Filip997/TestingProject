@@ -5,4 +5,5 @@ object IntentKeys {
     const val USER_TYPE = "user_type"
     const val USER_TOKEN = "userToken"
     const val USER_ID = "userId"
+    const val ACCOUNT_USER_TYPE = "accountUserType"
 }

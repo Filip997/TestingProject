@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.localinformant.R
 import com.example.localinformant.constants.AppConstants
 import com.example.localinformant.constants.IntentKeys
+import com.example.localinformant.constants.PreferencesManager
 import com.example.localinformant.databinding.ActivityRegisterBinding
 import com.example.localinformant.models.RegisterCompanyRequest
 import com.example.localinformant.models.RegisterPersonRequest
@@ -470,7 +471,7 @@ class RegisterActivity : AppCompatActivity() {
                 binding.signUpProgressbar.visibility = View.GONE
         }
 
-        registerViewModel.signupSuccessful.observe(this) { signUpSuccessful ->  // Loading observable for the progress bar
+        /*registerViewModel.signupSuccessful.observe(this) { signUpSuccessful ->  // Loading observable for the progress bar
             if (signUpPressed) {
                 signUpPressed = false
                 if (signUpSuccessful) {
@@ -486,6 +487,56 @@ class RegisterActivity : AppCompatActivity() {
                             getString(R.string.no_internet_connection)
                         else
                             registerViewModel.signupMessage.value.toString()
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }*/
+
+        registerViewModel.registerPersonResponse.observe(this) { response ->
+            if (signUpPressed) {
+                signUpPressed = false
+
+                if (response.isSuccessful) {
+                    Toast.makeText(
+                        this, getString(R.string.sign_up_successful), Toast.LENGTH_LONG
+                    ).show()
+
+                    PreferencesManager.putPerson(response.person!!)
+
+                    onBackPressedDispatcher.onBackPressed()
+                } else {
+                    val message: String =
+                        if (response.message?.contains(getString(R.string.the_email_address_is_already_in_use))!!)
+                            getString(R.string.email_already_used)
+                        else if (response.message.contains(getString(R.string.a_network_error)))
+                            getString(R.string.no_internet_connection)
+                        else
+                            response.message
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        registerViewModel.registerCompanyResponse.observe(this) { response ->
+            if (signUpPressed) {
+                signUpPressed = false
+
+                if (response.isSuccessful) {
+                    Toast.makeText(
+                        this, getString(R.string.sign_up_successful), Toast.LENGTH_LONG
+                    ).show()
+
+                    PreferencesManager.putCompany(response.company!!)
+
+                    onBackPressedDispatcher.onBackPressed()
+                } else {
+                    val message: String =
+                        if (response.message?.contains(getString(R.string.the_email_address_is_already_in_use))!!)
+                            getString(R.string.email_already_used)
+                        else if (response.message.contains(getString(R.string.a_network_error)))
+                            getString(R.string.no_internet_connection)
+                        else
+                            response.message
                     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                 }
             }
