@@ -46,6 +46,7 @@ class UserAccountFragment : Fragment() {
 
         setupViewModels()
         setupUI()
+        setupClickListeners()
 
         return binding.root
     }
@@ -78,6 +79,16 @@ class UserAccountFragment : Fragment() {
                 binding.tvFullName.text = company.companyName
                 binding.tvFollowersFollowingText.text = "followers"
                 binding.tvFollowersFollowing.text = company.followers.toString()
+            }
+        }
+    }
+
+    private fun setupClickListeners() {
+        if (userType == AppConstants.PERSON) {
+            binding.tbtnFollowFollowing.setOnClickListener {
+                val isChecked = binding.tbtnFollowFollowing.isChecked
+
+
             }
         }
     }

@@ -8,5 +8,5 @@ data class Company(
     val firstName: String = "",
     val lastName: String = "",
     val token: String = "",
-    val followers: List<String> = listOf()
+    val followers: MutableList<String> = mutableListOf()
 )

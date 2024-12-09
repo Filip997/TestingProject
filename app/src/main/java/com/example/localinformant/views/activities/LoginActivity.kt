@@ -130,7 +130,7 @@ class LoginActivity : AppCompatActivity() {
                 loginPressed = false
                 if (loginResponse.isSuccessful) {
                     PreferencesManager.putUserType(userType ?: "")
-                    PreferencesManager.putPerson(loginResponse.person!!)
+                    PreferencesManager.putPerson(loginResponse.person)
 
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     intent.putExtra(IntentKeys.USER_TYPE, userType)
@@ -158,7 +158,7 @@ class LoginActivity : AppCompatActivity() {
                 loginPressed = false
                 if (loginResponse.isSuccessful) {
                     PreferencesManager.putUserType(userType ?: "")
-                    PreferencesManager.putCompany(loginResponse.company!!)
+                    PreferencesManager.putCompany(loginResponse.company)
 
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     intent.putExtra(IntentKeys.USER_TYPE, userType)

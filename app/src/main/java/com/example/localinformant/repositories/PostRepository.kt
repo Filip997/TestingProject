@@ -71,11 +71,14 @@ class PostRepository {
             val allPosts = mutableListOf<Post>()
             val currentPerson = PreferencesManager.getPerson()
 
-            for (companyId in currentPerson.following) {
-                val postList = db.collection(AppConstants.POSTS).whereEqualTo(AppConstants.COMPANY_ID, companyId).get().await()
-                    .toObjects(Post::class.java)
+            if (currentPerson != null) {
+                for (companyId in currentPerson.following) {
+                    val postList = db.collection(AppConstants.POSTS)
+                        .whereEqualTo(AppConstants.COMPANY_ID, companyId).get().await()
+                        .toObjects(Post::class.java)
 
-                allPosts.addAll(postList)
+                    allPosts.addAll(postList)
+                }
             }
 
             return allPosts

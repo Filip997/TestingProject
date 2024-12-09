@@ -24,19 +24,19 @@ object PreferencesManager {
         return AppController.userSharedPreferences.getString(SharedPrefKeys.USER_TYPE, "") ?: ""
     }
 
-    fun putPerson(person: Person) {
+    fun putPerson(person: Person?) {
         AppController.userSharedPreferences.edit().putString(SharedPrefKeys.PERSON, Gson().toJson(person)).apply()
     }
 
-    fun getPerson(): Person {
-        return Gson().fromJson(AppController.userSharedPreferences.getString(SharedPrefKeys.PERSON, ""), TypeToken.get(Person::class.java))
+    fun getPerson(): Person? {
+        return Gson().fromJson(AppController.userSharedPreferences.getString(SharedPrefKeys.PERSON, null), TypeToken.get(Person::class.java))
     }
 
-    fun putCompany(company: Company) {
+    fun putCompany(company: Company?) {
         AppController.userSharedPreferences.edit().putString(SharedPrefKeys.COMPANY, Gson().toJson(company)).apply()
     }
 
-    fun getCompany(): Company {
-        return Gson().fromJson(AppController.userSharedPreferences.getString(SharedPrefKeys.COMPANY, ""), TypeToken.get(Company::class.java))
+    fun getCompany(): Company? {
+        return Gson().fromJson(AppController.userSharedPreferences.getString(SharedPrefKeys.COMPANY, null), TypeToken.get(Company::class.java))
     }
 }

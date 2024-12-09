@@ -7,7 +7,10 @@ import com.example.localinformant.databinding.CompanyPostsAdapterDesignBinding
 import com.example.localinformant.models.Post
 import com.example.localinformant.models.User
 
-class CompanyPostsAdapter(private val posts: MutableList<Post>) : RecyclerView.Adapter<CompanyPostsAdapter.CompanyPostsViewModel>() {
+class CompanyPostsAdapter(
+    private val posts: MutableList<Post>,
+    private val goToCompany: (companyID: String) -> Unit
+) : RecyclerView.Adapter<CompanyPostsAdapter.CompanyPostsViewModel>() {
 
     class CompanyPostsViewModel(binding: CompanyPostsAdapterDesignBinding) : RecyclerView.ViewHolder(binding.root) {
         val companyName = binding.tvCompanyName
@@ -23,6 +26,10 @@ class CompanyPostsAdapter(private val posts: MutableList<Post>) : RecyclerView.A
     override fun onBindViewHolder(holder: CompanyPostsViewModel, position: Int) {
         holder.companyName.text = posts[position].companyName
         holder.postText.text = posts[position].postText
+
+        holder.companyName.setOnClickListener {
+            goToCompany.invoke(posts[position].companyId)
+        }
     }
 
     fun updateList(newPosts: List<Post>) {

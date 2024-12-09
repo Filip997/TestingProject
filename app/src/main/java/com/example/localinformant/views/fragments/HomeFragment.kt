@@ -6,10 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.localinformant.R
 import com.example.localinformant.application.AppController
 import com.example.localinformant.constants.AppConstants
 import com.example.localinformant.constants.IntentKeys
+import com.example.localinformant.constants.NavFunctions.popUpDefaultNavigation
 import com.example.localinformant.constants.PreferencesManager
 import com.example.localinformant.constants.SharedPrefKeys
 import com.example.localinformant.databinding.FragmentHomeBinding
@@ -21,6 +25,7 @@ import kotlin.concurrent.thread
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var navController: NavController
 
     private lateinit var postViewModel: PostViewModel
 
@@ -33,6 +38,8 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater)
 
+        navController = findNavController()
+
         if (arguments?.containsKey(IntentKeys.USER_TYPE) != null && arguments?.containsKey(IntentKeys.USER_TYPE)!!) {
             userType = arguments?.getString(IntentKeys.USER_TYPE)
         } else {
@@ -43,7 +50,11 @@ class HomeFragment : Fragment() {
 
         setupViewModels()
 
-        companyPostsAdapter = CompanyPostsAdapter(mutableListOf())
+        companyPostsAdapter = CompanyPostsAdapter(mutableListOf()) { companyId ->
+            goToCompanyProfile(
+                companyId
+            )
+        }
         binding.rvPosts.layoutManager = LinearLayoutManager(requireContext())
         binding.rvPosts.adapter = companyPostsAdapter
 
@@ -64,6 +75,12 @@ class HomeFragment : Fragment() {
                 companyPostsAdapter.updateList(posts)
             }
         }
+
+        postViewModel.currentPersonsFollowedCompaniesPosts.observe(viewLifecycleOwner) { posts ->
+            if (!posts.isNullOrEmpty()) {
+                companyPostsAdapter.updateList(posts)
+            }
+        }
     }
 
     private fun setOnSwipeRefresh() {
@@ -74,5 +91,17 @@ class HomeFragment : Fragment() {
                 postViewModel.getCurrentCompanyPosts()
             }
         }
+    }
+
+    private fun goToCompanyProfile(companyId: String) {
+        val bundle = Bundle()
+        bundle.putString(IntentKeys.USER_ID, companyId)
+        bundle.putString(IntentKeys.USER_TYPE, this.userType)
+        bundle.putString(IntentKeys.ACCOUNT_USER_TYPE, AppConstants.COMPANY)
+
+        navController.navigate(
+            R.id.userAccountFragment, bundle,
+            popUpDefaultNavigation()
+        )
     }
 }
