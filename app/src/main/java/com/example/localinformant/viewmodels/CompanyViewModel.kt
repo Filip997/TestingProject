@@ -20,6 +20,12 @@ class CompanyViewModel : ViewModel() {
     private val companyMutable = MutableLiveData<Company?>()
     val companyLiveData: LiveData<Company?> = companyMutable
 
+    private val _isSuccessful = MutableLiveData<Boolean>()
+    val isSuccessful: LiveData<Boolean> = _isSuccessful
+
+    private val _isCompanyFollowed = MutableLiveData<Boolean>()
+    val isCompanyFollowed: LiveData<Boolean> = _isCompanyFollowed
+
     fun findCompaniesByName() {
         viewModelScope.launch {
             val companies = companyRepository.searchCompaniesByName()
@@ -44,6 +50,20 @@ class CompanyViewModel : ViewModel() {
     fun updateCompanyToken(token: String) {
         viewModelScope.launch {
             companyRepository.updateCompanyToken(token)
+        }
+    }
+
+    fun followUnfollowCompany(companyId: String) {
+        viewModelScope.launch {
+            val success = companyRepository.followUnfollowCompany(companyId)
+            _isSuccessful.postValue(success)
+        }
+    }
+
+    fun isCompanyFollowed(companyId: String) {
+        viewModelScope.launch {
+            val isFollowed = companyRepository.isCompanyFollowed(companyId)
+            _isCompanyFollowed.postValue(isFollowed)
         }
     }
 }

@@ -23,6 +23,9 @@ class PostViewModel : ViewModel() {
     private val _currentPersonsFollowedCompaniesPosts = MutableLiveData<List<Post>>()
     val currentPersonsFollowedCompaniesPosts: LiveData<List<Post>> = _currentPersonsFollowedCompaniesPosts
 
+    private val _postsByCompanyId = MutableLiveData<List<Post>>()
+    val postsByCompanyId: LiveData<List<Post>> = _postsByCompanyId
+
     private val isLoadingMutable = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = isLoadingMutable
 
@@ -46,6 +49,13 @@ class PostViewModel : ViewModel() {
         viewModelScope.launch {
             val posts = postRepository.getAllPostsByFollowedCompaniesFromCurrentPerson()
             _currentPersonsFollowedCompaniesPosts.postValue(posts)
+        }
+    }
+
+    fun getPostsByCompanyId(companyId: String) {
+        viewModelScope.launch {
+            val posts = postRepository.getPostsByCompanyId(companyId)
+            _postsByCompanyId.postValue(posts)
         }
     }
 }

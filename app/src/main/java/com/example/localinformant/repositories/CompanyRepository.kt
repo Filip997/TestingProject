@@ -81,52 +81,58 @@ class CompanyRepository {
         }
     }
 
-    suspend fun followUnfollowCompany(companyId: String) {
+    suspend fun followUnfollowCompany(companyId: String): Boolean =
         withContext(Dispatchers.IO) {
             try {
                 val currentPerson = PreferencesManager.getPerson()
-
-                val currentCompany = db.collection(AppConstants.COMPANIES)
-                    .document(companyId)
-                    .get()
-                    .await()
-                    .toObject<Company>()
+                val currentCompany = getCompanyById(companyId)
 
                 if (currentPerson != null && currentCompany != null) {
                     val personFollowing = currentPerson.following
                     val companyFollowers = currentCompany.followers
 
-                    var currentPersonFollowsCurrentCompany = false
-                    var currentCompanyIsFollowedByCurrentPerson = false
-
-                    for (id in personFollowing) {
-                        if (id == companyId) {
-                            currentPersonFollowsCurrentCompany = true
-                            break
-                        }
-                    }
-
-                    for (id in companyFollowers) {
-                        if (id == currentPerson.id) {
-                            currentCompanyIsFollowedByCurrentPerson = true
-                            break
-                        }
-                    }
+                    val currentPersonFollowsCurrentCompany = personFollowing.any { it == companyId }
+                    val currentCompanyIsFollowedByCurrentPerson = companyFollowers.any { it == currentPerson.id }
 
                     if (!currentPersonFollowsCurrentCompany && !currentCompanyIsFollowedByCurrentPerson) {
                         personFollowing.add(companyId)
                         companyFollowers.add(currentPerson.id)
-
-                        db.collection(AppConstants.PERSONS).document(currentPerson.id).update("following", personFollowing)
-                        db.collection(AppConstants.COMPANIES).document(companyId).update("followers", companyFollowers)
                     } else if (currentPersonFollowsCurrentCompany && currentCompanyIsFollowedByCurrentPerson) {
                         personFollowing.remove(companyId)
                         companyFollowers.remove(currentPerson.id)
                     }
+
+                    db.collection(AppConstants.PERSONS).document(currentPerson.id).update("following", personFollowing)
+                    db.collection(AppConstants.COMPANIES).document(companyId).update("followers", companyFollowers)
+
+                    true
+                } else {
+                    false
                 }
             } catch (e: Exception) {
-
+                false
             }
         }
-    }
+
+    suspend fun isCompanyFollowed(companyId: String): Boolean =
+        withContext(Dispatchers.IO) {
+            try {
+                val currentPerson = PreferencesManager.getPerson()
+                val currentCompany = getCompanyById(companyId)
+
+                if (currentPerson != null && currentCompany != null) {
+                    val personFollowing = currentPerson.following
+                    val companyFollowers = currentCompany.followers
+
+                    val currentPersonFollowsCurrentCompany = personFollowing.any { it == companyId }
+                    val currentCompanyIsFollowedByCurrentPerson = companyFollowers.any { it == currentPerson.id }
+
+                    currentPersonFollowsCurrentCompany && currentCompanyIsFollowedByCurrentPerson
+                } else {
+                    false
+                }
+            } catch (e: Exception) {
+                false
+            }
+        }
 }

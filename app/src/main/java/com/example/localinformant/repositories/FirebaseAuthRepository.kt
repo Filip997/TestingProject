@@ -82,7 +82,7 @@ class FirebaseAuthRepository {
                 "${request.firstName} ${request.lastName}",
                 request.email,
                 "",
-                listOf()
+                mutableListOf()
             )
 
             val data = hashMapOf(
@@ -116,7 +116,7 @@ class FirebaseAuthRepository {
                 request.firstName,
                 request.lastName,
                 "",
-                listOf()
+                mutableListOf()
             )
 
             val data = hashMapOf(
