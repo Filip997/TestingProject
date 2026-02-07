@@ -27,4 +27,5 @@ object AppConstants {
     const val NOTIFICATION_CHANNEL_ID = "localinformant_id"
     const val NOTIFICATION_CHANNEL_NAME = "localinformant_name"
     const val NOTIFICATION_CHANNEL_DESCRIPTION = "localinformant_description"
+    const val NOTIFICATIONS = "notifications"
 }
