@@ -66,7 +66,6 @@
                     android:background="@drawable/ic_blue_button_big"
                     android:fontFamily="@font/roboto_medium"
                     android:text="Like"
-                    android:textColor="@color/white"
                     android:textStyle="bold" />
 
                 <Button
@@ -79,7 +78,6 @@
                     android:background="@drawable/ic_blue_button_big"
                     android:fontFamily="@font/roboto_medium"
                     android:text="Comment"
-                    android:textColor="@color/white"
                     android:textStyle="bold" />
 
             </LinearLayout>

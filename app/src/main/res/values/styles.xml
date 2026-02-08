@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/purple_700</item>
+        <item name="boxStrokeColor">@color/material_dynamic_primary0</item>
         <item name="boxStrokeWidth">1dp</item>
     </style>
 

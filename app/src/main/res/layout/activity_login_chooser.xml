@@ -23,7 +23,6 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@color/purple_700"
         app:strokeWidth="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,7 +47,6 @@
                 android:fontFamily="@font/roboto_bold"
                 android:text="Individual"
                 android:textAlignment="center"
-                android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -75,7 +73,6 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/individual_card"
         app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@color/purple_700"
         app:strokeWidth="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -100,7 +97,6 @@
                 android:fontFamily="@font/roboto_bold"
                 android:text="Company"
                 android:textAlignment="center"
-                android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -24,7 +24,6 @@
         android:id="@+id/til_post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/color_gray"
         android:layout_marginStart="18dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="18dp"
@@ -85,7 +84,6 @@
             android:background="@drawable/ic_blue_button_big"
             android:fontFamily="@font/roboto_medium"
             android:text="Post"
-            android:textColor="@color/white"
             android:textStyle="bold" />
 
         <Button
@@ -98,7 +96,6 @@
             android:background="@drawable/ic_blue_button_big"
             android:fontFamily="@font/roboto_medium"
             android:text="Cancel"
-            android:textColor="@color/white"
             android:textStyle="bold" />
 
     </LinearLayout>
