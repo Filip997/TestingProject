@@ -63,7 +63,7 @@ dependencies {
     implementation("com.google.android.material:material:1.13.0")
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     implementation("androidx.activity:activity-ktx:1.12.3")
-    implementation("androidx.activity:activity-ktx:1.12.3")
+    implementation("androidx.activity:activity:1.12.3")
     implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0")
 
     //RxJava
