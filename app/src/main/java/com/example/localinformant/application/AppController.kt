@@ -8,9 +8,11 @@ import com.example.localinformant.constants.SharedPrefKeys
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
+import dagger.hilt.android.HiltAndroidApp
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+@HiltAndroidApp
 class AppController : Application() {
 
     companion object {
