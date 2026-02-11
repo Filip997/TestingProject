@@ -2,6 +2,7 @@ package com.example.localinformant.core.presentation
 
 import android.app.Activity
 import com.example.localinformant.language.presentation.activities.LanguageActivity
+import com.example.localinformant.views.activities.LoginActivity
 import com.example.localinformant.views.activities.LoginChooserActivity
 import com.example.localinformant.views.activities.MainActivity
 import dagger.hilt.android.scopes.ActivityScoped
@@ -22,5 +23,9 @@ class ScreensNavigator @Inject constructor(
 
     fun navigateToLoginChooserActivity() {
         LoginChooserActivity.start(activity)
+    }
+
+    fun navigateToLoginActivity(userType: String) {
+        LoginActivity.start(activity, userType)
     }
 }

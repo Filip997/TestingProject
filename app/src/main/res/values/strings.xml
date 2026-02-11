@@ -71,4 +71,6 @@
     <string name="next">Next</string>
     <string name="macedonian">Macedonian</string>
     <string name="english">English</string>
+    <string name="person">Person</string>
+    <string name="company">Company</string>
 </resources>

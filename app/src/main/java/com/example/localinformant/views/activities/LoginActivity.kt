@@ -181,4 +181,12 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
+    companion object {
+        fun start(context: Context, userType: String) {
+            val intent = Intent(context, LoginActivity::class.java)
+            intent.putExtra(IntentKeys.USER_TYPE, userType)
+            context.startActivity(intent)
+        }
+    }
 }
