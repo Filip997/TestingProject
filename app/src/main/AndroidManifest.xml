@@ -43,11 +43,11 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.activities.LanguageActivity"
+            android:name=".language.presentation.activities.LanguageActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.activities.SplashScreenActivity"
+            android:name=".splash.presentation.activities.SplashScreenActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

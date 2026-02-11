@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Локален Информатор</string>
+    <string name="choose_language">Изберете јазик</string>
+    <string name="next">Следно</string>
+    <string name="macedonian">Македонски</string>
+    <string name="english">Англиски</string>
+</resources>

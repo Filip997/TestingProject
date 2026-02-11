@@ -14,7 +14,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.localinformant.R
 import com.example.localinformant.constants.AppConstants
 import com.example.localinformant.constants.IntentKeys
-import com.example.localinformant.views.activities.SplashScreenActivity
+import com.example.localinformant.splash.presentation.activities.SplashScreenActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.messaging.remoteMessage

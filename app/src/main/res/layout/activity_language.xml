@@ -4,19 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.activities.LanguageActivity">
+    tools:context=".language.presentation.activities.LanguageActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_padding_size_xxxxlarge"
         android:textSize="@dimen/text_size_xlarge"
-        tools:text="Pick a language"
+        android:text="@string/choose_language"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <Spinner
+        android:id="@+id/spinner_language"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_padding_size_xxxxlarge"
@@ -30,11 +31,12 @@
         android:id="@+id/btn_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_padding_size_xxxxlarge"
         android:layout_marginBottom="@dimen/margin_padding_size_xxxxlarge"
         android:layout_marginHorizontal="@dimen/margin_padding_size_xxxlarge"
-        android:text="Next"
+        android:text="@string/next"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_language"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

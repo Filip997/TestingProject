@@ -2,12 +2,10 @@ package com.example.localinformant.views.activities
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.viewbinding.ViewBinding
-import com.example.localinformant.R
 
 abstract class BaseActivity : AppCompatActivity() {
 
