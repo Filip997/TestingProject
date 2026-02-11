@@ -1,5 +1,6 @@
 package com.example.localinformant.views.activities
 
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -276,6 +277,16 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(newTokenReceiver)
+    }
+
+    companion object {
+        fun start(context: Context, shouldFinish: Boolean) {
+            val intent = Intent(context, MainActivity::class.java)
+            context.startActivity(intent)
+            if (shouldFinish) {
+                (context as Activity).finish()
+            }
+        }
     }
 
 //    private fun setupBottomNavigationMenu() {

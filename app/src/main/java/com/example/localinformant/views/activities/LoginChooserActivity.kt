@@ -1,5 +1,6 @@
 package com.example.localinformant.views.activities
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -33,5 +34,12 @@ class LoginChooserActivity : AppCompatActivity() {
         val intent = Intent(this@LoginChooserActivity, LoginActivity::class.java)
         intent.putExtra(IntentKeys.USER_TYPE, userType)
         startActivity(intent)
+    }
+
+    companion object {
+        fun start(context: Context) {
+            val intent = Intent(context, LoginChooserActivity::class.java)
+            context.startActivity(intent)
+        }
     }
 }

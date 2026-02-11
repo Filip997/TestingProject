@@ -1,6 +1,8 @@
 package com.example.localinformant.language.presentation.activities
 
 import android.R
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -10,11 +12,12 @@ import androidx.activity.viewModels
 import androidx.viewbinding.ViewBinding
 import com.example.localinformant.core.presentation.getLanguages
 import com.example.localinformant.core.domain.models.Language
+import com.example.localinformant.core.presentation.ScreensNavigator
 import com.example.localinformant.databinding.ActivityLanguageBinding
 import com.example.localinformant.language.presentation.viewmodels.LanguageViewModel
 import com.example.localinformant.views.activities.BaseActivity
-import com.example.localinformant.views.activities.LoginChooserActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LanguageActivity : BaseActivity() {
@@ -22,6 +25,8 @@ class LanguageActivity : BaseActivity() {
     private lateinit var binding: ActivityLanguageBinding
 
     private val languageViewModel: LanguageViewModel by viewModels()
+
+    @Inject lateinit var screensNavigator: ScreensNavigator
 
     override fun getLayoutBinding(): ViewBinding {
         binding = ActivityLanguageBinding.inflate(layoutInflater)
@@ -62,8 +67,7 @@ class LanguageActivity : BaseActivity() {
         }
 
         binding.btnNext.setOnClickListener {
-            val intent = Intent(this@LanguageActivity, LoginChooserActivity::class.java)
-            startActivity(intent)
+            screensNavigator.navigateToLoginChooserActivity()
         }
     }
 
@@ -72,6 +76,14 @@ class LanguageActivity : BaseActivity() {
         if (!currentLanguageCode.isNullOrEmpty()) {
             val index = languages.map { it.code }.indexOf(currentLanguageCode)
             binding.spinnerLanguage.setSelection(index)
+        }
+    }
+
+    companion object {
+        fun start(context: Context) {
+            val intent = Intent(context, LanguageActivity::class.java)
+            context.startActivity(intent)
+            (context as Activity).finish()
         }
     }
 }
