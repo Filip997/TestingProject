@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".application.AppController"
         android:allowBackup="true"
@@ -14,7 +16,7 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
-            android:name=".views.activities.BaseActivity"
+            android:name=".core.presentation.activities.BaseActivity"
             android:exported="false" />
         <activity
             android:name=".views.activities.ChangePasswordActivity"
@@ -23,27 +25,27 @@
             android:name=".views.activities.LoginSettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".views.activities.ForgotPasswordActivity"
+            android:name=".auth.presentation.activities.ForgotPasswordActivity"
             android:exported="false" />
         <activity
             android:name=".views.activities.UsersListAdminActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.activities.RegisterActivity"
+            android:name=".auth.presentation.activities.RegisterActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".views.activities.LoginActivity"
+            android:name=".auth.presentation.activities.LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.activities.LoginChooserActivity"
+            android:name=".setup.presentation.activities.LoginChooserActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".language.presentation.activities.LanguageActivity"
+            android:name=".setup.presentation.activities.LanguageActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -57,7 +59,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".views.activities.MainActivity"
+            android:name=".core.presentation.activities.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
 

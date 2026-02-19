@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".language.presentation.activities.LanguageActivity">
+    android:padding="@dimen/margin_padding_size_xxxlarge"
+    tools:context=".setup.presentation.activities.LanguageActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_padding_size_xxxxlarge"
+        android:layout_marginTop="@dimen/margin_padding_size_large"
         android:textSize="@dimen/text_size_xlarge"
         android:text="@string/choose_language"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,21 +21,21 @@
         android:id="@+id/spinner_language"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_padding_size_xxxxlarge"
         android:layout_marginBottom="@dimen/margin_padding_size_xxxxlarge"
+        android:paddingVertical="@dimen/margin_padding_size_medium"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <Button
-        android:id="@+id/btn_next"
+        android:id="@+id/btn_language_next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_padding_size_xxxxlarge"
         android:layout_marginBottom="@dimen/margin_padding_size_xxxxlarge"
-        android:layout_marginHorizontal="@dimen/margin_padding_size_xxxlarge"
         android:text="@string/next"
+        android:background="@drawable/ic_blue_button_big"
         app:layout_constraintTop_toBottomOf="@+id/spinner_language"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

@@ -19,8 +19,8 @@
     <string name="sign_up_log_in"><u>Log in</u></string>
     <string name="sign_up_already_have_an_account">Already have an account?</string>
     <string name="forgot_password_send">Send</string>
-    <string name="forgot_password_title">Forgot Password</string>
-    <string name="sign_up_privacy_policy">By signing up, you\'re agree to our <font color='#0303ff'><u>Terms &amp; Conditions</u></font> and <font color='#0303ff'><u>Privacy Policy.</u></font></string>
+
+
     <string name="sign_up_confirm_password">Confirm Password</string>
     <string name="change_password_old_password">Current Password</string>
     <string name="change_password_new_password">New Password</string>
@@ -30,7 +30,6 @@
     <string name="change_password_enter_your_current_password">Enter Your Current Password</string>
     <string name="email_format_incorrect">Email format is not correct</string>
     <string name="log_in_successful">Log in successful</string>
-    <string name="no_internet_connection">No internet connection</string>
     <string name="no_user_in_database">Wrong email</string>
     <string name="email_already_used">Email address already in use</string>
     <string name="wrong_password">Invalid password or a Google account already exists</string>
@@ -40,7 +39,6 @@
     <string name="password_8_chars">Password needs to be at least 8 characters, have one uppercase and a special character</string>
     <string name="strong_password">Please enter a stronger password</string>
     <string name="password_20_chars">Password needs to be maximum 20 characters</string>
-    <string name="sign_up_successful">Sign up successful. Verify your email before logging in</string>
     <string name="email_sent">Email sent</string>
     <string name="logout">Logout</string>
     <string name="login_settings">Login Settings</string>
@@ -54,14 +52,8 @@
     <string name="the_password_is_invalid">The password is invalid</string>
     <string name="there_is_no_user">There is no user</string>
     <string name="the_email_address_is_already_in_use">The email address is already in use</string>
-    <string name="company_name">Company Name</string>
-    <string name="enter_your_company_name">Enter Your Company Name</string>
-    <string name="company_email">Company Email</string>
-    <string name="enter_your_company_email">Enter Your Company Email</string>
-    <string name="first_name">First Name</string>
-    <string name="enter_your_first_name">Enter Your First Name</string>
-    <string name="last_name">Last Name</string>
-    <string name="enter_your_last_name">Enter Your Last Name</string>
+
+
     <string name="my_account">My Account</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -73,4 +65,52 @@
     <string name="english">English</string>
     <string name="person">Person</string>
     <string name="company">Company</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="company_email">Company Email</string>
+    <string name="enter_your_email_address">Enter Your Email Address</string>
+    <string name="password">Password</string>
+    <string name="enter_your_password">Enter Your Password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="sign_in">Sign In</string>
+    <string name="dont_have_an_account">Don\'t have an account?</string>
+    <string name="create_one">Create one!</string>
+    <string name="empty_field">Empty field</string>
+    <string name="invalid_email_format">Invalid email format</string>
+    <string name="the_email_or_password_you_entered_is_incorrect">The email or password you entered is incorrect.</string>
+    <string name="we_couldnt_find_an_account_with_those_details">We couldn\'t find an account with those details.</string>
+    <string name="an_account_with_this_email_already_exists">An account with this email already exists. Please log in or use a different email address.</string>
+    <string name="something_went_wrong_while_connecting_to_the_server">Something went wrong while connecting to the server. Please try again.</string>
+    <string name="too_many_attemts_please_wait_a_few_minutes_and_try_again">Too many attempts. Please wait a few minutes and try again.</string>
+    <string name="please_verify_your_email_address_before_signing_in">Please verify your email address before signing in.</string>
+    <string name="no_internet_connection">No internet connection. Please check your network and try again.</string>
+    <string name="something_unexpected_happened_please_try_again">Something unexpected happened. Please try again.</string>
+    <string name="registration">Registration</string>
+    <string name="company_name">Company Name</string>
+    <string name="enter_your_company_name">Enter Your Company Name</string>
+    <string name="enter_your_company_email">Enter Your Company Email</string>
+    <string name="first_name">First Name</string>
+    <string name="enter_your_first_name">Enter Your First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="enter_your_last_name">Enter Your Last Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register_privacy_policy">By signing up, you agree to our <font color='#0303ff'><u>Terms &amp; Conditions</u></font> and <font color='#0303ff'><u>Privacy Policy.</u></font></string>
+    <string name="sign_up">Sign Up</string>
+    <string name="password_too_short_message">Password needs to contain at least 6 characters</string>
+    <string name="password_should_contain_at_least_one_special_character">Password should contain at least one special character</string>
+    <string name="password_should_contain_at_least_one_digit">Password should contain at least one digit</string>
+    <string name="password_should_contain_at_least_one_uppercase_letter">Password should contain at least one uppercase letter</string>
+    <string name="password_should_not_contain_whitespace">Password should not contain whitespace</string>
+    <string name="passwords_dont_match">Passwords don\'t match</string>
+    <string name="your_first_name">Your First Name</string>
+    <string name="your_last_name">Your Last Name</string>
+    <string name="your_email">Your Email</string>
+    <string name="close">Close</string>
+    <string name="ok">OK</string>
+    <string name="error">Error</string>
+    <string name="registration_successful_message">Registration successful! Verify your email before logging in.</string>
+    <string name="forgot_password_title">Forgot Password</string>
+    <string name="send">Send</string>
+    <string name="successful">Successful!</string>
+    <string name="check_your_email">Check your email.</string>
 </resources>

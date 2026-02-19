@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.localinformant.R
 import com.example.localinformant.databinding.ActivityChangePasswordBinding
 import com.example.localinformant.databinding.ActivityLoginSettingsBinding
-import com.example.localinformant.viewmodels.LoginViewModel
+import com.example.localinformant.auth.presentation.viewmodels.LoginViewModel
 import java.util.regex.Pattern
 
 class ChangePasswordActivity : AppCompatActivity() {

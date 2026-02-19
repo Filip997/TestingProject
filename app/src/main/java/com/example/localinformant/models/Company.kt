@@ -1,5 +1,7 @@
 package com.example.localinformant.models
 
+import com.example.localinformant.core.domain.models.User
+
 data class Company(
     val id: String = "",
     val companyName: String = "",
@@ -9,4 +11,4 @@ data class Company(
     val lastName: String = "",
     val token: String = "",
     val followers: MutableList<String> = mutableListOf()
-)
+): User

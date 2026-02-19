@@ -8,10 +8,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.localinformant.R
+import com.example.localinformant.auth.presentation.activities.LoginActivity
 import com.example.localinformant.constants.AppConstants
 import com.example.localinformant.constants.IntentKeys
 import com.example.localinformant.databinding.ActivityLoginSettingsBinding
-import com.example.localinformant.viewmodels.LoginViewModel
+import com.example.localinformant.auth.presentation.viewmodels.LoginViewModel
 import com.google.android.material.R.style.MaterialAlertDialog_MaterialComponents
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 

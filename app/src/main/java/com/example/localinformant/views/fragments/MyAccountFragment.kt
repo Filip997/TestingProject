@@ -15,9 +15,9 @@ import com.example.localinformant.constants.IntentKeys
 import com.example.localinformant.databinding.FragmentMyAccountBinding
 import com.example.localinformant.viewmodels.MyAccountViewModel
 import com.example.localinformant.views.activities.ChangePasswordActivity
-import com.example.localinformant.views.activities.LoginActivity
+import com.example.localinformant.auth.presentation.activities.LoginActivity
 import com.example.localinformant.views.activities.LoginSettingsActivity
-import com.example.localinformant.views.activities.MainActivity
+import com.example.localinformant.core.presentation.activities.MainActivity
 
 class MyAccountFragment : Fragment() {
 
