@@ -2,7 +2,7 @@ package com.example.localinformant.auth.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.localinformant.auth.domain.usecases.GetUserTypeUseCase
+import com.example.localinformant.core.domain.usecases.GetUserTypeUseCase
 import com.example.localinformant.auth.domain.usecases.RegisterUserData
 import com.example.localinformant.auth.domain.usecases.RegisterUserUseCase
 import com.example.localinformant.auth.domain.error.AuthError

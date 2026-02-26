@@ -40,9 +40,9 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener {
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
 
-        if (arguments?.containsKey(IntentKeys.USER_TYPE)!!) {
-            userType = arguments?.getString(IntentKeys.USER_TYPE)
-        }
+//        if (arguments?.containsKey(IntentKeys.USER_TYPE)!!) {
+//            userType = arguments?.getString(IntentKeys.USER_TYPE)
+//        }
 
         userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
 

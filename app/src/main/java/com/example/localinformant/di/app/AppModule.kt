@@ -7,8 +7,12 @@ import com.example.localinformant.auth.domain.repositories.FirebaseAuthRepositor
 import com.example.localinformant.constants.SharedPrefKeys
 import com.example.localinformant.core.data.repositories.PreferencesRepositoryImpl
 import com.example.localinformant.core.data.network.NetworkCheckerImpl
+import com.example.localinformant.core.data.repositories.FirebaseFirestoreRepositoryImpl
+import com.example.localinformant.core.data.repositories.FirebaseStorageRepositoryImpl
 import com.example.localinformant.core.domain.repositories.PreferencesRepository
 import com.example.localinformant.core.domain.network.NetworkChecker
+import com.example.localinformant.core.domain.repositories.FirebaseFirestoreRepository
+import com.example.localinformant.core.domain.repositories.FirebaseStorageRepository
 import com.example.localinformant.di.qualifiers.AppSharedPreferences
 import com.example.localinformant.di.qualifiers.UserSharedPreferences
 import com.google.firebase.Firebase
@@ -16,6 +20,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.messaging
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -54,6 +62,18 @@ abstract class AppModule {
         fun firebaseFirestore(): FirebaseFirestore {
             return Firebase.firestore
         }
+
+        @Provides
+        @Singleton
+        fun firebaseStorage(): FirebaseStorage {
+            return Firebase.storage
+        }
+
+        @Provides
+        @Singleton
+        fun firebaseCloudMessaging(): FirebaseMessaging {
+            return Firebase.messaging
+        }
     }
 
     @Binds
@@ -67,6 +87,18 @@ abstract class AppModule {
     abstract fun bindAuthRepository(
         impl: FirebaseAuthRepositoryImpl
     ): FirebaseAuthRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindDbRepository(
+        impl: FirebaseFirestoreRepositoryImpl
+    ): FirebaseFirestoreRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindStorageRepository(
+        impl: FirebaseStorageRepositoryImpl
+    ): FirebaseStorageRepository
 
     @Binds
     @Singleton

@@ -1,4 +1,6 @@
-package com.example.localinformant.models
+package com.example.localinformant.core.domain.models
+
+import com.example.localinformant.models.Comment
 
 data class Post(
     val id: String = "",

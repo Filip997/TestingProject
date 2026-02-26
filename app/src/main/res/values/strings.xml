@@ -113,4 +113,14 @@
     <string name="send">Send</string>
     <string name="successful">Successful!</string>
     <string name="check_your_email">Check your email.</string>
+    <string name="invalid_argument_message">Some of the entered information is invalid. Please check your input and try again.</string>
+    <string name="not_found_message">The requested data could not be found. Please try again.</string>
+    <string name="already_exists_message">This item already exists.</string>
+    <string name="aborted_message">The operation could not be completed. Please try again.</string>
+    <string name="deadline_exceeded_message">The request took too long. Please check your internet connection and try again.</string>
+    <string name="new_post">New Post</string>
+    <string name="enter_text">Enter text</string>
+    <string name="share">Share</string>
+    <string name="failed_uploading_images">Failed uploading images.</string>
+    <string name="post_is_shared_successfully">Post is shared successfully.</string>
 </resources>

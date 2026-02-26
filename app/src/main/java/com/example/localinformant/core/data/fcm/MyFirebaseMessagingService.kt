@@ -1,4 +1,4 @@
-package com.example.localinformant.fcm
+package com.example.localinformant.core.data.fcm
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -10,22 +10,36 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.localinformant.R
 import com.example.localinformant.constants.AppConstants
-import com.example.localinformant.constants.IntentKeys
+import com.example.localinformant.core.domain.usecases.UpdateFcmTokenUseCase
 import com.example.localinformant.splash.presentation.activities.SplashScreenActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.google.firebase.messaging.remoteMessage
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.random.Random
 
-class FirebaseMessageReceiver : FirebaseMessagingService() {
+@AndroidEntryPoint
+class MyFirebaseMessagingService : FirebaseMessagingService() {
+
+    private val serviceScope = CoroutineScope(
+        SupervisorJob() + Dispatchers.IO
+    )
+
+    @Inject lateinit var updateFcmTokenUseCase: UpdateFcmTokenUseCase
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
 
-        sendTokenToMainActivity(token)
+        serviceScope.launch {
+            updateFcmTokenUseCase.invoke(token)
+        }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
@@ -33,12 +47,6 @@ class FirebaseMessageReceiver : FirebaseMessagingService() {
 
         Log.d("__notification", message.data["type"] ?: "")
         createNotification(message.data["title"] ?: "", message.data["body"] ?: "")
-    }
-
-    private fun sendTokenToMainActivity(token: String) {
-        val intent = Intent(AppConstants.NEW_TOKEN)
-        intent.putExtra(IntentKeys.USER_TOKEN, token)
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
     }
 
     private fun createNotification(title: String, message: String) {
@@ -77,5 +85,10 @@ class FirebaseMessageReceiver : FirebaseMessagingService() {
             lightColor = Color.GREEN
         }
         notificationManager.createNotificationChannel(channel)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        serviceScope.cancel()
     }
 }

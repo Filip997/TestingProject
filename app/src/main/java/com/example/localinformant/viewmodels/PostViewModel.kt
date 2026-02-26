@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.localinformant.models.CreatePostResponse
-import com.example.localinformant.models.Post
+import com.example.localinformant.core.domain.models.Post
 import com.example.localinformant.models.PostRequest
 import com.example.localinformant.repositories.PostRepository
 import kotlinx.coroutines.launch

@@ -4,8 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.localinformant.databinding.CompanyPostsAdapterDesignBinding
-import com.example.localinformant.models.Post
-import com.example.localinformant.models.User
+import com.example.localinformant.core.domain.models.Post
 
 class CompanyPostsAdapter(
     private val posts: MutableList<Post>,

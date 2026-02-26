@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:layout_margin="@dimen/margin_padding_size_xsmall">
+
+    <ImageView
+        android:id="@+id/iv_picked_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:contentDescription="Picked image"/>
+
+    <ImageView
+        android:id="@+id/iv_remove_btn"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="@dimen/margin_padding_size_xsmall"
+        android:background="@drawable/remove_image_background"
+        android:src="@drawable/ic_close"
+        android:contentDescription="Remove image"/>
+
+</FrameLayout>

@@ -20,12 +20,14 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class FirebaseAuthRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val db: FirebaseFirestore,
+    private val cloudMessaging: FirebaseMessaging,
     private val networkChecker: NetworkChecker
 ) : FirebaseAuthRepository {
 
@@ -114,6 +116,9 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 val loggedPerson = getPersonById(personId)
 
                 if (loggedPerson != null) {
+                    val token = cloudMessaging.token.await()
+                    updatePersonToken(personId, token)
+
                     Result.Success(loggedPerson)
                 } else {
                     Result.Error(AuthError.USER_NOT_FOUND)
@@ -143,6 +148,13 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             .toObject(Person::class.java)
     }
 
+    private suspend fun updatePersonToken(id: String, token: String) {
+        db.collection(AppConstants.PERSONS)
+            .document(id)
+            .update("token", token)
+            .await()
+    }
+
     override suspend fun loginCompany(email: String, password: String): Result<User, Error> {
         return try {
             if (!networkChecker.hasInternetConnection()) {
@@ -157,6 +169,9 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 val loggedCompany = getCompanyById(companyId)
 
                 if (loggedCompany != null) {
+                    val token = cloudMessaging.token.await()
+                    updateCompanyToken(companyId, token)
+
                     Result.Success(loggedCompany)
                 } else {
                     Result.Error(AuthError.USER_NOT_FOUND)
@@ -184,6 +199,13 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             .get()
             .await()
             .toObject(Company::class.java)
+    }
+
+    private suspend fun updateCompanyToken(id: String, token: String) {
+        db.collection(AppConstants.COMPANIES)
+            .document(id)
+            .update("token", token)
+            .await()
     }
 
     override suspend fun resetPassword(email: String): Result<Unit, Error> {

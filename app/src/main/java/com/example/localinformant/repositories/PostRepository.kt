@@ -5,7 +5,7 @@ import com.example.localinformant.constants.PreferencesManager
 import com.example.localinformant.models.Comment
 import com.example.localinformant.models.Company
 import com.example.localinformant.models.CreatePostResponse
-import com.example.localinformant.models.Post
+import com.example.localinformant.core.domain.models.Post
 import com.example.localinformant.models.PostRequest
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth

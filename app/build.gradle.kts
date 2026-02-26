@@ -51,9 +51,11 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
     //Firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-auth-ktx:23.2.1")
     implementation("com.google.firebase:firebase-firestore-ktx:25.1.4")
     implementation("com.google.firebase:firebase-messaging:25.0.1")
+    implementation("com.google.firebase:firebase-storage-ktx")
 
     //Retrofit
     implementation ("com.squareup.retrofit2:retrofit:3.0.0")

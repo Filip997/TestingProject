@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.localinformant.auth.data.repositories.FirebaseAuthRepositoryImpl
-import com.example.localinformant.auth.domain.usecases.GetUserTypeUseCase
+import com.example.localinformant.core.domain.usecases.GetUserTypeUseCase
 import com.example.localinformant.auth.domain.usecases.LoginUserUseCase
 import com.example.localinformant.auth.domain.error.AuthError
 import com.example.localinformant.auth.domain.validators.LoginValidator

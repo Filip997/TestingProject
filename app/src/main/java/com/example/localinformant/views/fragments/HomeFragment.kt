@@ -17,7 +17,7 @@ import com.example.localinformant.constants.NavFunctions.popUpDefaultNavigation
 import com.example.localinformant.constants.PreferencesManager
 import com.example.localinformant.constants.SharedPrefKeys
 import com.example.localinformant.databinding.FragmentHomeBinding
-import com.example.localinformant.models.Post
+import com.example.localinformant.core.domain.models.Post
 import com.example.localinformant.viewmodels.PostViewModel
 import com.example.localinformant.views.adapters.CompanyPostsAdapter
 import kotlin.concurrent.thread

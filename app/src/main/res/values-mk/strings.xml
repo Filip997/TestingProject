@@ -55,4 +55,14 @@
     <string name="send">Испрати</string>
     <string name="successful">Успешно!</string>
     <string name="check_your_email">Проверете го вашиот емаил.</string>
+    <string name="invalid_argument_message">Некои од внесените информации се неважечки. Проверете го внесениот текст и обидете се повторно.</string>
+    <string name="not_found_message">Бараните податоци не можеа да се пронајдат. Обидете се повторно.</string>
+    <string name="already_exists_message">Оваа ставка веќе постои.</string>
+    <string name="aborted_message">Операцијата не можеше да се заврши. Обидете се повторно.</string>
+    <string name="deadline_exceeded_message">Барањето траеше предолго. Проверете ја вашата интернет-врска и обидете се повторно.</string>
+    <string name="new_post">Нова Објава</string>
+    <string name="enter_text">Внесете текст</string>
+    <string name="share">Сподели</string>
+    <string name="failed_uploading_images">Неуспешно прикачување на сликите.</string>
+    <string name="post_is_shared_successfully">Успешно е споделена објавата.</string>
 </resources>
