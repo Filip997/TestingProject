@@ -1,7 +1,7 @@
 package com.example.localinformant.core.domain.repositories
 
-import com.example.localinformant.models.Company
-import com.example.localinformant.models.Person
+import com.example.localinformant.core.domain.models.Company
+import com.example.localinformant.core.domain.models.Person
 
 interface PreferencesRepository {
 

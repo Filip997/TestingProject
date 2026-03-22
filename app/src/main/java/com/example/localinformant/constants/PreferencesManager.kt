@@ -1,8 +1,8 @@
 package com.example.localinformant.constants
 
 import com.example.localinformant.application.AppController
-import com.example.localinformant.models.Company
-import com.example.localinformant.models.Person
+import com.example.localinformant.core.domain.models.Company
+import com.example.localinformant.core.domain.models.Person
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

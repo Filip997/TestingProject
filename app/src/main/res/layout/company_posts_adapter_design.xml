@@ -2,88 +2,267 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_marginHorizontal="@dimen/margin_padding_size_medium"
+    android:layout_marginTop="@dimen/margin_padding_size_medium"
+    android:layout_marginBottom="@dimen/margin_padding_size_xsmall"
+    android:background="@drawable/bg_post_card"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/search_card_view"
+        android:id="@+id/card_home_post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        app:cardBackgroundColor="#D3D3D3"
+        android:background="@color/md_theme_background"
         app:cardCornerRadius="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/tv_company_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <TextView
-                android:id="@+id/tv_company_post_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_company_name"/>
+            android:layout_height="match_parent"
+            android:background="@color/md_theme_background"
+            android:padding="@dimen/margin_padding_size_xlarge">
 
             <LinearLayout
-                android:id="@+id/layout_buttons"
+                android:id="@+id/layout_home_company_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="18dp"
+                android:gravity="center_vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/civ_home_company_profile_image"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/default_profile_pic"
+                    android:contentDescription="Company profile image" />
+
+                <TextView
+                    android:id="@+id/tv_home_company_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold"
+                    android:layout_marginStart="@dimen/margin_padding_size_large"
+                    tools:text="Lotarija"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_padding_size_medium"
+                    android:text="·"
+                    android:textSize="@dimen/text_size_medium"/>
+
+                <TextView
+                    android:id="@+id/tv_home_post_time_submited"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_padding_size_small"
+                    android:textSize="@dimen/text_size_medium"
+                    tools:text="45m"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_home_post_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_padding_size_xlarge"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_company_post_text">
+                app:layout_constraintTop_toBottomOf="@+id/layout_home_company_details">
 
-                <Button
-                    android:id="@+id/btn_like"
-                    android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/tv_home_company_post_text"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="18dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
-                    android:background="@drawable/ic_blue_button_big"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="Like"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/text_size_large"
+                    tools:text="It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."/>
 
-                <Button
-                    android:id="@+id/btn_comment"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:id="@+id/layout_home_post_images"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="18dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/ic_blue_button_big"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="Comment"
-                    android:textStyle="bold" />
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/margin_padding_size_large"
+                    android:gravity="center_horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/view_pager_home_post_images"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:clipToPadding="false"
+                        android:clipChildren="false"
+                        android:overScrollMode="never"/>
+
+                    <LinearLayout
+                        android:id="@+id/layout_home_dots"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="@dimen/margin_padding_size_medium"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_home_post_interactions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/margin_padding_size_xlarge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_home_post_content">
+
+                <LinearLayout
+                    android:id="@+id/layout_home_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/iv_home_like_btn"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_like"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="Like image"/>
+
+                    <TextView
+                        android:id="@+id/tv_home_num_likes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_medium"
+                        android:layout_marginStart="@dimen/margin_padding_size_medium"
+                        tools:text="15"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_home_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_padding_size_large"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/iv_home_comment_btn"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_comment"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="Like image"/>
+
+                    <TextView
+                        android:id="@+id/tv_home_num_comments"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_medium"
+                        android:layout_marginStart="@dimen/margin_padding_size_medium"
+                        tools:text="3"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_home_comments_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/card_home_post"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="visible">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_home_post_comments"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:nestedScrollingEnabled="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_home_user_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_small"
+            android:layout_marginBottom="@dimen/margin_padding_size_medium"
+            android:paddingHorizontal="@dimen/margin_padding_size_medium"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv_home_post_comments"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_home_user_new_comment_profile_image"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/default_profile_pic"
+                android:contentDescription="Company profile image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_home_user_new_comment"
+                style="@style/WriteCommentTextInputLayoutStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:layout_marginHorizontal="@dimen/margin_padding_size_medium"
+                android:hint="@string/write_a_comment"
+                app:helperTextEnabled="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/civ_home_user_new_comment_profile_image"
+                app:layout_constraintEnd_toStartOf="@+id/iv_home_submit_btn">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:inputType="text"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:padding="0dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/iv_home_submit_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_submit"
+                android:scaleType="centerCrop"
+                android:contentDescription="Submit image"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

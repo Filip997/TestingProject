@@ -2,8 +2,8 @@ package com.example.localinformant.repositories
 
 import com.example.localinformant.constants.AppConstants
 import com.example.localinformant.constants.PreferencesManager
-import com.example.localinformant.models.Comment
-import com.example.localinformant.models.Company
+import com.example.localinformant.core.domain.models.Comment
+import com.example.localinformant.core.domain.models.Company
 import com.example.localinformant.models.CreatePostResponse
 import com.example.localinformant.core.domain.models.Post
 import com.example.localinformant.models.PostRequest

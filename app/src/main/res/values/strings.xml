@@ -54,10 +54,6 @@
     <string name="the_email_address_is_already_in_use">The email address is already in use</string>
 
 
-    <string name="my_account">My Account</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
 
     <string name="choose_language">Choose language</string>
     <string name="next">Next</string>
@@ -123,4 +119,10 @@
     <string name="share">Share</string>
     <string name="failed_uploading_images">Failed uploading images.</string>
     <string name="post_is_shared_successfully">Post is shared successfully.</string>
+    <string name="write_a_comment">Write a comment</string>
+    <string name="reactions">Reactions</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="notifications">Notifications</string>
+    <string name="my_account">My Account</string>
 </resources>

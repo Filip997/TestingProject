@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_home_reaction_user"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="@dimen/margin_padding_size_medium">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_home_reacted_user_profile_image"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/default_profile_pic"
+        android:contentDescription="User profile image" />
+
+    <TextView
+        android:id="@+id/tv_home_reacted_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_medium"
+        android:layout_marginStart="@dimen/margin_padding_size_large"
+        tools:text="Filip Ivanovski"/>
+
+</LinearLayout>

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.localinformant.models.Person
+import com.example.localinformant.core.domain.models.Person
 import com.example.localinformant.repositories.PersonRepository
 import kotlinx.coroutines.launch
 

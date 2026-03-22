@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.localinformant.databinding.CreatePostPopUpDesignBinding
 import com.example.localinformant.main.presentation.adapters.PickedImagesAdapter
@@ -23,6 +24,7 @@ class PopUpWindowManager @Inject constructor(
 ) {
     private var binding: CreatePostPopUpDesignBinding? = null
     private var createPostPopUpWindow: PopupWindow? = null
+    private var shareBtnEnabled = false
 
     private var imagePickerListener: ImagePickerListener? = null
     private var sharePostListener: SharePostListener? = null
@@ -55,6 +57,10 @@ class PopUpWindowManager @Inject constructor(
         createPostPopUpWindow = PopupWindow(binding?.root, width, height, focusable)
         createPostPopUpWindow?.showAtLocation(binding?.root, Gravity.CENTER, 0, 0)
 
+        binding?.tilCreatePost?.editText?.doOnTextChanged { text, _, _, _ ->
+            shareBtnEnabled = !text.isNullOrEmpty()
+        }
+
         val pickedImagesAdapter = PickedImagesAdapter(mutableListOf())
         binding?.rvCreatePostPickedImages?.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         binding?.rvCreatePostPickedImages?.adapter = pickedImagesAdapter
@@ -71,11 +77,13 @@ class PopUpWindowManager @Inject constructor(
         }
 
         binding?.tvShareTextBtn?.setOnClickListener {
-            val uuid = UUID.randomUUID().toString()
-            val postText = binding?.etCreatePost?.text.toString()
-            val uris = pickedImagesAdapter.getUris()
+            if (shareBtnEnabled) {
+                val uuid = UUID.randomUUID().toString()
+                val postText = binding?.etCreatePost?.text.toString()
+                val uris = pickedImagesAdapter.getUris()
 
-            sharePostListener?.sharePost(uuid, postText, uris)
+                sharePostListener?.sharePost(uuid, postText, uris)
+            }
         }
 
         binding?.tvCloseTextBtn?.setOnClickListener {
@@ -100,7 +108,6 @@ class PopUpWindowManager @Inject constructor(
         binding = null
         createPostPopUpWindow = null
         imagePickerListener = null
-        sharePostListener = null
     }
 
     fun registerListener(listener: SharePostListener) {

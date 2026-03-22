@@ -80,6 +80,9 @@ dependencies {
     implementation ("com.google.dagger:hilt-android:2.59.1")
     ksp ("com.google.dagger:hilt-compiler:2.59.1")
 
+    //Glide
+    implementation ("com.github.bumptech.glide:glide:4.14.2")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")

@@ -16,7 +16,7 @@ import com.example.localinformant.databinding.FragmentUserAccountBinding
 import com.example.localinformant.viewmodels.CompanyViewModel
 import com.example.localinformant.viewmodels.PersonViewModel
 import com.example.localinformant.viewmodels.PostViewModel
-import com.example.localinformant.views.adapters.CompanyPostsAdapter
+import com.example.localinformant.core.presentation.adapters.CompanyPostsAdapter
 
 class UserAccountFragment : Fragment() {
 
@@ -54,13 +54,13 @@ class UserAccountFragment : Fragment() {
         companyViewModel = ViewModelProvider(this)[CompanyViewModel::class.java]
         postViewModel = ViewModelProvider(this)[PostViewModel::class.java]
 
-        companyPostsAdapter = CompanyPostsAdapter(mutableListOf()) { companyId ->
-            goToCompanyProfile(
-                companyId
-            )
-        }
-        binding.rvPosts.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvPosts.adapter = companyPostsAdapter
+//        companyPostsAdapter = CompanyPostsAdapter(mutableListOf()) { companyId ->
+//            goToCompanyProfile(
+//                companyId
+//            )
+//        }
+//        binding.rvPosts.layoutManager = LinearLayoutManager(requireContext())
+//        binding.rvPosts.adapter = companyPostsAdapter
 
         if (accountUserType == AppConstants.COMPANY) {
             companyViewModel.isCompanyFollowed(userId!!)
@@ -117,11 +117,11 @@ class UserAccountFragment : Fragment() {
             }
         }
 
-        postViewModel.postsByCompanyId.observe(viewLifecycleOwner) { posts ->
-            if (!posts.isNullOrEmpty()) {
-                companyPostsAdapter.updateList(posts)
-            }
-        }
+//        postViewModel.postsByCompanyId.observe(viewLifecycleOwner) { posts ->
+//            if (!posts.isNullOrEmpty()) {
+//                companyPostsAdapter.updateList(posts)
+//            }
+//        }
     }
 
     private fun setOnSwipeRefresh() {

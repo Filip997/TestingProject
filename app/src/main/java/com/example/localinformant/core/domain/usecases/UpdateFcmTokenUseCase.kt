@@ -1,12 +1,12 @@
 package com.example.localinformant.core.domain.usecases
 
-import com.example.localinformant.core.domain.repositories.FirebaseFirestoreRepository
+import com.example.localinformant.core.domain.repositories.GlobalRepository
 import com.example.localinformant.core.domain.repositories.PreferencesRepository
 import javax.inject.Inject
 
 class UpdateFcmTokenUseCase @Inject constructor(
     private val preferencesRepository: PreferencesRepository,
-    private val firestoreRepository: FirebaseFirestoreRepository
+    private val globalRepository: GlobalRepository
 ) {
 
     suspend operator fun invoke(token: String) {
@@ -14,9 +14,13 @@ class UpdateFcmTokenUseCase @Inject constructor(
         val company = preferencesRepository.getCompany()
 
         if (person != null) {
-            firestoreRepository.updatePersonToken(token)
+            globalRepository.updatePersonToken(token)?.let {
+                preferencesRepository.savePerson(it)
+            }
         } else if (company != null) {
-            firestoreRepository.updateCompanyToken(token)
+            globalRepository.updateCompanyToken(token)?.let {
+                preferencesRepository.saveCompany(it)
+            }
         }
     }
 }

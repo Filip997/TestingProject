@@ -1,6 +1,7 @@
 package com.example.localinformant.core.presentation.navigator
 
 import android.app.Activity
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import com.example.localinformant.R
@@ -11,7 +12,7 @@ import com.example.localinformant.constants.NavFunctions
 import com.example.localinformant.constants.NavFunctions.isFragmentInBackStack
 import com.example.localinformant.setup.presentation.activities.LanguageActivity
 import com.example.localinformant.setup.presentation.activities.LoginChooserActivity
-import com.example.localinformant.core.presentation.activities.MainActivity
+import com.example.localinformant.main.presentation.activities.MainActivity
 import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
 
@@ -87,12 +88,12 @@ class ScreensNavigator @Inject constructor(
         }
     }
 
-    fun navigateToMyAccountFragment() {
+    fun navigateToMyAccountFragment(bundle: Bundle? = null) {
         if (navController?.isFragmentInBackStack(R.id.myAccountFragment) == true) {
             navController?.popBackStack(R.id.myAccountFragment, false)
         } else {
             navController?.navigate(
-                R.id.myAccountFragment, null,
+                R.id.myAccountFragment, bundle,
                 NavFunctions.popUpDefaultNavigation()
             )
         }

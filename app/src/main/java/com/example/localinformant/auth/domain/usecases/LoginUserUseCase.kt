@@ -6,8 +6,8 @@ import com.example.localinformant.core.domain.models.User
 import com.example.localinformant.core.domain.error.Error
 import com.example.localinformant.core.domain.result.Result
 import com.example.localinformant.core.domain.models.UserType
-import com.example.localinformant.models.Company
-import com.example.localinformant.models.Person
+import com.example.localinformant.core.domain.models.Company
+import com.example.localinformant.core.domain.models.Person
 import javax.inject.Inject
 
 class LoginUserUseCase @Inject constructor(

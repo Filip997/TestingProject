@@ -3,8 +3,8 @@ package com.example.localinformant.repositories
 import android.util.Log
 import com.example.localinformant.constants.AppConstants
 import com.example.localinformant.constants.PreferencesManager
-import com.example.localinformant.models.Company
-import com.example.localinformant.models.Person
+import com.example.localinformant.core.domain.models.Company
+import com.example.localinformant.core.domain.models.Person
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
@@ -88,22 +88,22 @@ class CompanyRepository {
                 val currentCompany = getCompanyById(companyId)
 
                 if (currentPerson != null && currentCompany != null) {
-                    val personFollowing = currentPerson.following
-                    val companyFollowers = currentCompany.followers
-
-                    val currentPersonFollowsCurrentCompany = personFollowing.any { it == companyId }
-                    val currentCompanyIsFollowedByCurrentPerson = companyFollowers.any { it == currentPerson.id }
-
-                    if (!currentPersonFollowsCurrentCompany && !currentCompanyIsFollowedByCurrentPerson) {
-                        personFollowing.add(companyId)
-                        companyFollowers.add(currentPerson.id)
-                    } else if (currentPersonFollowsCurrentCompany && currentCompanyIsFollowedByCurrentPerson) {
-                        personFollowing.remove(companyId)
-                        companyFollowers.remove(currentPerson.id)
-                    }
-
-                    db.collection(AppConstants.PERSONS).document(currentPerson.id).update("following", personFollowing)
-                    db.collection(AppConstants.COMPANIES).document(companyId).update("followers", companyFollowers)
+//                    val personFollowing = currentPerson.following
+//                    val companyFollowers = currentCompany.followers
+//
+//                    val currentPersonFollowsCurrentCompany = personFollowing.any { it == companyId }
+//                    val currentCompanyIsFollowedByCurrentPerson = companyFollowers.any { it == currentPerson.id }
+//
+//                    if (!currentPersonFollowsCurrentCompany && !currentCompanyIsFollowedByCurrentPerson) {
+//                        personFollowing.add(companyId)
+//                        companyFollowers.add(currentPerson.id)
+//                    } else if (currentPersonFollowsCurrentCompany && currentCompanyIsFollowedByCurrentPerson) {
+//                        personFollowing.remove(companyId)
+//                        companyFollowers.remove(currentPerson.id)
+//                    }
+//
+//                    db.collection(AppConstants.PERSONS).document(currentPerson.id).update("following", personFollowing)
+//                    db.collection(AppConstants.COMPANIES).document(companyId).update("followers", companyFollowers)
 
                     true
                 } else {

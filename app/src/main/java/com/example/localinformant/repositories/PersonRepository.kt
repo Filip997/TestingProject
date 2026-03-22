@@ -2,7 +2,7 @@ package com.example.localinformant.repositories
 
 import android.util.Log
 import com.example.localinformant.constants.AppConstants
-import com.example.localinformant.models.Person
+import com.example.localinformant.core.domain.models.Person
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore

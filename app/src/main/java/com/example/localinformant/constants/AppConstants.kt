@@ -3,7 +3,7 @@ package com.example.localinformant.constants
 object AppConstants {
 
     const val ID = "id"
-    const val PERSON = "persons"
+    const val PERSON = "person"
     const val COMPANY = "company"
     const val PERSONS = "persons"
     const val COMPANIES = "companies"
@@ -22,6 +22,7 @@ object AppConstants {
     const val POST_TEXT = "postText"
     const val LIKES = "likes"
     const val COMMENTS = "comments"
+    const val REACTIONS = "reactions"
     const val SHARED_PREFS = "sharedPrefs"
     const val NEW_TOKEN = "newToken"
     const val NOTIFICATION_CHANNEL_ID = "localinformant_id"

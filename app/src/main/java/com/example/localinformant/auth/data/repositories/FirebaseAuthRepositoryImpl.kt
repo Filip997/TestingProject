@@ -4,13 +4,14 @@ import com.example.localinformant.auth.domain.repositories.FirebaseAuthRepositor
 import com.example.localinformant.auth.domain.usecases.RegisterUserData
 import com.example.localinformant.auth.domain.error.AuthError
 import com.example.localinformant.constants.AppConstants
+import com.example.localinformant.core.data.dto.CompanyDto
+import com.example.localinformant.core.data.dto.PersonDto
+import com.example.localinformant.core.data.mappers.toDomain
 import com.example.localinformant.core.domain.models.User
 import com.example.localinformant.core.domain.network.NetworkChecker
 import com.example.localinformant.core.domain.error.Error
 import com.example.localinformant.core.domain.result.Result
-import com.example.localinformant.models.Company
 import com.example.localinformant.models.LoginUserResponse
-import com.example.localinformant.models.Person
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.EmailAuthProvider
@@ -41,20 +42,19 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 auth.createUserWithEmailAndPassword(request.email, request.password).await()
             val currentUser = auth.currentUser
 
-            val person = Person(
-                currentUser?.uid!!,
-                request.firstName,
-                request.lastName,
-                "${request.firstName} ${request.lastName}",
-                request.email,
-                "",
-                mutableListOf()
+            val person = PersonDto(
+                id = currentUser?.uid!!,
+                firstName = request.firstName,
+                lastName = request.lastName,
+                email = request.email,
+                token = "",
+                following = listOf()
             )
 
             db.collection(AppConstants.PERSONS).document(currentUser.uid).set(person).await()
             authResponse.user?.sendEmailVerification()
 
-            Result.Success(person)
+            Result.Success(person.toDomain())
         } catch (e: FirebaseAuthUserCollisionException) {
             Result.Error(AuthError.USER_ALREADY_EXISTS)
         } catch (e: FirebaseNetworkException) {
@@ -76,21 +76,23 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 auth.createUserWithEmailAndPassword(request.companyEmail, request.password).await()
             val currentUser = auth.currentUser
 
-            val company = Company(
-                currentUser?.uid!!,
-                request.companyName,
-                request.companyEmail,
-                request.email,
-                request.firstName,
-                request.lastName,
-                "",
-                mutableListOf()
+            val company = CompanyDto(
+                id = currentUser?.uid!!,
+                companyName = request.companyName,
+                companyEmail = request.companyEmail,
+                email = request.email,
+                firstName = request.firstName,
+                lastName = request.lastName,
+                token = "",
+                followers = listOf(),
+                following = listOf(),
+                posts = listOf()
             )
 
             db.collection(AppConstants.COMPANIES).document(currentUser.uid).set(company).await()
             authResponse.user?.sendEmailVerification()
 
-            Result.Success(company)
+            Result.Success(company.toDomain())
         } catch (e: FirebaseAuthUserCollisionException) {
             Result.Error(AuthError.USER_ALREADY_EXISTS)
         } catch (e: FirebaseNetworkException) {
@@ -119,7 +121,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                     val token = cloudMessaging.token.await()
                     updatePersonToken(personId, token)
 
-                    Result.Success(loggedPerson)
+                    Result.Success(loggedPerson.toDomain())
                 } else {
                     Result.Error(AuthError.USER_NOT_FOUND)
                 }
@@ -140,12 +142,12 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun getPersonById(id: String): Person? {
+    private suspend fun getPersonById(id: String): PersonDto? {
         return db.collection(AppConstants.PERSONS)
             .document(id)
             .get()
             .await()
-            .toObject(Person::class.java)
+            .toObject(PersonDto::class.java)
     }
 
     private suspend fun updatePersonToken(id: String, token: String) {
@@ -172,7 +174,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                     val token = cloudMessaging.token.await()
                     updateCompanyToken(companyId, token)
 
-                    Result.Success(loggedCompany)
+                    Result.Success(loggedCompany.toDomain())
                 } else {
                     Result.Error(AuthError.USER_NOT_FOUND)
                 }
@@ -193,12 +195,12 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun getCompanyById(id: String): Company? {
+    private suspend fun getCompanyById(id: String): CompanyDto? {
         return db.collection(AppConstants.COMPANIES)
             .document(id)
             .get()
             .await()
-            .toObject(Company::class.java)
+            .toObject(CompanyDto::class.java)
     }
 
     private suspend fun updateCompanyToken(id: String, token: String) {

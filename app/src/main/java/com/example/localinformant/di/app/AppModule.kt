@@ -7,14 +7,16 @@ import com.example.localinformant.auth.domain.repositories.FirebaseAuthRepositor
 import com.example.localinformant.constants.SharedPrefKeys
 import com.example.localinformant.core.data.repositories.PreferencesRepositoryImpl
 import com.example.localinformant.core.data.network.NetworkCheckerImpl
-import com.example.localinformant.core.data.repositories.FirebaseFirestoreRepositoryImpl
-import com.example.localinformant.core.data.repositories.FirebaseStorageRepositoryImpl
+import com.example.localinformant.core.data.repositories.GlobalRepositoryImpl
 import com.example.localinformant.core.domain.repositories.PreferencesRepository
 import com.example.localinformant.core.domain.network.NetworkChecker
-import com.example.localinformant.core.domain.repositories.FirebaseFirestoreRepository
-import com.example.localinformant.core.domain.repositories.FirebaseStorageRepository
+import com.example.localinformant.core.domain.repositories.GlobalRepository
 import com.example.localinformant.di.qualifiers.AppSharedPreferences
 import com.example.localinformant.di.qualifiers.UserSharedPreferences
+import com.example.localinformant.home.data.repositories.HomeRepositoryImpl
+import com.example.localinformant.home.domain.repositories.HomeRepository
+import com.example.localinformant.main.data.repositories.MainRepositoryImpl
+import com.example.localinformant.main.domain.repositories.MainRepository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -90,19 +92,25 @@ abstract class AppModule {
 
     @Binds
     @Singleton
-    abstract fun bindDbRepository(
-        impl: FirebaseFirestoreRepositoryImpl
-    ): FirebaseFirestoreRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindStorageRepository(
-        impl: FirebaseStorageRepositoryImpl
-    ): FirebaseStorageRepository
-
-    @Binds
-    @Singleton
     abstract fun bindNetworkChecker(
         impl: NetworkCheckerImpl
     ): NetworkChecker
+
+    @Binds
+    @Singleton
+    abstract fun bindGlobalRepository(
+        impl: GlobalRepositoryImpl
+    ): GlobalRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindMainRepository(
+        impl: MainRepositoryImpl
+    ): MainRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindHomeRepository(
+        impl: HomeRepositoryImpl
+    ): HomeRepository
 }

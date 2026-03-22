@@ -1,12 +1,13 @@
 package com.example.localinformant.core.domain.models
 
-import com.example.localinformant.models.Comment
 
 data class Post(
     val id: String = "",
-    val companyId: String = "",
-    val companyName: String = "",
+    val createdAt: Long = 0,
+    val userId: String = "",
     val postText: String = "",
-    val likes: List<String> = listOf(),
+    val imageUrls: List<String> = listOf(),
+    val likeBtnClicked: Boolean = false,
+    val likes: List<Reaction> = listOf(),
     val comments: List<Comment> = listOf()
 )

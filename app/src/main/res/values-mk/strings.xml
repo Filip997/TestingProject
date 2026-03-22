@@ -65,4 +65,10 @@
     <string name="share">Сподели</string>
     <string name="failed_uploading_images">Неуспешно прикачување на сликите.</string>
     <string name="post_is_shared_successfully">Успешно е споделена објавата.</string>
+    <string name="write_a_comment">Напишете коментар</string>
+    <string name="reactions">Реакции</string>
+    <string name="home">Дома</string>
+    <string name="search">Пребарувај</string>
+    <string name="notifications">Известувања</string>
+    <string name="my_account">Профил</string>
 </resources>
