@@ -1,4 +1,4 @@
-package com.example.localinformant.views.adapters
+package com.example.localinformant.search.presentation.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -23,7 +23,8 @@ class SearchUsersAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchUserViewHolder {
-        return SearchUserViewHolder(SearchUsersAdapterDesignBinding
+        return SearchUserViewHolder(
+            SearchUsersAdapterDesignBinding
             .inflate(LayoutInflater.from(parent.context), parent, false))
     }
 

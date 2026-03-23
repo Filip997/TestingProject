@@ -1,11 +1,11 @@
-package com.example.localinformant.views.fragments
+package com.example.localinformant.search.presentation.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -15,7 +15,7 @@ import com.example.localinformant.constants.IntentKeys
 import com.example.localinformant.core.presentation.navigator.ScreensNavigator
 import com.example.localinformant.databinding.FragmentSearchBinding
 import com.example.localinformant.search.presentation.viewmodels.SearchViewModel
-import com.example.localinformant.views.adapters.SearchUsersAdapter
+import com.example.localinformant.search.presentation.adapters.SearchUsersAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,7 +28,8 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private val searchViewModel: SearchViewModel by viewModels()
 
-    @Inject lateinit var screensNavigator: ScreensNavigator
+    @Inject
+    lateinit var screensNavigator: ScreensNavigator
 
     private lateinit var bundle: Bundle
     private lateinit var searchUsersAdapter: SearchUsersAdapter

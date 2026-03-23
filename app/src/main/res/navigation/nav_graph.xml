@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.localinformant.views.fragments.SearchFragment"
+        android:name="com.example.localinformant.search.presentation.fragments.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
