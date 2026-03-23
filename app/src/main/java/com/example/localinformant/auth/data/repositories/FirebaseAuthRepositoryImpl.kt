@@ -45,7 +45,9 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             val person = PersonDto(
                 id = currentUser?.uid!!,
                 firstName = request.firstName,
+                firstNameLowerCase = request.firstName.lowercase(),
                 lastName = request.lastName,
+                lastNameLowerCase = request.lastName.lowercase(),
                 email = request.email,
                 token = "",
                 following = listOf()
@@ -79,6 +81,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             val company = CompanyDto(
                 id = currentUser?.uid!!,
                 companyName = request.companyName,
+                companyNameLowerCase = request.companyName.lowercase(),
                 companyEmail = request.companyEmail,
                 email = request.email,
                 firstName = request.firstName,

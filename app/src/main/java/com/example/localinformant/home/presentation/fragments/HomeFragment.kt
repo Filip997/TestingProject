@@ -28,7 +28,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-    private lateinit var binding: FragmentHomeBinding
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
 
     private val homeViewModel: HomeViewModel by viewModels()
 
@@ -42,7 +43,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentHomeBinding.inflate(inflater)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         bundle = Bundle()
 

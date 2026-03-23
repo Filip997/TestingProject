@@ -1,45 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_search_user"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="@dimen/margin_padding_size_medium">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/search_card_view"
-        android:layout_width="match_parent"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_search_user_profile_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="@dimen/margin_padding_size_xsmall"
+        android:src="@drawable/default_profile_pic"
+        android:contentDescription="User profile image" />
+
+    <TextView
+        android:id="@+id/tv_search_user_name"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="#D3D3D3"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:textSize="@dimen/text_size_large"
+        android:layout_marginStart="@dimen/margin_padding_size_xlarge"
+        tools:text="Filip Ivanovski"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/civ_search_user_profile_picture"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="10dp"/>
-
-            <TextView
-                android:id="@+id/tv_search_user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:layout_margin="16dp"/>
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

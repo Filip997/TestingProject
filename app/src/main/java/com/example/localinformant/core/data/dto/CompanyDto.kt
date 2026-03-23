@@ -3,6 +3,7 @@ package com.example.localinformant.core.data.dto
 data class CompanyDto(
     val id: String = "",
     val companyName: String = "",
+    val companyNameLowerCase: String = "",
     val companyProfileImageUrl: String = "",
     val companyEmail: String = "",
     val email: String = "",

@@ -6,52 +6,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".views.fragments.SearchFragment">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/search_card_view"
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/sv_search_users"
+        android:layout_height="50dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        app:cardBackgroundColor="#D3D3D3"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintStart_toEndOf="parent"
+        app:queryBackground="@null"
+        android:background="@drawable/bg_search_view"
+        android:fontFamily="@font/roboto_light"
+        android:inputType="text"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="bold"
+        android:layout_margin="@dimen/margin_padding_size_medium"
+        app:queryHint="@string/search_users"
+        app:iconifiedByDefault="false"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/search_bar_et"
-                android:layout_width="0dp"
-                app:queryBackground="@null"
-                android:layout_height="wrap_content"
-                android:autofillHints="hints"
-                android:background="@android:color/transparent"
-                android:fontFamily="@font/roboto_light"
-                android:hint="Hint search"
-                android:inputType="text"
-                android:textColor="#A9AFBD"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:iconifiedByDefault="false"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_search_users"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_padding_size_medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_card_view"
+        app:layout_constraintTop_toBottomOf="@+id/sv_search_users"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ProgressBar
+        android:id="@+id/progressbar_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:elevation="@dimen/margin_padding_size_xxlarge"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

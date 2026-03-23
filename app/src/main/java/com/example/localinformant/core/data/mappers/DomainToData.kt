@@ -28,6 +28,7 @@ fun Company.toDto(): CompanyDto {
     return CompanyDto(
         id = id,
         companyName = companyName,
+        companyNameLowerCase = companyName.lowercase(),
         companyProfileImageUrl = companyProfileImageUrl,
         companyEmail = companyEmail,
         email = email,
@@ -44,7 +45,9 @@ fun Person.toDto(): PersonDto {
     return PersonDto(
         id = id,
         firstName = firstName,
+        firstNameLowerCase = firstName.lowercase(),
         lastName = lastName,
+        lastNameLowerCase = lastName.lowercase(),
         email = email,
         token = token,
         following = following

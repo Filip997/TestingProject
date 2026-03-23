@@ -17,6 +17,8 @@ import com.example.localinformant.home.data.repositories.HomeRepositoryImpl
 import com.example.localinformant.home.domain.repositories.HomeRepository
 import com.example.localinformant.main.data.repositories.MainRepositoryImpl
 import com.example.localinformant.main.domain.repositories.MainRepository
+import com.example.localinformant.search.data.repositories.SearchRepositoryImpl
+import com.example.localinformant.search.domain.repositories.SearchRepository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -113,4 +115,10 @@ abstract class AppModule {
     abstract fun bindHomeRepository(
         impl: HomeRepositoryImpl
     ): HomeRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSearchRepository(
+        impl: SearchRepositoryImpl
+    ): SearchRepository
 }
