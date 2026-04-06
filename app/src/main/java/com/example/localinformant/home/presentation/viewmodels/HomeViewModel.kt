@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.localinformant.core.domain.result.Result
 import com.example.localinformant.core.presentation.mappers.toUi
+import com.example.localinformant.home.domain.usecases.GetPostByIdUseCase
 import com.example.localinformant.home.domain.usecases.GetPostsByFollowedCompaniesUseCase
 import com.example.localinformant.home.domain.usecases.ObserveCommentsUseCase
 import com.example.localinformant.home.domain.usecases.ObserveReactionsUseCase
@@ -16,10 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,6 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getPostsByFollowedCompaniesUseCase: GetPostsByFollowedCompaniesUseCase,
+    private val getPostByIdUseCase: GetPostByIdUseCase,
     private val submitReactionUseCase: SubmitReactionUseCase,
     private val submitCommentUseCase: SubmitCommentUseCase,
     private val observeReactionsUseCase: ObserveReactionsUseCase,
@@ -34,13 +34,7 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _homeUiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState())
-    val homeUiState = _homeUiState
-        .onStart { getPosts() }
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000),
-            HomeUiState()
-        )
+    val homeUiState = _homeUiState.asStateFlow()
 
     private val _submitCommentEvent: MutableSharedFlow<SubmitCommentEvent> = MutableSharedFlow()
     val submitCommentEvent = _submitCommentEvent.asSharedFlow()
@@ -134,6 +128,46 @@ class HomeViewModel @Inject constructor(
             }
 
             isLoadingMore = false
+        }
+    }
+
+    fun getPostById(postId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _homeUiState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
+
+            when(val result = getPostByIdUseCase.invoke(postId)) {
+                is Result.Success -> {
+                    val postWithCompany = result.data
+
+                    _homeUiState.update {
+                        it.copy(
+                            postsUi = listOf(postWithCompany.toUi()),
+                            error = null
+                        )
+                    }
+
+                    observeReactions(listOf(postId))
+                    observeComments(listOf(postId))
+                }
+                is Result.Error -> {
+                    _homeUiState.update {
+                        it.copy(
+                            postsUi = listOf(),
+                            error = result.error
+                        )
+                    }
+                }
+            }
+
+            _homeUiState.update {
+                it.copy(
+                    isLoading = false
+                )
+            }
         }
     }
 

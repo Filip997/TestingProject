@@ -2,8 +2,10 @@ package com.example.localinformant.di.app
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.localinformant.core.data.api.FcmApi
 import com.example.localinformant.auth.data.repositories.FirebaseAuthRepositoryImpl
 import com.example.localinformant.auth.domain.repositories.FirebaseAuthRepository
+import com.example.localinformant.constants.FirebaseApiConstants
 import com.example.localinformant.constants.SharedPrefKeys
 import com.example.localinformant.core.data.repositories.PreferencesRepositoryImpl
 import com.example.localinformant.core.data.network.NetworkCheckerImpl
@@ -17,6 +19,8 @@ import com.example.localinformant.home.data.repositories.HomeRepositoryImpl
 import com.example.localinformant.home.domain.repositories.HomeRepository
 import com.example.localinformant.main.data.repositories.MainRepositoryImpl
 import com.example.localinformant.main.domain.repositories.MainRepository
+import com.example.localinformant.notifications.data.repositories.NotificationsRepositoryImpl
+import com.example.localinformant.notifications.domain.repositories.NotificationsRepository
 import com.example.localinformant.search.data.repositories.SearchRepositoryImpl
 import com.example.localinformant.search.domain.repositories.SearchRepository
 import com.google.firebase.Firebase
@@ -34,6 +38,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -78,6 +84,21 @@ abstract class AppModule {
         fun firebaseCloudMessaging(): FirebaseMessaging {
             return Firebase.messaging
         }
+
+        @Provides
+        @Singleton
+        fun retrofit(): Retrofit {
+            return Retrofit.Builder()
+                .baseUrl(FirebaseApiConstants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+        }
+
+        @Provides
+        @Singleton
+        fun fcmApi(retrofit: Retrofit): FcmApi {
+            return retrofit.create(FcmApi::class.java)
+        }
     }
 
     @Binds
@@ -121,4 +142,10 @@ abstract class AppModule {
     abstract fun bindSearchRepository(
         impl: SearchRepositoryImpl
     ): SearchRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindNotificationsRepository(
+        impl: NotificationsRepositoryImpl
+    ): NotificationsRepository
 }

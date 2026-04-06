@@ -55,12 +55,12 @@ class ScreensNavigator @Inject constructor(
         RegisterActivity.start(activity)
     }
 
-    fun navigateToHomeFragment() {
-        if (navController?.isFragmentInBackStack(R.id.homeFragment) == true) {
+    fun navigateToHomeFragment(bundle: Bundle? = null) {
+        if (navController?.isFragmentInBackStack(R.id.homeFragment) == true && bundle == null) {
             navController?.popBackStack(R.id.homeFragment, false)
         } else {
             navController?.navigate(
-                R.id.homeFragment, null,
+                R.id.homeFragment, bundle,
                 NavFunctions.popUpDefaultNavigation()
             )
         }

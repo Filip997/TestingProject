@@ -20,11 +20,13 @@ import com.example.localinformant.core.domain.models.UserType
 import com.example.localinformant.core.presentation.activities.BaseActivity
 import com.example.localinformant.core.presentation.dialogs.CustomInfoDialog
 import com.example.localinformant.core.presentation.navigator.ScreensNavigator
+import com.example.localinformant.core.presentation.util.MyNotificationManager
 import com.example.localinformant.core.presentation.util.toString
 import com.example.localinformant.databinding.ActivityMainBinding
 import com.example.localinformant.main.presentation.events.CreatePostEvent
 import com.example.localinformant.main.presentation.util.PopUpWindowManager
 import com.example.localinformant.main.presentation.viewmodels.MainViewModel
+import com.google.android.material.badge.BadgeDrawable
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -40,6 +42,10 @@ class MainActivity : BaseActivity() {
     lateinit var screensNavigator: ScreensNavigator
     @Inject
     lateinit var popUpWindowManager: PopUpWindowManager
+    @Inject
+    lateinit var myNotificationManager: MyNotificationManager
+
+    private lateinit var badge: BadgeDrawable
 
     private val navController: NavController by lazy {
         val navHostFragment = supportFragmentManager
@@ -57,9 +63,9 @@ class MainActivity : BaseActivity() {
 
         screensNavigator.onAttachNavController(navController)
 
+        setBottomNavMenu()
         setupViewModels()
         setupClickListeners()
-        setBottomNavMenu()
     }
 
     private fun setupViewModels() {
@@ -106,6 +112,24 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                myNotificationManager.unreadNotificationsCount.collect {
+                    if (it > 0) {
+                        badge.apply {
+                            isVisible = true
+                            number = it
+                        }
+                    } else {
+                        badge.apply {
+                            isVisible = false
+                            number = 0
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun setupClickListeners() {
@@ -127,6 +151,12 @@ class MainActivity : BaseActivity() {
 
     private fun setBottomNavMenu() {
         binding.bottomNavViewMain.setupWithNavController(navController)
+
+        badge = binding.bottomNavViewMain.getOrCreateBadge(R.id.notificationsFragment).apply {
+            isVisible = false
+            backgroundColor = getColor(R.color.md_theme_primary)
+            badgeTextColor = getColor(R.color.md_theme_onSecondary)
+        }
 
         binding.bottomNavViewMain.setOnItemSelectedListener {
             when (it.itemId) {

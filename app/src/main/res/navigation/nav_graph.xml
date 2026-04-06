@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/notificationsFragment"
-        android:name="com.example.localinformant.views.fragments.NotificationsFragment"
+        android:name="com.example.localinformant.notifications.presentation.fragments.NotificationsFragment"
         android:label="fragment_notifications"
         tools:layout="@layout/fragment_notifications" >
         <action

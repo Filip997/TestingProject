@@ -241,7 +241,7 @@ class HomeRepositoryImpl @Inject constructor(
         postId: String,
         user: User,
         userType: UserType
-    ): Result<Unit, NetworkError> {
+    ): Result<Post, NetworkError> {
         return try {
             if (!networkChecker.hasInternetConnection()) {
                 return Result.Error(NetworkError.NO_INTERNET_CONNECTION)
@@ -273,7 +273,13 @@ class HomeRepositoryImpl @Inject constructor(
                 .document(postId)
                 .update("likes", FieldValue.arrayUnion(id))
 
-            Result.Success(Unit)
+            val postResult = getPostById(postId)
+
+            if (postResult is Result.Success) {
+                Result.Success(postResult.data)
+            } else {
+                Result.Error(NetworkError.UNKNOWN)
+            }
         } catch (e: FirebaseFirestoreException) {
             when (e.code) {
                 FirebaseFirestoreException.Code.INVALID_ARGUMENT -> Result.Error(NetworkError.INVALID_ARGUMENT)
@@ -317,7 +323,9 @@ class HomeRepositoryImpl @Inject constructor(
         awaitClose { listener.remove() }
     }
 
-    override suspend fun submitComment(id: String, postId: String, commentText: String, user: User, userType: UserType): Result<Unit, NetworkError> {
+    override suspend fun submitComment(
+        id: String, postId: String, commentText: String, user: User, userType: UserType
+    ): Result<Post, NetworkError> {
         return try {
             if (!networkChecker.hasInternetConnection()) {
                 return Result.Error(NetworkError.NO_INTERNET_CONNECTION)
@@ -351,7 +359,13 @@ class HomeRepositoryImpl @Inject constructor(
                 .document(postId)
                 .update("comments", FieldValue.arrayUnion(id))
 
-            Result.Success(Unit)
+            val postResult = getPostById(postId)
+
+            if (postResult is Result.Success) {
+                Result.Success(postResult.data)
+            } else {
+                Result.Error(NetworkError.UNKNOWN)
+            }
         } catch (e: FirebaseFirestoreException) {
             when (e.code) {
                 FirebaseFirestoreException.Code.INVALID_ARGUMENT -> Result.Error(NetworkError.INVALID_ARGUMENT)
@@ -394,5 +408,78 @@ class HomeRepositoryImpl @Inject constructor(
             }
 
         awaitClose { listener.remove() }
+    }
+
+    override suspend fun getUsersWhoCommentedByPostId(
+        postId: String,
+        postUserId: String
+    ): Result<List<String>, NetworkError> {
+        return try {
+            if (!networkChecker.hasInternetConnection()) {
+                return Result.Error(NetworkError.NO_INTERNET_CONNECTION)
+            }
+
+            val currentUserId = auth.currentUser?.uid!!
+
+            val userIds = db.collection(AppConstants.COMMENTS)
+                .whereEqualTo("postId", postId)
+                .get()
+                .await()
+                .documents
+                .mapNotNull {
+                    it.toObject(CommentDto::class.java)
+                }
+                .map {
+                    it.userId
+                }
+                .filter {
+                    it != currentUserId && it != postUserId
+                }
+                .distinct()
+
+            Result.Success(userIds)
+        } catch (e: FirebaseFirestoreException) {
+            when (e.code) {
+                FirebaseFirestoreException.Code.INVALID_ARGUMENT -> Result.Error(NetworkError.INVALID_ARGUMENT)
+                FirebaseFirestoreException.Code.NOT_FOUND -> Result.Error(NetworkError.NOT_FOUND)
+                FirebaseFirestoreException.Code.ALREADY_EXISTS -> Result.Error(NetworkError.ALREADY_EXISTS)
+                FirebaseFirestoreException.Code.RESOURCE_EXHAUSTED -> Result.Error(NetworkError.RESOURCE_EXHAUSTED)
+                FirebaseFirestoreException.Code.ABORTED -> Result.Error(NetworkError.ABORTED)
+                FirebaseFirestoreException.Code.DEADLINE_EXCEEDED -> Result.Error(NetworkError.DEADLINE_EXCEEDED)
+                FirebaseFirestoreException.Code.UNKNOWN -> Result.Error(NetworkError.UNKNOWN)
+                else -> Result.Error(NetworkError.UNKNOWN)
+            }
+        } catch (e: Exception) {
+            Result.Error(NetworkError.UNKNOWN)
+        }
+    }
+
+    override suspend fun getPostById(postId: String): Result<Post, NetworkError> {
+        return try {
+            val result = db.collection(AppConstants.POSTS)
+                .document(postId)
+                .get()
+                .await()
+                .toObject(PostDto::class.java)
+
+            if (result != null) {
+                Result.Success(result.toDomain())
+            } else {
+                Result.Error(NetworkError.NOT_FOUND)
+            }
+        } catch (e: FirebaseFirestoreException) {
+            when (e.code) {
+                FirebaseFirestoreException.Code.INVALID_ARGUMENT -> Result.Error(NetworkError.INVALID_ARGUMENT)
+                FirebaseFirestoreException.Code.NOT_FOUND -> Result.Error(NetworkError.NOT_FOUND)
+                FirebaseFirestoreException.Code.ALREADY_EXISTS -> Result.Error(NetworkError.ALREADY_EXISTS)
+                FirebaseFirestoreException.Code.RESOURCE_EXHAUSTED -> Result.Error(NetworkError.RESOURCE_EXHAUSTED)
+                FirebaseFirestoreException.Code.ABORTED -> Result.Error(NetworkError.ABORTED)
+                FirebaseFirestoreException.Code.DEADLINE_EXCEEDED -> Result.Error(NetworkError.DEADLINE_EXCEEDED)
+                FirebaseFirestoreException.Code.UNKNOWN -> Result.Error(NetworkError.UNKNOWN)
+                else -> Result.Error(NetworkError.UNKNOWN)
+            }
+        } catch (e: Exception) {
+            Result.Error(NetworkError.UNKNOWN)
+        }
     }
 }

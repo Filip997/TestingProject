@@ -39,6 +39,22 @@ class HomeFragment : Fragment() {
     private lateinit var bundle: Bundle
     private lateinit var companyPostsAdapter: CompanyPostsAdapter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (arguments != null) {
+            val postId = arguments?.getString(IntentKeys.POST_ID)
+
+            if (postId != null) {
+                homeViewModel.getPostById(postId)
+            } else {
+                homeViewModel.getPosts()
+            }
+        } else {
+            homeViewModel.getPosts()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

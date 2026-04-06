@@ -13,11 +13,14 @@ import kotlinx.coroutines.flow.Flow
 interface HomeRepository {
 
     suspend fun getPostsByFollowedCompanies(followedUsersIds: List<String>, isRefreshing: Boolean): Result<List<Post>, NetworkError>
+    suspend fun getPostById(postId: String): Result<Post, NetworkError>
     suspend fun getCompanyByPostId(postId: String): Result<Company, NetworkError>
 
-    suspend fun submitReaction(id: String, postId: String, user: User, userType: UserType): Result<Unit, NetworkError>
+    suspend fun submitReaction(id: String, postId: String, user: User, userType: UserType): Result<Post, NetworkError>
     fun observeReactions(postIds: List<String>): Flow<List<Reaction>>
 
-    suspend fun submitComment(id: String, postId: String, commentText: String, user: User, userType: UserType): Result<Unit, NetworkError>
+    suspend fun submitComment(id: String, postId: String, commentText: String, user: User, userType: UserType): Result<Post, NetworkError>
     fun observeComments(postIds: List<String>): Flow<List<Comment>>
+
+    suspend fun getUsersWhoCommentedByPostId(postId: String, postUserId: String): Result<List<String>, NetworkError>
 }

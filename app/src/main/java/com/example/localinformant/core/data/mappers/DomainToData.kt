@@ -2,14 +2,17 @@ package com.example.localinformant.core.data.mappers
 
 import com.example.localinformant.core.data.dto.CommentDto
 import com.example.localinformant.core.data.dto.CompanyDto
+import com.example.localinformant.core.data.dto.NotificationDto
 import com.example.localinformant.core.data.dto.PersonDto
 import com.example.localinformant.core.data.dto.PostDto
 import com.example.localinformant.core.data.dto.ReactionDto
 import com.example.localinformant.core.domain.models.Comment
 import com.example.localinformant.core.domain.models.Company
+import com.example.localinformant.core.domain.models.Notification
 import com.example.localinformant.core.domain.models.Person
 import com.example.localinformant.core.domain.models.Post
 import com.example.localinformant.core.domain.models.Reaction
+import com.example.localinformant.core.domain.models.UserType
 import com.google.firebase.Timestamp
 
 fun Post.toDto(): PostDto {
@@ -75,5 +78,19 @@ fun Reaction.toDto(): ReactionDto {
         userProfileImage = userProfileImage,
         userName = userName,
         postId = postId
+    )
+}
+
+fun Notification.toDto(): NotificationDto {
+    return NotificationDto(
+        id = id,
+        createdOn = Timestamp(createdOn / 1000, ((createdOn % 1000) * 1_000_000).toInt()),
+        fromUserId = when(fromUserType!!) {
+            UserType.PERSON -> (fromUser as Person).id
+            UserType.COMPANY -> (fromUser as Company).id
+        },
+        fromUserType = fromUserType.name,
+        postId = postId,
+        notificationType = notificationType?.name ?: ""
     )
 }

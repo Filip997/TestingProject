@@ -2,16 +2,18 @@ package com.example.localinformant.core.data.mappers
 
 import com.example.localinformant.core.data.dto.CommentDto
 import com.example.localinformant.core.data.dto.CompanyDto
+import com.example.localinformant.core.data.dto.NotificationDto
 import com.example.localinformant.core.data.dto.PersonDto
 import com.example.localinformant.core.data.dto.PostDto
 import com.example.localinformant.core.data.dto.ReactionDto
 import com.example.localinformant.core.domain.models.Comment
 import com.example.localinformant.core.domain.models.Post
 import com.example.localinformant.core.domain.models.Company
+import com.example.localinformant.core.domain.models.Notification
+import com.example.localinformant.core.domain.models.NotificationType
 import com.example.localinformant.core.domain.models.Person
 import com.example.localinformant.core.domain.models.Reaction
 import com.example.localinformant.core.domain.models.UserType
-import kotlin.String
 
 fun PostDto.toDomain(): Post {
     return Post(
@@ -74,5 +76,20 @@ fun ReactionDto.toDomain(): Reaction {
         userProfileImage = userProfileImage,
         userName = userName,
         postId = postId
+    )
+}
+
+fun NotificationDto.toDomain(): Notification {
+    return Notification(
+        id = id,
+        createdOn = createdOn?.toDate()?.time ?: 0L,
+        toUserId = toUserId,
+        fromUser = when(UserType.valueOf(fromUserType)) {
+            UserType.PERSON -> Person(id = fromUserId)
+            UserType.COMPANY -> Company(id = fromUserId)
+        },
+        fromUserType = UserType.valueOf(fromUserType),
+        postId = postId,
+        notificationType = NotificationType.valueOf(notificationType)
     )
 }

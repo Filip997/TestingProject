@@ -1,19 +1,18 @@
 package com.example.localinformant.core.data.fcm
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.graphics.Color
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
-import androidx.core.app.NotificationCompat
-import com.example.localinformant.R
-import com.example.localinformant.constants.AppConstants
+import com.example.localinformant.core.domain.models.Company
+import com.example.localinformant.core.domain.models.NotificationType
+import com.example.localinformant.core.domain.models.Person
+import com.example.localinformant.core.domain.models.UserType
+import com.example.localinformant.core.domain.usecases.GetAppLanguageCodeUseCase
+import com.example.localinformant.core.domain.usecases.GetUserByIdUseCase
+import com.example.localinformant.core.domain.usecases.SaveNotificationToDatabaseUseCase
 import com.example.localinformant.core.domain.usecases.UpdateFcmTokenUseCase
-import com.example.localinformant.splash.presentation.activities.SplashScreenActivity
+import com.example.localinformant.core.presentation.util.AppStateManager
+import com.example.localinformant.core.presentation.util.MyNotificationManager
+import com.example.localinformant.core.presentation.util.toBody
+import com.example.localinformant.core.presentation.util.toTitle
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +22,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.random.Random
 
 @AndroidEntryPoint
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -32,7 +30,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         SupervisorJob() + Dispatchers.IO
     )
 
+    @Inject lateinit var appStateManager: AppStateManager
+    @Inject lateinit var myNotificationManager: MyNotificationManager
     @Inject lateinit var updateFcmTokenUseCase: UpdateFcmTokenUseCase
+    @Inject lateinit var saveNotificationToDatabaseUseCase: SaveNotificationToDatabaseUseCase
+    @Inject lateinit var getUserByIdUseCase: GetUserByIdUseCase
+    @Inject lateinit var getAppLanguageCodeUseCase: GetAppLanguageCodeUseCase
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
@@ -45,46 +48,65 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        Log.d("__notification", message.data["type"] ?: "")
-        createNotification(message.data["title"] ?: "", message.data["body"] ?: "")
-    }
+        val dataMessage = message.data
 
-    private fun createNotification(title: String, message: String) {
-        val intent = Intent(this, SplashScreenActivity::class.java)
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notificationId = Random.nextInt()
+        Log.d("MyFirebaseMessagingService", dataMessage.toMap().toString())
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNotificationChannel(notificationManager)
+        val fromUserId = dataMessage["userId"] ?: ""
+        val fromUserType = dataMessage["userType"]?.let {
+            runCatching { UserType.valueOf(it) }.getOrNull()
+        } ?: return
+        val notificationType = dataMessage["notificationType"]?.let {
+            runCatching { NotificationType.valueOf(it) }.getOrNull()
+        } ?: return
+        val postId = dataMessage["postId"] ?: ""
+
+        if (notificationType != NotificationType.NEW_MESSAGE) {
+            serviceScope.launch {
+                saveNotificationToDatabaseUseCase.invoke(
+                    fromUserId = fromUserId,
+                    fromUserType = fromUserType,
+                    notificationType = notificationType,
+                    postId = postId
+                )
+            }
         }
 
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
-        )
+        if (!appStateManager.isAppInForeground()) {
+            serviceScope.launch {
+                val user = getUserByIdUseCase.invoke(fromUserId, fromUserType)
 
-        val notification = NotificationCompat.Builder(this, AppConstants.NOTIFICATION_CHANNEL_ID)
-            .setContentTitle(title)
-            .setContentText(message)
-            .setSmallIcon(R.drawable.ic_notifications)
-            .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
-            .build()
+                val userName = user?.let {
+                    when (it) {
+                        is Person -> it.fullName
+                        is Company -> it.companyName
+                        else -> ""
+                    }
+                } ?: ""
 
-        notificationManager.notify(notificationId, notification)
-    }
+                val userProfileImageUrl = user?.let {
+                    when (it) {
+                        is Person -> it.profileImageUrl
+                        is Company -> it.companyProfileImageUrl
+                        else -> null
+                    }
+                }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(notificationManager: NotificationManager) {
-        val channel = NotificationChannel(AppConstants.NOTIFICATION_CHANNEL_ID, AppConstants.NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH).apply {
-            description = AppConstants.NOTIFICATION_CHANNEL_DESCRIPTION
-            enableLights(true)
-            lightColor = Color.GREEN
+                myNotificationManager.createNotification(
+                    title = notificationType.toTitle(this@MyFirebaseMessagingService),
+                    message = notificationType.toBody(
+                        this@MyFirebaseMessagingService,
+                        userName
+                    ),
+                    profileImageUrl = userProfileImageUrl
+                )
+            }
+        } else {
+            when(notificationType) {
+                NotificationType.NEW_MESSAGE -> myNotificationManager.incrementMessagesCount()
+                else -> myNotificationManager.incrementNotificationsCount()
+            }
         }
-        notificationManager.createNotificationChannel(channel)
     }
 
     override fun onDestroy() {

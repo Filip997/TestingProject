@@ -54,7 +54,6 @@
     <string name="the_email_address_is_already_in_use">The email address is already in use</string>
 
 
-
     <string name="choose_language">Choose language</string>
     <string name="next">Next</string>
     <string name="macedonian">Macedonian</string>
@@ -126,4 +125,12 @@
     <string name="notifications">Notifications</string>
     <string name="my_account">My Account</string>
     <string name="search_users">Search Users</string>
+    <string name="new_message">New Message!</string>
+    <string name="new_like">New Like!</string>
+    <string name="new_comment">New Comment!</string>
+    <string name="new_follower">New Follower!</string>
+    <string name="new_like_notification_body">%1$s liked your post.</string>
+    <string name="new_comment_notification_body">%1$s commented on your post.</string>
+    <string name="other_people_commented_notification_body">New comments on a post you\'ve commented.</string>
+    <string name="new_follower_notification_body">%1$s started following you.</string>
 </resources>

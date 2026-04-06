@@ -72,4 +72,12 @@
     <string name="notifications">Известувања</string>
     <string name="my_account">Профил</string>
     <string name="search_users">Пребарувај Корисници</string>
+    <string name="new_message">Нова Порака!</string>
+    <string name="new_like">Ново Допаѓање!</string>
+    <string name="new_comment">Нов Коментар!</string>
+    <string name="new_follower">Нов Следач!</string>
+    <string name="new_like_notification_body">На %1$s му се допадна твојата објава.</string>
+    <string name="new_comment_notification_body">%1$s искоментира на твојата објава.</string>
+    <string name="other_people_commented_notification_body">Има нови коментари на објава на која си искоментирал.</string>
+    <string name="new_follower_notification_body">%1$s започна да те следи.</string>
 </resources>

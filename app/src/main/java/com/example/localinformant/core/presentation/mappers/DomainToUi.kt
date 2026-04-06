@@ -2,11 +2,13 @@ package com.example.localinformant.core.presentation.mappers
 
 import com.example.localinformant.core.domain.models.Comment
 import com.example.localinformant.core.domain.models.Company
+import com.example.localinformant.core.domain.models.Notification
 import com.example.localinformant.core.domain.models.Person
 import com.example.localinformant.core.domain.models.PostWithCompany
 import com.example.localinformant.core.domain.models.Reaction
 import com.example.localinformant.core.domain.models.UserType
 import com.example.localinformant.core.presentation.models.CommentUi
+import com.example.localinformant.core.presentation.models.NotificationUi
 import com.example.localinformant.core.presentation.models.PostUiState
 import com.example.localinformant.core.presentation.models.ReactionUi
 import com.example.localinformant.core.presentation.models.SearchedUserUi
@@ -64,5 +66,28 @@ fun Company.toSearchedUserUi(): SearchedUserUi {
         userType = UserType.COMPANY,
         userName = companyName,
         userProfileImageUrl = companyProfileImageUrl
+    )
+}
+
+fun Notification.toUi(): NotificationUi {
+    return NotificationUi(
+        id = id,
+        createdOn = createdOn,
+        toUserId = toUserId,
+        fromUserId = when(fromUserType!!) {
+            UserType.PERSON -> (fromUser as Person).id
+            UserType.COMPANY -> (fromUser as Company).id
+        },
+        fromUserType = fromUserType,
+        fromUserName = when(fromUserType) {
+            UserType.PERSON -> (fromUser as Person).fullName
+            UserType.COMPANY -> (fromUser as Company).companyName
+        },
+        fromUserProfileImageUrl = when(fromUserType) {
+            UserType.PERSON -> (fromUser as Person).profileImageUrl
+            UserType.COMPANY -> (fromUser as Company).companyProfileImageUrl
+        },
+        postId = postId,
+        notificationType = notificationType
     )
 }
