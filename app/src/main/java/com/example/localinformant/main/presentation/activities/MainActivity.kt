@@ -53,6 +53,12 @@ class MainActivity : BaseActivity() {
         navHostFragment.findNavController()
     }
 
+    private val sideNavController: NavController by lazy {
+        val sideNavHostFragment = supportFragmentManager
+            .findFragmentById(R.id.side_nav_host_fragment) as NavHostFragment
+        sideNavHostFragment.findNavController()
+    }
+
     override fun getLayoutBinding(): ViewBinding {
         binding = ActivityMainBinding.inflate(layoutInflater)
         return binding
@@ -62,6 +68,10 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         screensNavigator.onAttachNavController(navController)
+        screensNavigator.onAttachSideNavController(sideNavController)
+        screensNavigator.onInitializePrimaryNavHost(binding.navHostFragment)
+        screensNavigator.onInitializeDimOverlay(binding.dimOverlay)
+        screensNavigator.onInitializeSideSheetNavHost(binding.sideNavHostFragment)
 
         setBottomNavMenu()
         setupViewModels()
@@ -175,7 +185,7 @@ class MainActivity : BaseActivity() {
                     true
                 }
 
-                R.id.myAccountFragment -> {
+                R.id.userAccountFragment -> {
                     screensNavigator.navigateToMyAccountFragment()
                     true
                 }

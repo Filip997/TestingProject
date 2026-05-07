@@ -80,4 +80,23 @@
     <string name="new_comment_notification_body">%1$s искоментира на твојата објава.</string>
     <string name="other_people_commented_notification_body">Има нови коментари на објава на која си искоментирал.</string>
     <string name="new_follower_notification_body">%1$s започна да те следи.</string>
+    <string name="followers">Следачи</string>
+    <string name="following">Заследено</string>
+    <string name="follow_btn_text">Заследи</string>
+    <string name="following_btn_text">Следиш</string>
+    <string name="message">Порака</string>
+    <string name="posts">Објави</string>
+    <string name="settings">Поставки</string>
+    <string name="change_password">Промени Лозинка</string>
+    <string name="update_your_password">Ажурирај ја твојата лозинка</string>
+    <string name="log_out">Одјави се</string>
+    <string name="old_password">Стара Лозинка</string>
+    <string name="new_password">Нова Лозинка</string>
+    <string name="enter_old_password">Внесете ја старата лозинка</string>
+    <string name="enter_new_password">Внесете ја новата лозинка</string>
+    <string name="password_changed_successfully">Лозинката е успешно променета!</string>
+    <string name="wrong_old_password">Погрешна стара лозинка</string>
+    <string name="logout">Одјава</string>
+    <string name="are_you_sure_you_want_to_logout">Дали сте сигурни дека сакате да се одјавите?</string>
+    <string name="yes">Да</string>
 </resources>

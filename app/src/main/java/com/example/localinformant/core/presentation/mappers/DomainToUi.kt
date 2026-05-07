@@ -6,15 +6,18 @@ import com.example.localinformant.core.domain.models.Notification
 import com.example.localinformant.core.domain.models.Person
 import com.example.localinformant.core.domain.models.PostWithCompany
 import com.example.localinformant.core.domain.models.Reaction
+import com.example.localinformant.core.domain.models.UserAccountDetails
 import com.example.localinformant.core.domain.models.UserType
 import com.example.localinformant.core.presentation.models.CommentUi
+import com.example.localinformant.core.presentation.models.FollowerFollowingUserUi
 import com.example.localinformant.core.presentation.models.NotificationUi
-import com.example.localinformant.core.presentation.models.PostUiState
+import com.example.localinformant.core.presentation.models.PostUi
 import com.example.localinformant.core.presentation.models.ReactionUi
 import com.example.localinformant.core.presentation.models.SearchedUserUi
+import com.example.localinformant.core.presentation.models.UserAccountDetailsUi
 
-fun PostWithCompany.toUi(): PostUiState {
-    return PostUiState(
+fun PostWithCompany.toUi(): PostUi {
+    return PostUi(
         id = this.post.id,
         createdAt = this.post.createdAt,
         companyId = this.company?.id ?: "",
@@ -89,5 +92,56 @@ fun Notification.toUi(): NotificationUi {
         },
         postId = postId,
         notificationType = notificationType
+    )
+}
+
+fun UserAccountDetails.toUi(): UserAccountDetailsUi {
+    return when(user) {
+        is Person -> {
+            UserAccountDetailsUi(
+                userId = user.id,
+                userType = userType,
+                isCurrentUser = isCurrentUser,
+                isUserFollowed = isUserFollowed,
+                userProfileImage = user.profileImageUrl,
+                userName = user.fullName,
+                followers = listOf(),
+                following = user.following,
+                postsUi = posts.map { it.toUi() }
+            )
+        }
+        is Company -> {
+            UserAccountDetailsUi(
+                userId = user.id,
+                userType = userType,
+                isCurrentUser = isCurrentUser,
+                isUserFollowed = isUserFollowed,
+                userProfileImage = user.companyProfileImageUrl,
+                userName = user.companyName,
+                followers = user.followers,
+                following = user.following,
+                postsUi = posts.map { it.toUi() }
+            )
+        }
+        else -> UserAccountDetailsUi()
+    }
+}
+
+fun Person.toFollowerFollowingUi(): FollowerFollowingUserUi {
+    return FollowerFollowingUserUi(
+        userId = id,
+        userType = UserType.PERSON,
+        userProfileImage = profileImageUrl,
+        userName = fullName,
+
+    )
+}
+
+fun Company.toFollowerFollowingUi(): FollowerFollowingUserUi {
+    return FollowerFollowingUserUi(
+        userId = id,
+        userType = UserType.COMPANY,
+        userProfileImage = companyProfileImageUrl,
+        userName = companyName,
     )
 }

@@ -2,14 +2,14 @@ package com.example.localinformant.core.data.repositories
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.example.localinformant.constants.SharedPrefKeys
+import com.example.localinformant.core.presentation.constants.SharedPrefKeys
 import com.example.localinformant.core.data.dto.CompanyDto
 import com.example.localinformant.core.data.dto.PersonDto
 import com.example.localinformant.core.data.mappers.toDomain
 import com.example.localinformant.core.data.mappers.toDto
 import com.example.localinformant.core.domain.repositories.PreferencesRepository
-import com.example.localinformant.di.qualifiers.AppSharedPreferences
-import com.example.localinformant.di.qualifiers.UserSharedPreferences
+import com.example.localinformant.core.di.qualifiers.AppSharedPreferences
+import com.example.localinformant.core.di.qualifiers.UserSharedPreferences
 import com.example.localinformant.core.domain.models.Company
 import com.example.localinformant.core.domain.models.Person
 import com.google.gson.Gson
@@ -39,6 +39,12 @@ class PreferencesRepositoryImpl @Inject constructor(
 
     override fun getUserType() = userSharedPreferences.getString(SharedPrefKeys.USER_TYPE, "")
 
+    override fun deleteUserType() {
+        userSharedPreferences.edit {
+            remove(SharedPrefKeys.USER_TYPE)
+        }
+    }
+
     override fun savePerson(person: Person) {
         userSharedPreferences.edit {
             putString(SharedPrefKeys.PERSON, Gson().toJson(person.toDto())).apply()
@@ -57,6 +63,12 @@ class PreferencesRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun deletePerson() {
+        userSharedPreferences.edit {
+            remove(SharedPrefKeys.PERSON)
+        }
+    }
+
     override fun saveCompany(company: Company) {
         userSharedPreferences.edit {
             putString(SharedPrefKeys.COMPANY, Gson().toJson(company.toDto())).apply()
@@ -72,6 +84,12 @@ class PreferencesRepositoryImpl @Inject constructor(
             companyDto.toDomain()
         } else {
             null
+        }
+    }
+
+    override fun deleteCompany() {
+        userSharedPreferences.edit {
+            remove(SharedPrefKeys.COMPANY)
         }
     }
 }

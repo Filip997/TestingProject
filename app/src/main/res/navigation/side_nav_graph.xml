@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/side_nav_graph"
+    app:startDestination="@id/settingsSlideFragment">
+
+    <fragment
+        android:id="@+id/settingsSlideFragment"
+        android:name="com.example.localinformant.account.presentation.fragments.SettingsSlideFragment"
+        android:label="fragment_slide_settings"
+        tools:layout="@layout/fragment_slide_settings" >
+    </fragment>
+
+</navigation>

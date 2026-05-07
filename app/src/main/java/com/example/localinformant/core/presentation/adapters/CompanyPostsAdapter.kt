@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.localinformant.R
 import com.example.localinformant.core.domain.models.UserType
-import com.example.localinformant.core.presentation.models.PostUiState
+import com.example.localinformant.core.presentation.models.PostUi
 import com.example.localinformant.core.presentation.models.ReactionUi
 import com.example.localinformant.core.presentation.util.loadImage
 import com.example.localinformant.core.presentation.util.toTimeAgo
@@ -30,8 +30,9 @@ class CompanyPostsAdapter(
     private val openReactions: (List<ReactionUi>) -> Unit,
     private val onToggleComments: (String) -> Unit,
     private val submitComment: (String, String) -> Unit
-) : ListAdapter<PostUiState, RecyclerView.ViewHolder>(DiffCallback()) {
+) : ListAdapter<PostUi, RecyclerView.ViewHolder>(DiffCallback()) {
 
+    private var currentUserProfileImage = ""
     private var isLoadingMore = false
 
     companion object {
@@ -69,6 +70,7 @@ class CompanyPostsAdapter(
         val layoutComment = binding.layoutHomeComment
         val postNumComments = binding.tvHomeNumComments
         val layoutCommentsSection = binding.layoutHomeCommentsSection
+        val userNewCommentProfileImage = binding.civHomeUserNewCommentProfileImage
         val userCommentText = binding.tilHomeUserNewComment
         val commentTextEt = binding.tilHomeUserNewComment.editText
         val submitCommentBtn = binding.ivHomeSubmitBtn
@@ -138,6 +140,8 @@ class CompanyPostsAdapter(
                         holder.postImagesDotsLayout,
                         currentPostUiState.postImageUrls
                     )
+                } else {
+                    holder.layoutPostImages.visibility = View.GONE
                 }
 
                 holder.postLikeBtn.setImageResource(
@@ -165,6 +169,12 @@ class CompanyPostsAdapter(
                 holder.layoutCommentsSection.visibility = if (currentPostUiState.commentSectionVisible) View.VISIBLE else View.GONE
 
                 holder.postCommentsAdapter.submitList(currentPostUiState.postComments)
+
+                loadImage(
+                    context = context,
+                    imageUrl = currentUserProfileImage,
+                    target = holder.userNewCommentProfileImage
+                )
 
                 holder.submitCommentBtn.setOnClickListener {
                     if (!holder.commentTextEt?.text.isNullOrEmpty()) {
@@ -231,15 +241,19 @@ class CompanyPostsAdapter(
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<PostUiState>() {
+    class DiffCallback : DiffUtil.ItemCallback<PostUi>() {
 
-        override fun areItemsTheSame(oldItem: PostUiState, newItem: PostUiState): Boolean {
+        override fun areItemsTheSame(oldItem: PostUi, newItem: PostUi): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: PostUiState, newItem: PostUiState): Boolean {
+        override fun areContentsTheSame(oldItem: PostUi, newItem: PostUi): Boolean {
             return oldItem == newItem
         }
+    }
+
+    fun setProfileImage(image: String) {
+        currentUserProfileImage = image
     }
 
     fun showLoading() {

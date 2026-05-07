@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.localinformant.auth.data.repositories.FirebaseAuthRepositoryImpl
 import com.example.localinformant.core.domain.usecases.GetUserTypeUseCase
 import com.example.localinformant.auth.domain.usecases.LoginUserUseCase
 import com.example.localinformant.auth.domain.error.AuthError
@@ -13,7 +12,6 @@ import com.example.localinformant.auth.presentation.events.LoginEvent
 import com.example.localinformant.auth.presentation.models.LoginUiState
 import com.example.localinformant.core.domain.result.Result
 import com.example.localinformant.core.domain.models.UserType
-import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,7 +26,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authRepository: FirebaseAuthRepositoryImpl,
     private val loginValidator: LoginValidator,
     private val getUserTypeUseCase: GetUserTypeUseCase,
     private val loginUserUseCase: LoginUserUseCase
@@ -44,24 +41,12 @@ class LoginViewModel @Inject constructor(
         .onStart { loadUserType() }
         .stateIn(
             viewModelScope,
-            SharingStarted.Companion.WhileSubscribed(5000L),
+            SharingStarted.WhileSubscribed(5000L),
             LoginUiState()
         )
 
     private val _loginEvent: MutableSharedFlow<LoginEvent> = MutableSharedFlow()
     val loginEvent = _loginEvent.asSharedFlow()
-
-    private val _userDeleted = MutableLiveData(false)
-    val userDeleted = _userDeleted
-
-    private val _changeSuccessful = MutableLiveData(false)
-    val changeSuccessful = _changeSuccessful
-
-    private var _changePasswordMessage = MutableLiveData("")
-    val changePasswordMessage = _changePasswordMessage
-
-    val user: FirebaseUser? by lazy { authRepository.currentUser() }
-
 
     private fun loadUserType() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -130,28 +115,6 @@ class LoginViewModel @Inject constructor(
                     isLoginEnabled = isLoginEnabled
                 )
             }
-        }
-    }
-
-    fun deleteUser(userType: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _isLoading.postValue(true)
-            user?.uid?.let {
-                authRepository.deleteUserData(it,userType)
-            }
-            val authResponse = authRepository.deleteUser()
-            _userDeleted.postValue(authResponse.isSuccessful)
-            _isLoading.postValue(false)
-        }
-    }
-
-    fun changePassword(oldPassword: String, newPassword: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _isLoading.postValue(true)
-            val authResponse = authRepository.changePassword(oldPassword, newPassword)
-            _changeSuccessful.postValue(authResponse.isSuccessful)
-            _changePasswordMessage.postValue(authResponse.message)
-            _isLoading.postValue(false)
         }
     }
 }

@@ -2,14 +2,16 @@ package com.example.localinformant.core.presentation.navigator
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import com.example.localinformant.R
 import com.example.localinformant.auth.presentation.activities.ForgotPasswordActivity
 import com.example.localinformant.auth.presentation.activities.LoginActivity
 import com.example.localinformant.auth.presentation.activities.RegisterActivity
-import com.example.localinformant.constants.NavFunctions
-import com.example.localinformant.constants.NavFunctions.isFragmentInBackStack
+import com.example.localinformant.core.presentation.util.NavFunctions
+import com.example.localinformant.core.presentation.util.NavFunctions.isFragmentInBackStack
 import com.example.localinformant.setup.presentation.activities.LanguageActivity
 import com.example.localinformant.setup.presentation.activities.LoginChooserActivity
 import com.example.localinformant.main.presentation.activities.MainActivity
@@ -22,9 +24,29 @@ class ScreensNavigator @Inject constructor(
 ) {
 
     private var navController: NavController? = null
+    private var sideNavController: NavController? = null
+    private var primaryNavHost: View? = null
+    private var dimOverlay: View? = null
+    private var sideSheetNavHost: View? = null
 
     fun onAttachNavController(navController: NavController) {
         this.navController = navController
+    }
+
+    fun onAttachSideNavController(sideNavController: NavController) {
+        this.sideNavController = sideNavController
+    }
+
+    fun onInitializePrimaryNavHost(primaryNavHost: View) {
+        this.primaryNavHost = primaryNavHost
+    }
+
+    fun onInitializeDimOverlay(dimOverlay: View) {
+        this.dimOverlay = dimOverlay
+    }
+
+    fun onInitializeSideSheetNavHost(sideSheetNavHost: View) {
+        this.sideSheetNavHost = sideSheetNavHost
     }
 
     fun onBackPressed() {
@@ -89,13 +111,49 @@ class ScreensNavigator @Inject constructor(
     }
 
     fun navigateToMyAccountFragment(bundle: Bundle? = null) {
-        if (navController?.isFragmentInBackStack(R.id.myAccountFragment) == true) {
-            navController?.popBackStack(R.id.myAccountFragment, false)
+        if (navController?.isFragmentInBackStack(R.id.userAccountFragment) == true && bundle == null) {
+            navController?.popBackStack(R.id.userAccountFragment, false)
         } else {
             navController?.navigate(
-                R.id.myAccountFragment, bundle,
+                R.id.userAccountFragment, bundle,
                 NavFunctions.popUpDefaultNavigation()
             )
         }
+    }
+
+    fun openSettingsSideSheet() {
+        primaryNavHost?.visibility = View.GONE
+        dimOverlay?.visibility = View.VISIBLE
+
+        sideSheetNavHost?.isVisible = true
+
+        sideSheetNavHost?.post {
+
+            sideSheetNavHost?.translationX = sideSheetNavHost?.width?.toFloat() ?: 0f
+
+            sideSheetNavHost?.animate()
+                ?.translationX(0f)
+                ?.setDuration(250)
+                ?.start()
+        }
+    }
+
+    fun closeSideSheet() {
+        primaryNavHost?.visibility = View.VISIBLE
+        dimOverlay?.visibility = View.GONE
+
+        sideSheetNavHost?.animate()
+            ?.translationX(sideSheetNavHost?.width?.toFloat() ?: 0f)
+            ?.setDuration(250)
+            ?.withEndAction {
+
+                sideSheetNavHost?.isVisible = false
+
+                sideNavController?.popBackStack(
+                    R.id.settingsSlideFragment,
+                    true
+                )
+            }
+            ?.start()
     }
 }

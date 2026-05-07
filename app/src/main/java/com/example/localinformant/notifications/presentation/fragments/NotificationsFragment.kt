@@ -10,7 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.localinformant.constants.IntentKeys
+import com.example.localinformant.core.presentation.constants.IntentKeys
 import com.example.localinformant.core.presentation.navigator.ScreensNavigator
 import com.example.localinformant.core.presentation.util.MyNotificationManager
 import com.example.localinformant.databinding.FragmentNotificationsBinding

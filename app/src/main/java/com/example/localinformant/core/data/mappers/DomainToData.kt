@@ -47,6 +47,7 @@ fun Company.toDto(): CompanyDto {
 fun Person.toDto(): PersonDto {
     return PersonDto(
         id = id,
+        profileImageUrl = profileImageUrl,
         firstName = firstName,
         firstNameLowerCase = firstName.lowercase(),
         lastName = lastName,
@@ -63,8 +64,6 @@ fun Comment.toDto(): CommentDto {
         createdAt = Timestamp(createdAt / 1000, ((createdAt % 1000) * 1_000_000).toInt()),
         userId = userId,
         userType = userType?.name ?: "",
-        userProfileImage = userProfileImage,
-        userName = userName,
         postId = postId,
         commentText = commentText
     )
@@ -75,8 +74,6 @@ fun Reaction.toDto(): ReactionDto {
         id = id,
         userId = userId,
         userType = userType?.name ?: "",
-        userProfileImage = userProfileImage,
-        userName = userName,
         postId = postId
     )
 }

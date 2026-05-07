@@ -12,7 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.localinformant.R
-import com.example.localinformant.constants.IntentKeys
+import com.example.localinformant.core.presentation.constants.IntentKeys
 import com.example.localinformant.core.presentation.dialogs.CustomInfoDialog
 import com.example.localinformant.core.presentation.navigator.ScreensNavigator
 import com.example.localinformant.core.presentation.util.toString
@@ -37,16 +37,17 @@ class HomeFragment : Fragment() {
     @Inject lateinit var reactionsPopUpWindow: ReactionsPopUpWindow
 
     private lateinit var bundle: Bundle
+    private var postId: String? = null
     private lateinit var companyPostsAdapter: CompanyPostsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (arguments != null) {
-            val postId = arguments?.getString(IntentKeys.POST_ID)
+            postId = arguments?.getString(IntentKeys.POST_ID)
 
             if (postId != null) {
-                homeViewModel.getPostById(postId)
+                homeViewModel.getPostById(postId!!)
             } else {
                 homeViewModel.getPosts()
             }
@@ -82,7 +83,8 @@ class HomeFragment : Fragment() {
                         binding.progressbarHome.visibility = View.GONE
 
                     companyPostsAdapter.hideLoading()
-                    companyPostsAdapter.submitList(state.postsUi)
+                    companyPostsAdapter.setProfileImage(state.postUiState.currentUserProfileImage)
+                    companyPostsAdapter.submitList(state.postUiState.postsUi)
 
                     if (state.error != null) {
                         CustomInfoDialog(
@@ -153,16 +155,15 @@ class HomeFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                if (dy <= 0) return
-
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
 
                 val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
                 val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
 
                 val threshold = 3
 
-                if (lastVisibleItemPosition >= totalItemCount - threshold) {
+                if (lastVisibleItemPosition >= totalItemCount - threshold && postId == null) {
                     if (!homeViewModel.isEndReached()) {
                         companyPostsAdapter.showLoading()
                         homeViewModel.loadMorePosts()
@@ -170,13 +171,29 @@ class HomeFragment : Fragment() {
                         companyPostsAdapter.hideLoading()
                     }
                 }
+
+                if (firstVisibleItemPosition == RecyclerView.NO_POSITION || lastVisibleItemPosition == RecyclerView.NO_POSITION) return
+
+                val firstSafeVisiblePosition = maxOf(firstVisibleItemPosition - 5, 0)
+                val lastSafeVisiblePosition = minOf(lastVisibleItemPosition + 5, companyPostsAdapter.currentList.lastIndex)
+
+                if (firstSafeVisiblePosition > lastSafeVisiblePosition) return
+
+                val visiblePosts = companyPostsAdapter.currentList.subList(firstSafeVisiblePosition, lastSafeVisiblePosition + 1)
+                val visiblePostIds = visiblePosts.map { it.id }
+
+                homeViewModel.updateVisiblePostIds(visiblePostIds)
             }
         })
     }
 
     private fun setOnSwipeRefresh() {
         binding.swipeRefreshLayoutHome.setOnRefreshListener {
-            homeViewModel.getPosts()
+            if (postId == null) {
+                homeViewModel.getPosts()
+            } else {
+                binding.swipeRefreshLayoutHome.isRefreshing = false
+            }
         }
     }
 }

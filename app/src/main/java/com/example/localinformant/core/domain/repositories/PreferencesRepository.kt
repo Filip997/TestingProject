@@ -10,10 +10,13 @@ interface PreferencesRepository {
 
     fun saveUserType(userType: String)
     fun getUserType(): String?
+    fun deleteUserType()
 
     fun savePerson(person: Person)
     fun getPerson(): Person?
+    fun deletePerson()
 
     fun saveCompany(company: Company)
     fun getCompany(): Company?
+    fun deleteCompany()
 }

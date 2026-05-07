@@ -46,6 +46,7 @@ fun CompanyDto.toDomain(): Company {
 fun PersonDto.toDomain(): Person {
     return Person(
         id = id,
+        profileImageUrl = profileImageUrl,
         firstName = firstName,
         lastName = lastName,
         fullName = "$firstName $lastName",
@@ -61,8 +62,8 @@ fun CommentDto.toDomain(): Comment {
         createdAt = createdAt?.toDate()?.time ?: 0L,
         userId = userId,
         userType = UserType.valueOf(userType),
-        userProfileImage = userProfileImage,
-        userName = userName,
+        userProfileImage = "",
+        userName = "",
         postId = postId,
         commentText = commentText
     )
@@ -73,8 +74,6 @@ fun ReactionDto.toDomain(): Reaction {
         id = id,
         userId = userId,
         userType = UserType.valueOf(userType),
-        userProfileImage = userProfileImage,
-        userName = userName,
         postId = postId
     )
 }

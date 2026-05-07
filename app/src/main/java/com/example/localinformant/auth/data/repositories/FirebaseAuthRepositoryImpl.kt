@@ -3,7 +3,7 @@ package com.example.localinformant.auth.data.repositories
 import com.example.localinformant.auth.domain.repositories.FirebaseAuthRepository
 import com.example.localinformant.auth.domain.usecases.RegisterUserData
 import com.example.localinformant.auth.domain.error.AuthError
-import com.example.localinformant.constants.AppConstants
+import com.example.localinformant.core.data.constants.AppConstants
 import com.example.localinformant.core.data.dto.CompanyDto
 import com.example.localinformant.core.data.dto.PersonDto
 import com.example.localinformant.core.data.mappers.toDomain
@@ -11,15 +11,12 @@ import com.example.localinformant.core.domain.models.User
 import com.example.localinformant.core.domain.network.NetworkChecker
 import com.example.localinformant.core.domain.error.Error
 import com.example.localinformant.core.domain.result.Result
-import com.example.localinformant.models.LoginUserResponse
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.FirebaseTooManyRequestsException
-import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
@@ -44,6 +41,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
 
             val person = PersonDto(
                 id = currentUser?.uid!!,
+                profileImageUrl = "",
                 firstName = request.firstName,
                 firstNameLowerCase = request.firstName.lowercase(),
                 lastName = request.lastName,
@@ -82,6 +80,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 id = currentUser?.uid!!,
                 companyName = request.companyName,
                 companyNameLowerCase = request.companyName.lowercase(),
+                companyProfileImageUrl = "",
                 companyEmail = request.companyEmail,
                 email = request.email,
                 firstName = request.firstName,
@@ -230,40 +229,4 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
             Result.Error(AuthError.UNKNOWN)
         }
     }
-
-    suspend fun changePassword(oldPassword: String, newPassword: String): LoginUserResponse {
-        try {
-            val user = auth.currentUser!!
-            val email = user.email
-            val credential = email?.let { EmailAuthProvider.getCredential(it, oldPassword) }
-            credential?.let { user.reauthenticate(it).await() }
-            user.updatePassword(newPassword).await()
-            return LoginUserResponse(true, "")
-        } catch (e: Exception) {
-            return LoginUserResponse(false, e.message.toString())
-        }
-
-    }
-
-    suspend fun deleteUser(): LoginUserResponse {
-        try {
-            auth.currentUser!!.delete().await()
-            return LoginUserResponse(true, "")
-        } catch (e: Exception) {
-            return LoginUserResponse(false, e.message.toString())
-        }
-    }
-
-    suspend fun deleteUserData(userId: String, userType: String): LoginUserResponse {
-        try {
-            db.collection(userType).document(userId).delete().await()
-            return LoginUserResponse(true, "")
-        } catch (e: Exception) {
-            return LoginUserResponse(false, e.message.toString())
-        }
-    }
-
-    fun logout() = auth.signOut()
-
-    fun currentUser(): FirebaseUser? = auth.currentUser
 }

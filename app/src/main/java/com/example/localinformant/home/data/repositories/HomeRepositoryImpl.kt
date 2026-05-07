@@ -1,6 +1,6 @@
 package com.example.localinformant.home.data.repositories
 
-import com.example.localinformant.constants.AppConstants
+import com.example.localinformant.core.data.constants.AppConstants
 import com.example.localinformant.core.data.dto.CommentDto
 import com.example.localinformant.core.data.dto.CompanyDto
 import com.example.localinformant.core.data.dto.PostDto
@@ -9,26 +9,19 @@ import com.example.localinformant.core.data.mappers.toDomain
 import com.example.localinformant.core.domain.error.NetworkError
 import com.example.localinformant.core.domain.models.Comment
 import com.example.localinformant.core.domain.models.Company
-import com.example.localinformant.core.domain.models.Person
 import com.example.localinformant.core.domain.models.Post
 import com.example.localinformant.core.domain.models.Reaction
-import com.example.localinformant.core.domain.models.User
-import com.example.localinformant.core.domain.models.UserType
 import com.example.localinformant.core.domain.network.NetworkChecker
 import com.example.localinformant.core.domain.result.Result
 import com.example.localinformant.home.domain.repositories.HomeRepository
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import kotlin.jvm.java
 
 class HomeRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
@@ -220,224 +213,6 @@ class HomeRepositoryImpl @Inject constructor(
                 .map { it.toDomain() }
 
             Result.Success(company.first())
-        } catch (e: FirebaseFirestoreException) {
-            when (e.code) {
-                FirebaseFirestoreException.Code.INVALID_ARGUMENT -> Result.Error(NetworkError.INVALID_ARGUMENT)
-                FirebaseFirestoreException.Code.NOT_FOUND -> Result.Error(NetworkError.NOT_FOUND)
-                FirebaseFirestoreException.Code.ALREADY_EXISTS -> Result.Error(NetworkError.ALREADY_EXISTS)
-                FirebaseFirestoreException.Code.RESOURCE_EXHAUSTED -> Result.Error(NetworkError.RESOURCE_EXHAUSTED)
-                FirebaseFirestoreException.Code.ABORTED -> Result.Error(NetworkError.ABORTED)
-                FirebaseFirestoreException.Code.DEADLINE_EXCEEDED -> Result.Error(NetworkError.DEADLINE_EXCEEDED)
-                FirebaseFirestoreException.Code.UNKNOWN -> Result.Error(NetworkError.UNKNOWN)
-                else -> Result.Error(NetworkError.UNKNOWN)
-            }
-        } catch (e: Exception) {
-            Result.Error(NetworkError.UNKNOWN)
-        }
-    }
-
-    override suspend fun submitReaction(
-        id: String,
-        postId: String,
-        user: User,
-        userType: UserType
-    ): Result<Post, NetworkError> {
-        return try {
-            if (!networkChecker.hasInternetConnection()) {
-                return Result.Error(NetworkError.NO_INTERNET_CONNECTION)
-            }
-
-            val currentUserId = auth.currentUser?.uid!!
-
-            val reaction = ReactionDto(
-                id = id,
-                userId = currentUserId,
-                userType = userType.name,
-                userProfileImage = when(userType) {
-                    UserType.PERSON -> (user as Person).profileImageUrl
-                    UserType.COMPANY -> (user as Company).companyProfileImageUrl
-                },
-                userName = when(userType) {
-                    UserType.PERSON -> (user as Person).fullName
-                    UserType.COMPANY -> (user as Company).companyName
-                },
-                postId = postId
-            )
-
-            db.collection(AppConstants.REACTIONS)
-                .document(id)
-                .set(reaction)
-                .await()
-
-            db.collection(AppConstants.POSTS)
-                .document(postId)
-                .update("likes", FieldValue.arrayUnion(id))
-
-            val postResult = getPostById(postId)
-
-            if (postResult is Result.Success) {
-                Result.Success(postResult.data)
-            } else {
-                Result.Error(NetworkError.UNKNOWN)
-            }
-        } catch (e: FirebaseFirestoreException) {
-            when (e.code) {
-                FirebaseFirestoreException.Code.INVALID_ARGUMENT -> Result.Error(NetworkError.INVALID_ARGUMENT)
-                FirebaseFirestoreException.Code.NOT_FOUND -> Result.Error(NetworkError.NOT_FOUND)
-                FirebaseFirestoreException.Code.ALREADY_EXISTS -> Result.Error(NetworkError.ALREADY_EXISTS)
-                FirebaseFirestoreException.Code.RESOURCE_EXHAUSTED -> Result.Error(NetworkError.RESOURCE_EXHAUSTED)
-                FirebaseFirestoreException.Code.ABORTED -> Result.Error(NetworkError.ABORTED)
-                FirebaseFirestoreException.Code.DEADLINE_EXCEEDED -> Result.Error(NetworkError.DEADLINE_EXCEEDED)
-                FirebaseFirestoreException.Code.UNKNOWN -> Result.Error(NetworkError.UNKNOWN)
-                else -> Result.Error(NetworkError.UNKNOWN)
-            }
-        } catch (e: Exception) {
-            Result.Error(NetworkError.UNKNOWN)
-        }
-    }
-
-    override fun observeReactions(postIds: List<String>): Flow<List<Reaction>> = callbackFlow {
-        if (postIds.isEmpty()) {
-            trySend(emptyList())
-            close()
-            return@callbackFlow
-        }
-
-        val listener = db.collection(AppConstants.REACTIONS)
-            .whereIn("postId", postIds)
-            .addSnapshotListener { snapshot, error ->
-
-                if (error != null) {
-                    close(error)
-                    return@addSnapshotListener
-                }
-
-                val reactions = snapshot?.documents
-                    ?.mapNotNull { it.toObject(ReactionDto::class.java) }
-                    ?.map { it.toDomain() }
-                    ?: emptyList()
-
-                trySend(reactions)
-            }
-
-        awaitClose { listener.remove() }
-    }
-
-    override suspend fun submitComment(
-        id: String, postId: String, commentText: String, user: User, userType: UserType
-    ): Result<Post, NetworkError> {
-        return try {
-            if (!networkChecker.hasInternetConnection()) {
-                return Result.Error(NetworkError.NO_INTERNET_CONNECTION)
-            }
-
-            val currentUserId = auth.currentUser?.uid!!
-
-            val comment = CommentDto(
-                id = id,
-                createdAt = Timestamp.now(),
-                userId = currentUserId,
-                userType = userType.name,
-                userProfileImage = when(userType) {
-                    UserType.PERSON -> (user as Person).profileImageUrl
-                    UserType.COMPANY -> (user as Company).companyProfileImageUrl
-                },
-                userName = when(userType) {
-                    UserType.PERSON -> (user as Person).fullName
-                    UserType.COMPANY -> (user as Company).companyName
-                },
-                postId = postId,
-                commentText = commentText
-            )
-
-            db.collection(AppConstants.COMMENTS)
-                .document(id)
-                .set(comment)
-                .await()
-
-            db.collection(AppConstants.POSTS)
-                .document(postId)
-                .update("comments", FieldValue.arrayUnion(id))
-
-            val postResult = getPostById(postId)
-
-            if (postResult is Result.Success) {
-                Result.Success(postResult.data)
-            } else {
-                Result.Error(NetworkError.UNKNOWN)
-            }
-        } catch (e: FirebaseFirestoreException) {
-            when (e.code) {
-                FirebaseFirestoreException.Code.INVALID_ARGUMENT -> Result.Error(NetworkError.INVALID_ARGUMENT)
-                FirebaseFirestoreException.Code.NOT_FOUND -> Result.Error(NetworkError.NOT_FOUND)
-                FirebaseFirestoreException.Code.ALREADY_EXISTS -> Result.Error(NetworkError.ALREADY_EXISTS)
-                FirebaseFirestoreException.Code.RESOURCE_EXHAUSTED -> Result.Error(NetworkError.RESOURCE_EXHAUSTED)
-                FirebaseFirestoreException.Code.ABORTED -> Result.Error(NetworkError.ABORTED)
-                FirebaseFirestoreException.Code.DEADLINE_EXCEEDED -> Result.Error(NetworkError.DEADLINE_EXCEEDED)
-                FirebaseFirestoreException.Code.UNKNOWN -> Result.Error(NetworkError.UNKNOWN)
-                else -> Result.Error(NetworkError.UNKNOWN)
-            }
-        } catch (e: Exception) {
-            Result.Error(NetworkError.UNKNOWN)
-        }
-    }
-
-    override fun observeComments(postIds: List<String>): Flow<List<Comment>> = callbackFlow {
-        if (postIds.isEmpty()) {
-            trySend(emptyList())
-            close()
-            return@callbackFlow
-        }
-
-        val listener = db.collection(AppConstants.COMMENTS)
-            .whereIn("postId", postIds)
-            .orderBy("createdAt", Query.Direction.ASCENDING)
-            .addSnapshotListener { snapshot, error ->
-
-                if (error != null) {
-                    close(error)
-                    return@addSnapshotListener
-                }
-
-                val comments = snapshot?.documents
-                    ?.mapNotNull { it.toObject(CommentDto::class.java) }
-                    ?.map { it.toDomain() }
-                    ?: emptyList()
-
-                trySend(comments)
-            }
-
-        awaitClose { listener.remove() }
-    }
-
-    override suspend fun getUsersWhoCommentedByPostId(
-        postId: String,
-        postUserId: String
-    ): Result<List<String>, NetworkError> {
-        return try {
-            if (!networkChecker.hasInternetConnection()) {
-                return Result.Error(NetworkError.NO_INTERNET_CONNECTION)
-            }
-
-            val currentUserId = auth.currentUser?.uid!!
-
-            val userIds = db.collection(AppConstants.COMMENTS)
-                .whereEqualTo("postId", postId)
-                .get()
-                .await()
-                .documents
-                .mapNotNull {
-                    it.toObject(CommentDto::class.java)
-                }
-                .map {
-                    it.userId
-                }
-                .filter {
-                    it != currentUserId && it != postUserId
-                }
-                .distinct()
-
-            Result.Success(userIds)
         } catch (e: FirebaseFirestoreException) {
             when (e.code) {
                 FirebaseFirestoreException.Code.INVALID_ARGUMENT -> Result.Error(NetworkError.INVALID_ARGUMENT)

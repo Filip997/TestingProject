@@ -1,6 +1,6 @@
 package com.example.localinformant.auth.domain.validators
 
-import com.example.localinformant.auth.domain.error.ValidationError
+import com.example.localinformant.core.domain.error.ValidationError
 import com.example.localinformant.core.domain.models.UserType
 import javax.inject.Inject
 

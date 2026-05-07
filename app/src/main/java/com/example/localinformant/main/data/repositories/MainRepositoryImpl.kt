@@ -1,7 +1,7 @@
 package com.example.localinformant.main.data.repositories
 
 import android.net.Uri
-import com.example.localinformant.constants.AppConstants
+import com.example.localinformant.core.data.constants.AppConstants
 import com.example.localinformant.core.data.dto.CompanyDto
 import com.example.localinformant.core.data.dto.PostDto
 import com.example.localinformant.core.data.mappers.toDomain

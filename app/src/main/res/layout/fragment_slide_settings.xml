@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingVertical="@dimen/margin_padding_size_xlarge"
+    android:background="@android:color/background_light"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".account.presentation.fragments.SettingsSlideFragment">
+
+    <RelativeLayout
+        android:id="@+id/layout_settings_slide_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/tv_settings_slide_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_padding_size_xlarge"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="@string/settings"
+            android:textSize="@dimen/text_size_large_title"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/iv_settings_slide_close_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/margin_padding_size_medium"
+            android:layout_marginHorizontal="@dimen/margin_padding_size_xlarge"
+            android:background="@drawable/bg_close_settings"
+            android:src="@drawable/ic_close_green"
+            android:contentDescription="Close image"/>
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/settings_slide_top_line_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/margin_padding_size_xlarge"
+        android:background="@color/md_theme_outlineVariant"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_settings_slide_header"/>
+
+    <LinearLayout
+        android:id="@+id/layout_settings_slide_change_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_margin="@dimen/margin_padding_size_xlarge"
+        android:padding="@dimen/margin_padding_size_large"
+        android:background="@drawable/bg_change_password_layout"
+        tools:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_slide_top_line_separator">
+
+        <ImageView
+            android:id="@+id/iv_settings_slide_change_password_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="@dimen/margin_padding_size_medium"
+            android:src="@drawable/ic_lock_green"
+            android:contentDescription="Remove image"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_padding_size_xlarge"
+                android:text="@string/change_password"
+                android:textSize="@dimen/text_size_large_title"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_padding_size_xlarge"
+                android:text="@string/update_your_password"
+                android:textSize="@dimen/text_size_large" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_settings_slide_change_password_fields"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="@dimen/margin_padding_size_xlarge"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settings_slide_top_line_separator">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/old_password"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_settings_slide_old_password"
+            style="@style/LoginTextInputLayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_medium"
+            android:hint="@string/enter_old_password"
+            app:startIconDrawable="@drawable/ic_lock"
+            app:endIconMode="password_toggle"
+            app:helperTextEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:inputType="textPassword"
+                android:maxLength="20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_xxlarge"
+            android:fontFamily="@font/roboto_bold"
+            android:text="@string/new_password"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_settings_slide_new_password"
+            style="@style/LoginTextInputLayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_medium"
+            android:hint="@string/enter_new_password"
+            app:startIconDrawable="@drawable/ic_lock"
+            app:endIconMode="password_toggle"
+            app:helperTextEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:inputType="textPassword"
+                android:maxLength="20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_padding_size_xxxlarge">
+
+            <Button
+                android:id="@+id/btn_settings_slide_change_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="@drawable/ic_blue_button_big"
+                android:fontFamily="@font/roboto_medium"
+                android:text="@string/change_password"
+                android:textStyle="bold"/>
+
+            <ProgressBar
+                android:id="@+id/progressbar_settings_slide"
+                android:layout_width="@dimen/margin_padding_size_xxxxlarge"
+                android:layout_height="@dimen/margin_padding_size_xxxxlarge"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/md_theme_secondaryContainer"
+                android:visibility="gone"
+                android:elevation="@dimen/margin_padding_size_xlarge"
+                tools:visibility="visible"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/settings_slide_bottom_line_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/margin_padding_size_xlarge"
+        android:background="@color/md_theme_outlineVariant"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/layout_settings_slide_logout"/>
+
+    <LinearLayout
+        android:id="@+id/layout_settings_slide_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginHorizontal="@dimen/margin_padding_size_xlarge"
+        android:padding="@dimen/margin_padding_size_large"
+        android:background="@drawable/bg_change_password_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_settings_slide_logout_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="@dimen/margin_padding_size_xsmall"
+            android:src="@drawable/ic_logout"
+            android:contentDescription="Remove image"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_padding_size_medium"
+            android:text="@string/log_out"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,6 @@ import com.example.localinformant.core.presentation.models.PostUiState
 
 data class HomeUiState(
     val isLoading: Boolean = false,
-    val postsUi: List<PostUiState> = listOf(),
+    val postUiState: PostUiState = PostUiState(),
     val error: NetworkError? = null
 )

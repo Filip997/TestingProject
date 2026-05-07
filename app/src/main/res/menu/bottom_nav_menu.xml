@@ -19,7 +19,7 @@
         android:icon="@drawable/ic_notifications"/>
 
     <item
-        android:id="@+id/myAccountFragment"
+        android:id="@+id/userAccountFragment"
         android:title="@string/my_account"
         android:icon="@drawable/ic_account"/>
 </menu>

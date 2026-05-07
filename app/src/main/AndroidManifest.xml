@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
-        android:name=".application.AppController"
+        android:name=".core.application.AppController"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -21,16 +21,7 @@
             android:name=".core.presentation.activities.BaseActivity"
             android:exported="false" />
         <activity
-            android:name=".views.activities.ChangePasswordActivity"
-            android:exported="false" />
-        <activity
-            android:name=".views.activities.LoginSettingsActivity"
-            android:exported="false" />
-        <activity
             android:name=".auth.presentation.activities.ForgotPasswordActivity"
-            android:exported="false" />
-        <activity
-            android:name=".views.activities.UsersListAdminActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

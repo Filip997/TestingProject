@@ -1,6 +1,6 @@
 package com.example.localinformant.search.data.repositories
 
-import com.example.localinformant.constants.AppConstants
+import com.example.localinformant.core.data.constants.AppConstants
 import com.example.localinformant.core.data.dto.CompanyDto
 import com.example.localinformant.core.data.dto.PersonDto
 import com.example.localinformant.core.data.mappers.toDomain

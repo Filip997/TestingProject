@@ -2,9 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/margin_padding_size_medium"
-    android:layout_marginTop="@dimen/margin_padding_size_medium"
-    android:layout_marginBottom="@dimen/margin_padding_size_xsmall"
+    android:layout_marginHorizontal="@dimen/margin_padding_size_small"
+    android:layout_marginTop="@dimen/margin_padding_size_small"
     android:background="@drawable/bg_post_card"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -14,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/md_theme_background"
-        app:cardCornerRadius="15dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">

@@ -17,8 +17,8 @@
             android:id="@+id/action_homeFragment_to_notificationsFragment"
             app:destination="@id/notificationsFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_myAccountFragment"
-            app:destination="@id/myAccountFragment" />
+            android:id="@+id/action_homeFragment_to_userAccountFragment"
+            app:destination="@id/userAccountFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -32,9 +32,6 @@
             android:id="@+id/action_searchFragment_to_notificationsFragment"
             app:destination="@id/notificationsFragment" />
         <action
-            android:id="@+id/action_searchFragment_to_myAccountFragment"
-            app:destination="@id/myAccountFragment" />
-        <action
             android:id="@+id/action_searchFragment_to_userAccountFragment"
             app:destination="@+id/userAccountFragment"/>
     </fragment>
@@ -44,37 +41,28 @@
         android:label="fragment_notifications"
         tools:layout="@layout/fragment_notifications" >
         <action
-            android:id="@+id/action_notificationsFragment_to_myAccountFragment"
-            app:destination="@id/myAccountFragment" />
-        <action
             android:id="@+id/action_notificationsFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
         <action
             android:id="@+id/action_notificationsFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/myAccountFragment"
-        android:name="com.example.localinformant.views.fragments.MyAccountFragment"
-        android:label="fragment_my_account"
-        tools:layout="@layout/fragment_my_account" >
         <action
-            android:id="@+id/action_myAccountFragment_to_notificationsFragment"
-            app:destination="@id/notificationsFragment" />
-        <action
-            android:id="@+id/action_myAccountFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
-        <action
-            android:id="@+id/action_myAccountFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            android:id="@+id/action_notificationsFragment_to_userAccountFragment"
+            app:destination="@id/userAccountFragment" />
     </fragment>
     <fragment
         android:id="@+id/userAccountFragment"
-        android:name="com.example.localinformant.views.fragments.UserAccountFragment"
+        android:name="com.example.localinformant.account.presentation.fragments.UserAccountFragment"
         android:label="fragment_user_account"
         tools:layout="@layout/fragment_user_account">
         <action
             android:id="@+id/action_userAccountFragment_to_searchFragment"
             app:destination="@+id/searchFragment"/>
+        <action
+            android:id="@+id/action_userAccountFragment_to_notificationsFragment"
+            app:destination="@id/notificationsFragment" />
+        <action
+            android:id="@+id/action_userAccountFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>

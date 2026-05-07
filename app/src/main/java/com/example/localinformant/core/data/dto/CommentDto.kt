@@ -7,8 +7,6 @@ data class CommentDto(
     val createdAt: Timestamp? = null,
     val userId: String = "",
     val userType: String = "",
-    val userProfileImage: String = "",
-    val userName: String = "",
     val postId: String = "",
     val commentText: String = ""
 )

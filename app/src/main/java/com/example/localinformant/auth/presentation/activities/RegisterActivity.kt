@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
 import com.example.localinformant.R
-import com.example.localinformant.auth.domain.error.ValidationError
+import com.example.localinformant.core.domain.error.ValidationError
 import com.example.localinformant.auth.presentation.events.RegisterEvent
 import com.example.localinformant.auth.presentation.util.toString
 import com.example.localinformant.core.domain.models.UserType

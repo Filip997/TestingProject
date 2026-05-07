@@ -1,6 +1,6 @@
 package com.example.localinformant.auth.presentation.models
 
-import com.example.localinformant.auth.domain.error.ValidationError
+import com.example.localinformant.core.domain.error.ValidationError
 import com.example.localinformant.core.domain.models.UserType
 
 data class RegisterUiState(
