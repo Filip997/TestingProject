@@ -10,6 +10,7 @@ import com.example.localinformant.core.data.mappers.toDomain
 import com.example.localinformant.core.domain.models.User
 import com.example.localinformant.core.domain.network.NetworkChecker
 import com.example.localinformant.core.domain.error.Error
+import com.example.localinformant.core.domain.models.UserStatus
 import com.example.localinformant.core.domain.result.Result
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -47,6 +48,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 lastName = request.lastName,
                 lastNameLowerCase = request.lastName.lowercase(),
                 email = request.email,
+                status = UserStatus.OFFLINE.name,
                 token = "",
                 following = listOf()
             )
@@ -85,6 +87,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(
                 email = request.email,
                 firstName = request.firstName,
                 lastName = request.lastName,
+                status = UserStatus.OFFLINE.name,
                 token = "",
                 followers = listOf(),
                 following = listOf(),

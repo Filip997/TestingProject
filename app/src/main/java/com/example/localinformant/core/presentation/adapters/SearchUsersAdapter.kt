@@ -1,4 +1,4 @@
-package com.example.localinformant.search.presentation.adapters
+package com.example.localinformant.core.presentation.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -13,7 +13,7 @@ import com.example.localinformant.databinding.SearchUsersAdapterDesignBinding
 
 class SearchUsersAdapter(
     private val context: Context,
-    private val goToUserProfile: (String, UserType) -> Unit
+    private val onUserClick: (String, UserType) -> Unit
 ) : ListAdapter<SearchedUserUi, SearchUsersAdapter.SearchUserViewHolder>(DiffCallback()) {
 
     class SearchUserViewHolder(binding: SearchUsersAdapterDesignBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -40,7 +40,7 @@ class SearchUsersAdapter(
         holder.userName.text = currentUser.userName
 
         holder.layoutSearchedUser.setOnClickListener {
-            goToUserProfile.invoke(currentUser.id, currentUser.userType!!)
+            onUserClick.invoke(currentUser.id, currentUser.userType!!)
         }
     }
 

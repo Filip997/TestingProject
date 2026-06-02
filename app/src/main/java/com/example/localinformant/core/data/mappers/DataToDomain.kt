@@ -2,6 +2,8 @@ package com.example.localinformant.core.data.mappers
 
 import com.example.localinformant.core.data.dto.CommentDto
 import com.example.localinformant.core.data.dto.CompanyDto
+import com.example.localinformant.core.data.dto.ConversationDto
+import com.example.localinformant.core.data.dto.MessageDto
 import com.example.localinformant.core.data.dto.NotificationDto
 import com.example.localinformant.core.data.dto.PersonDto
 import com.example.localinformant.core.data.dto.PostDto
@@ -9,11 +11,15 @@ import com.example.localinformant.core.data.dto.ReactionDto
 import com.example.localinformant.core.domain.models.Comment
 import com.example.localinformant.core.domain.models.Post
 import com.example.localinformant.core.domain.models.Company
+import com.example.localinformant.core.domain.models.Conversation
+import com.example.localinformant.core.domain.models.Message
 import com.example.localinformant.core.domain.models.Notification
 import com.example.localinformant.core.domain.models.NotificationType
 import com.example.localinformant.core.domain.models.Person
 import com.example.localinformant.core.domain.models.Reaction
+import com.example.localinformant.core.domain.models.UserStatus
 import com.example.localinformant.core.domain.models.UserType
+import kotlin.String
 
 fun PostDto.toDomain(): Post {
     return Post(
@@ -36,6 +42,7 @@ fun CompanyDto.toDomain(): Company {
         email = email,
         firstName = firstName,
         lastName = lastName,
+        status = UserStatus.valueOf(status),
         token = token,
         followers = followers,
         following = following,
@@ -51,6 +58,7 @@ fun PersonDto.toDomain(): Person {
         lastName = lastName,
         fullName = "$firstName $lastName",
         email = email,
+        status = UserStatus.valueOf(status),
         token = token,
         following = following
     )
@@ -90,5 +98,30 @@ fun NotificationDto.toDomain(): Notification {
         fromUserType = UserType.valueOf(fromUserType),
         postId = postId,
         notificationType = NotificationType.valueOf(notificationType)
+    )
+}
+
+fun ConversationDto.toDomain(currentUserId: String): Conversation {
+    return Conversation(
+        id = id,
+        participants = participants,
+        participant2Id = participants.firstOrNull { it != currentUserId } ?: "",
+        participant2Name = "",
+        participant2ProfileImage = "",
+        messages = messages,
+        lastMessage = lastMessage,
+        lastMessageUserId = lastMessageUserId,
+        lastMessageTime = lastMessageTime?.toDate()?.time ?: 0L
+    )
+}
+
+fun MessageDto.toDomain(): Message {
+    return Message(
+        id = id,
+        conversationId = conversationId,
+        senderId = senderId,
+        receiverId = receiverId,
+        content = content,
+        timeSent = timeSent?.toDate()?.time ?: 0L
     )
 }

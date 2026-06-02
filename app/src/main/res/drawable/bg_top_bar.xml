@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="60dp"
+    android:viewportWidth="680"
+    android:viewportHeight="120">
+
+    <!-- White background -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M0,0 L680,0 L680,120 L0,120 Z"/>
+
+    <!-- Large blob top-left -->
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.92"
+        android:pathData="M0,0 Q10,30 30,40 Q50,48 55,30 Q60,10 40,2 Q20,-6 0,0Z"/>
+
+    <!-- Top-left corner overflow ellipse -->
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.85"
+        android:pathData="M0,0 Q20,-10 45,8 Q60,20 50,38 Q38,52 18,48 Q-4,44 0,22 Q0,10 0,0Z"/>
+
+    <!-- Drip tail blobs from top-left -->
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.70"
+        android:pathData="M40,40 Q56,46 58,58 Q60,70 50,74 Q38,78 34,66 Q30,54 40,40Z"/>
+
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.55"
+        android:pathData="M36,64 Q44,68 46,80 Q48,92 40,94 Q32,96 30,84 Q28,72 36,64Z"/>
+
+    <!-- Top-right corner blob -->
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.88"
+        android:pathData="M640,0 Q680,0 680,0 Q680,55 680,55 Q665,42 645,30 Q620,18 630,5 Q634,0 640,0Z"/>
+
+    <!-- Top-right secondary blob -->
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.75"
+        android:pathData="M620,8 Q648,0 668,14 Q682,26 678,42 Q672,56 654,50 Q632,44 622,28 Q616,18 620,8Z"/>
+
+    <!-- Top-right drip tail -->
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.60"
+        android:pathData="M662,50 Q676,56 678,70 Q680,82 670,86 Q660,90 656,78 Q650,64 662,50Z"/>
+
+    <!-- Mid-right blob -->
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.70"
+        android:pathData="M558,0 Q588,0 608,10 Q622,20 616,32 Q608,46 584,40 Q560,34 554,18 Q550,6 558,0Z"/>
+
+    <!-- Bottom-left blob -->
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.82"
+        android:pathData="M0,80 Q8,68 22,72 Q38,76 35,95 Q32,115 12,118 Q0,120 0,120Z"/>
+
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.65"
+        android:pathData="M6,100 Q28,90 52,100 Q68,108 62,118 Q50,124 24,120 Q4,116 6,100Z"/>
+
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.50"
+        android:pathData="M42,112 Q54,108 68,114 Q76,120 66,122 Q52,124 42,120 Q36,116 42,112Z"/>
+
+    <!-- Bottom-right blob -->
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.85"
+        android:pathData="M620,100 Q640,88 665,95 Q685,102 680,120 L620,120Z"/>
+
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.60"
+        android:pathData="M584,106 Q602,98 622,108 Q634,116 626,122 Q610,126 592,120 Q580,114 584,106Z"/>
+
+    <!-- Small scattered edge droplets -->
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.50"
+        android:pathData="M100,0 Q118,0 122,6 Q126,12 116,14 Q104,16 100,8 Q98,4 100,0Z"/>
+
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.45"
+        android:pathData="M150,108 Q162,106 168,114 Q170,120 160,120 Q150,120 148,114 Q146,108 150,108Z"/>
+
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.40"
+        android:pathData="M232,0 Q244,0 248,5 Q250,10 242,12 Q232,14 230,6 Q230,2 232,0Z"/>
+
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.42"
+        android:pathData="M296,112 Q310,108 320,116 Q324,122 312,122 Q300,122 296,116 Q294,112 296,112Z"/>
+
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.38"
+        android:pathData="M382,0 Q394,0 398,6 Q400,12 390,12 Q380,12 378,6 Q378,2 382,0Z"/>
+
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.44"
+        android:pathData="M438,110 Q450,106 458,114 Q462,120 450,120 Q438,120 436,114 Q434,108 438,110Z"/>
+
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.36"
+        android:pathData="M494,0 Q504,0 506,5 Q508,10 500,10 Q492,10 490,5 Q490,2 494,0Z"/>
+
+    <!-- Tiny satellite drops -->
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.40"
+        android:pathData="M70,54 Q76,50 80,56 Q84,62 80,68 Q74,72 70,66 Q66,60 70,54Z"/>
+
+    <path
+        android:fillColor="#A2F2D9"
+        android:fillAlpha="0.38"
+        android:pathData="M624,66 Q632,62 636,68 Q640,74 634,78 Q626,80 622,74 Q620,68 624,66Z"/>
+
+</vector>

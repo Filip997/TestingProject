@@ -2,6 +2,8 @@ package com.example.localinformant.core.presentation.mappers
 
 import com.example.localinformant.core.domain.models.Comment
 import com.example.localinformant.core.domain.models.Company
+import com.example.localinformant.core.domain.models.Conversation
+import com.example.localinformant.core.domain.models.Message
 import com.example.localinformant.core.domain.models.Notification
 import com.example.localinformant.core.domain.models.Person
 import com.example.localinformant.core.domain.models.PostWithCompany
@@ -9,7 +11,9 @@ import com.example.localinformant.core.domain.models.Reaction
 import com.example.localinformant.core.domain.models.UserAccountDetails
 import com.example.localinformant.core.domain.models.UserType
 import com.example.localinformant.core.presentation.models.CommentUi
+import com.example.localinformant.core.presentation.models.ConversationUi
 import com.example.localinformant.core.presentation.models.FollowerFollowingUserUi
+import com.example.localinformant.core.presentation.models.MessageUi
 import com.example.localinformant.core.presentation.models.NotificationUi
 import com.example.localinformant.core.presentation.models.PostUi
 import com.example.localinformant.core.presentation.models.ReactionUi
@@ -143,5 +147,30 @@ fun Company.toFollowerFollowingUi(): FollowerFollowingUserUi {
         userType = UserType.COMPANY,
         userProfileImage = companyProfileImageUrl,
         userName = companyName,
+    )
+}
+
+fun Conversation.toUi(): ConversationUi {
+    return ConversationUi(
+        id = id,
+        participants = participants,
+        participant2Id = participant2Id,
+        participant2Name = participant2Name,
+        participant2ProfileImage = participant2ProfileImage,
+        messages = messages,
+        lastMessage = lastMessage,
+        lastMessageUserId = lastMessageUserId,
+        lastMessageTime = lastMessageTime
+    )
+}
+
+fun Message.toUi(): MessageUi {
+    return MessageUi(
+        id = id,
+        conversationId = conversationId,
+        senderId = senderId,
+        receiverId = receiverId,
+        content = content,
+        timeSent = timeSent
     )
 }

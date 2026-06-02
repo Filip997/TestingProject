@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.viewbinding.ViewBinding
 import com.example.localinformant.R
+import com.example.localinformant.core.domain.models.UserStatus
 import com.example.localinformant.core.domain.models.UserType
 import com.example.localinformant.core.presentation.activities.BaseActivity
 import com.example.localinformant.core.presentation.dialogs.CustomInfoDialog
@@ -195,6 +196,18 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        mainViewModel.updateCurrentUserStatus(UserStatus.ONLINE)
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        mainViewModel.updateCurrentUserStatus(UserStatus.OFFLINE)
     }
 
     companion object {

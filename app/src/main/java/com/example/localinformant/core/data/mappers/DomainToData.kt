@@ -2,12 +2,16 @@ package com.example.localinformant.core.data.mappers
 
 import com.example.localinformant.core.data.dto.CommentDto
 import com.example.localinformant.core.data.dto.CompanyDto
+import com.example.localinformant.core.data.dto.ConversationDto
+import com.example.localinformant.core.data.dto.MessageDto
 import com.example.localinformant.core.data.dto.NotificationDto
 import com.example.localinformant.core.data.dto.PersonDto
 import com.example.localinformant.core.data.dto.PostDto
 import com.example.localinformant.core.data.dto.ReactionDto
 import com.example.localinformant.core.domain.models.Comment
 import com.example.localinformant.core.domain.models.Company
+import com.example.localinformant.core.domain.models.Conversation
+import com.example.localinformant.core.domain.models.Message
 import com.example.localinformant.core.domain.models.Notification
 import com.example.localinformant.core.domain.models.Person
 import com.example.localinformant.core.domain.models.Post
@@ -37,6 +41,7 @@ fun Company.toDto(): CompanyDto {
         email = email,
         firstName = firstName,
         lastName = lastName,
+        status = status?.name ?: "",
         token = token,
         followers = followers,
         following = following,
@@ -53,6 +58,7 @@ fun Person.toDto(): PersonDto {
         lastName = lastName,
         lastNameLowerCase = lastName.lowercase(),
         email = email,
+        status = status?.name ?: "",
         token = token,
         following = following
     )
@@ -89,5 +95,30 @@ fun Notification.toDto(): NotificationDto {
         fromUserType = fromUserType.name,
         postId = postId,
         notificationType = notificationType?.name ?: ""
+    )
+}
+
+fun Conversation.toDto(): ConversationDto {
+    return ConversationDto(
+        id = id,
+        participants = participants,
+        messages = messages,
+        lastMessage = lastMessage,
+        lastMessageUserId = lastMessageUserId,
+        lastMessageTime = Timestamp(
+            lastMessageTime / 1000,
+            ((lastMessageTime % 1000) * 1_000_000).toInt()
+        )
+    )
+}
+
+fun Message.toDto(): MessageDto {
+    return MessageDto(
+        id = id,
+        conversationId = conversationId,
+        senderId = senderId,
+        receiverId = receiverId,
+        content = content,
+        timeSent = Timestamp(timeSent / 1000, ((timeSent % 1000) * 1_000_000).toInt())
     )
 }

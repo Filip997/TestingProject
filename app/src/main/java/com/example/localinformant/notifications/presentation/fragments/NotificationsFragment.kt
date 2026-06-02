@@ -47,6 +47,7 @@ class NotificationsFragment : Fragment() {
         setupViewModels()
         setupRecyclerViewNotifications()
         setOnSwipeRefresh()
+        setupClickListeners()
 
         return binding.root
     }
@@ -62,6 +63,7 @@ class NotificationsFragment : Fragment() {
                     else
                         binding.progressbarNotifications.visibility = View.GONE
 
+                    myNotificationManager.resetNotificationsCount()
                     notificationsAdapter.submitList(state.notifications)
                 }
             }
@@ -93,6 +95,12 @@ class NotificationsFragment : Fragment() {
     private fun setOnSwipeRefresh() {
         binding.swipeRefreshLayoutNotifications.setOnRefreshListener {
             notificationsViewModel.getUserNotifications()
+        }
+    }
+
+    private fun setupClickListeners() {
+        binding.ivBackArrowNotifications.setOnClickListener {
+            screensNavigator.onBackPressed()
         }
     }
 

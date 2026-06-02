@@ -7,6 +7,8 @@ import com.example.localinformant.core.data.dto.PostDto
 import com.example.localinformant.core.data.mappers.toDomain
 import com.example.localinformant.core.domain.error.NetworkError
 import com.example.localinformant.core.domain.models.Company
+import com.example.localinformant.core.domain.models.UserStatus
+import com.example.localinformant.core.domain.models.UserType
 import com.example.localinformant.core.domain.network.NetworkChecker
 import com.example.localinformant.core.domain.result.Result
 import com.example.localinformant.main.domain.repositories.MainRepository
@@ -27,6 +29,40 @@ class MainRepositoryImpl @Inject constructor(
     private val storage: FirebaseStorage,
     private val networkChecker: NetworkChecker
 ) : MainRepository {
+
+    override suspend fun changeUserStatus(userType: UserType, status: UserStatus): Result<Unit, NetworkError> {
+        return try {
+            if (!networkChecker.hasInternetConnection()) {
+                return Result.Error(NetworkError.NO_INTERNET_CONNECTION)
+            }
+
+            val currentUserId = auth.currentUser?.uid!!
+            val collection = when(userType) {
+                UserType.PERSON -> AppConstants.PERSONS
+                UserType.COMPANY -> AppConstants.COMPANIES
+            }
+
+            db.collection(collection)
+                .document(currentUserId)
+                .update("status", status.name)
+                .await()
+
+            Result.Success(Unit)
+        } catch (e: FirebaseFirestoreException) {
+            when (e.code) {
+                FirebaseFirestoreException.Code.INVALID_ARGUMENT -> Result.Error(NetworkError.INVALID_ARGUMENT)
+                FirebaseFirestoreException.Code.NOT_FOUND -> Result.Error(NetworkError.NOT_FOUND)
+                FirebaseFirestoreException.Code.ALREADY_EXISTS -> Result.Error(NetworkError.ALREADY_EXISTS)
+                FirebaseFirestoreException.Code.RESOURCE_EXHAUSTED -> Result.Error(NetworkError.RESOURCE_EXHAUSTED)
+                FirebaseFirestoreException.Code.ABORTED -> Result.Error(NetworkError.ABORTED)
+                FirebaseFirestoreException.Code.DEADLINE_EXCEEDED -> Result.Error(NetworkError.DEADLINE_EXCEEDED)
+                FirebaseFirestoreException.Code.UNKNOWN -> Result.Error(NetworkError.UNKNOWN)
+                else -> Result.Error(NetworkError.UNKNOWN)
+            }
+        } catch (e: Exception) {
+            Result.Error(NetworkError.UNKNOWN)
+        }
+    }
 
     override suspend fun savePostImages(postId: String, uriImages: List<Uri>): Result<List<String>, NetworkError> {
         return try {

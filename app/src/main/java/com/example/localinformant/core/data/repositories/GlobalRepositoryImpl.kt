@@ -5,6 +5,7 @@ import com.example.localinformant.core.data.api.FcmApi
 import com.example.localinformant.core.data.constants.AppConstants
 import com.example.localinformant.core.data.dto.CommentDto
 import com.example.localinformant.core.data.dto.CompanyDto
+import com.example.localinformant.core.data.dto.ConversationDto
 import com.example.localinformant.core.data.dto.NotificationDto
 import com.example.localinformant.core.data.dto.NotificationRequestDto
 import com.example.localinformant.core.data.dto.PersonDto
@@ -15,6 +16,7 @@ import com.example.localinformant.core.domain.error.NetworkError
 import com.example.localinformant.core.domain.models.Comment
 import com.example.localinformant.core.domain.repositories.GlobalRepository
 import com.example.localinformant.core.domain.models.Company
+import com.example.localinformant.core.domain.models.Conversation
 import com.example.localinformant.core.domain.models.NotificationType
 import com.example.localinformant.core.domain.models.Person
 import com.example.localinformant.core.domain.models.Post
@@ -34,6 +36,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import java.util.UUID
 import javax.inject.Inject
 import kotlin.collections.chunked
 
@@ -90,6 +93,47 @@ class GlobalRepositoryImpl @Inject constructor(
                 .get()
                 .await()
                 .toObject(CompanyDto::class.java)?.toDomain()
+    }
+
+    override suspend fun getUserTypeByUserId(userId: String): Result<UserType, NetworkError> {
+        return try {
+            if (!networkChecker.hasInternetConnection()) {
+                return Result.Error(NetworkError.NO_INTERNET_CONNECTION)
+            }
+
+            val personSnapshot = db.collection(AppConstants.PERSONS)
+                .document(userId)
+                .get()
+                .await()
+
+            if (personSnapshot.exists()) {
+                return Result.Success(UserType.PERSON)
+            }
+
+            val companySnapshot = db.collection(AppConstants.COMPANIES)
+                .document(userId)
+                .get()
+                .await()
+
+            if (companySnapshot.exists()) {
+                return Result.Success(UserType.COMPANY)
+            }
+
+            Result.Error(NetworkError.NOT_FOUND)
+        } catch (e: FirebaseFirestoreException) {
+            when (e.code) {
+                FirebaseFirestoreException.Code.INVALID_ARGUMENT -> Result.Error(NetworkError.INVALID_ARGUMENT)
+                FirebaseFirestoreException.Code.NOT_FOUND -> Result.Error(NetworkError.NOT_FOUND)
+                FirebaseFirestoreException.Code.ALREADY_EXISTS -> Result.Error(NetworkError.ALREADY_EXISTS)
+                FirebaseFirestoreException.Code.RESOURCE_EXHAUSTED -> Result.Error(NetworkError.RESOURCE_EXHAUSTED)
+                FirebaseFirestoreException.Code.ABORTED -> Result.Error(NetworkError.ABORTED)
+                FirebaseFirestoreException.Code.DEADLINE_EXCEEDED -> Result.Error(NetworkError.DEADLINE_EXCEEDED)
+                FirebaseFirestoreException.Code.UNKNOWN -> Result.Error(NetworkError.UNKNOWN)
+                else -> Result.Error(NetworkError.UNKNOWN)
+            }
+        } catch (e: Exception) {
+            Result.Error(NetworkError.UNKNOWN)
+        }
     }
 
     override suspend fun observeUsersByIds(
@@ -423,6 +467,91 @@ class GlobalRepositoryImpl @Inject constructor(
                 .distinct()
 
             Result.Success(userIds)
+        } catch (e: FirebaseFirestoreException) {
+            when (e.code) {
+                FirebaseFirestoreException.Code.INVALID_ARGUMENT -> Result.Error(NetworkError.INVALID_ARGUMENT)
+                FirebaseFirestoreException.Code.NOT_FOUND -> Result.Error(NetworkError.NOT_FOUND)
+                FirebaseFirestoreException.Code.ALREADY_EXISTS -> Result.Error(NetworkError.ALREADY_EXISTS)
+                FirebaseFirestoreException.Code.RESOURCE_EXHAUSTED -> Result.Error(NetworkError.RESOURCE_EXHAUSTED)
+                FirebaseFirestoreException.Code.ABORTED -> Result.Error(NetworkError.ABORTED)
+                FirebaseFirestoreException.Code.DEADLINE_EXCEEDED -> Result.Error(NetworkError.DEADLINE_EXCEEDED)
+                FirebaseFirestoreException.Code.UNKNOWN -> Result.Error(NetworkError.UNKNOWN)
+                else -> Result.Error(NetworkError.UNKNOWN)
+            }
+        } catch (e: Exception) {
+            Result.Error(NetworkError.UNKNOWN)
+        }
+    }
+
+    override suspend fun checkIfConversationExists(
+        otherUserId: String,
+        otherUserType: UserType
+    ): Result<Conversation?, NetworkError> {
+        return try {
+            if (!networkChecker.hasInternetConnection()) {
+                return Result.Error(NetworkError.NO_INTERNET_CONNECTION)
+            }
+
+            val currentUserId = auth.currentUser?.uid!!
+
+            val conversations = db.collection(AppConstants.CONVERSATIONS)
+                .whereArrayContains("participants", currentUserId)
+                .get()
+                .await()
+                .documents
+                .mapNotNull {
+                    it.toObject(ConversationDto::class.java)?.toDomain(currentUserId)
+                }
+
+            val conversation = conversations.find { conversation ->
+                conversation.participants.contains(otherUserId) &&
+                        conversation.participants.size == 2
+            }
+
+            Result.Success(conversation)
+        } catch (e: FirebaseFirestoreException) {
+            when (e.code) {
+                FirebaseFirestoreException.Code.INVALID_ARGUMENT -> Result.Error(NetworkError.INVALID_ARGUMENT)
+                FirebaseFirestoreException.Code.NOT_FOUND -> Result.Error(NetworkError.NOT_FOUND)
+                FirebaseFirestoreException.Code.ALREADY_EXISTS -> Result.Error(NetworkError.ALREADY_EXISTS)
+                FirebaseFirestoreException.Code.RESOURCE_EXHAUSTED -> Result.Error(NetworkError.RESOURCE_EXHAUSTED)
+                FirebaseFirestoreException.Code.ABORTED -> Result.Error(NetworkError.ABORTED)
+                FirebaseFirestoreException.Code.DEADLINE_EXCEEDED -> Result.Error(NetworkError.DEADLINE_EXCEEDED)
+                FirebaseFirestoreException.Code.UNKNOWN -> Result.Error(NetworkError.UNKNOWN)
+                else -> Result.Error(NetworkError.UNKNOWN)
+            }
+        } catch (e: Exception) {
+            Result.Error(NetworkError.UNKNOWN)
+        }
+    }
+
+    override suspend fun createNewConversation(
+        otherUserId: String,
+        otherUserType: UserType
+    ): Result<String, NetworkError> {
+        return try {
+            if (!networkChecker.hasInternetConnection()) {
+                return Result.Error(NetworkError.NO_INTERNET_CONNECTION)
+            }
+
+            val currentUserId = auth.currentUser?.uid!!
+            val conversationId = UUID.randomUUID().toString()
+
+            val conversationDto = ConversationDto(
+                id = conversationId,
+                participants = listOf(currentUserId, otherUserId),
+                messages = listOf(),
+                lastMessage = "",
+                lastMessageUserId = "",
+                lastMessageTime = null
+            )
+
+            db.collection(AppConstants.CONVERSATIONS)
+                .document(conversationId)
+                .set(conversationDto)
+                .await()
+
+            Result.Success(conversationId)
         } catch (e: FirebaseFirestoreException) {
             when (e.code) {
                 FirebaseFirestoreException.Code.INVALID_ARGUMENT -> Result.Error(NetworkError.INVALID_ARGUMENT)

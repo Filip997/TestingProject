@@ -15,7 +15,7 @@ import com.example.localinformant.core.presentation.constants.IntentKeys
 import com.example.localinformant.core.presentation.navigator.ScreensNavigator
 import com.example.localinformant.databinding.FragmentSearchBinding
 import com.example.localinformant.search.presentation.viewmodels.SearchViewModel
-import com.example.localinformant.search.presentation.adapters.SearchUsersAdapter
+import com.example.localinformant.core.presentation.adapters.SearchUsersAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -82,7 +82,7 @@ class SearchFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun setupRecyclerViewSearchedUsers() {
         searchUsersAdapter = SearchUsersAdapter(
             context = requireContext(),
-            goToUserProfile = { userId, userType ->
+            onUserClick = { userId, userType ->
                 bundle.putString(IntentKeys.USER_ID, userId)
                 bundle.putString(IntentKeys.USER_TYPE, userType.name)
 

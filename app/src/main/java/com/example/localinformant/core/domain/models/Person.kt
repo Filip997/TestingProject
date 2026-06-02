@@ -7,6 +7,7 @@ data class Person(
     val lastName: String = "",
     val fullName: String = "",
     val email: String = "",
+    val status: UserStatus? = null,
     val token: String = "",
     val following: List<String> = listOf()
 ): User

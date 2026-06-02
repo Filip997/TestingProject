@@ -255,7 +255,7 @@
                 android:checked="true"
                 android:gravity="center"
                 android:paddingTop="@dimen/margin_padding_size_small"
-                android:text="Reactions"
+                android:text="@string/reactions"
                 android:textColor="@drawable/text_color_account_reactions_comments"
                 android:textSize="@dimen/text_size_large_title"
                 android:textStyle="bold"/>
@@ -274,7 +274,7 @@
                 android:checked="false"
                 android:gravity="center"
                 android:paddingTop="@dimen/margin_padding_size_small"
-                android:text="Comments"
+                android:text="@string/comments"
                 android:textColor="@drawable/text_color_account_reactions_comments"
                 android:textSize="@dimen/text_size_large_title"
                 android:textStyle="bold"/>

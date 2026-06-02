@@ -9,10 +9,12 @@ import com.example.localinformant.account.domain.usecases.GetPostsWherePersonRea
 import com.example.localinformant.account.domain.usecases.GetUserAccountDetailsUseCase
 import com.example.localinformant.account.domain.usecases.GetUsersByIdsUseCase
 import com.example.localinformant.account.domain.usecases.LoadMorePostsByUserIdUseCase
+import com.example.localinformant.core.domain.usecases.StartConversationUseCase
 import com.example.localinformant.account.domain.usecases.SetProfilePictureUseCase
 import com.example.localinformant.account.presentation.events.FollowUnfollowCompanyEvent
 import com.example.localinformant.account.presentation.events.OpenFollowersFollowingPopUpWindowEvent
 import com.example.localinformant.account.presentation.events.SetProfilePictureEvent
+import com.example.localinformant.account.presentation.events.StartConversationEvent
 import com.example.localinformant.account.presentation.models.UserAccountUiState
 import com.example.localinformant.core.domain.models.Company
 import com.example.localinformant.core.domain.models.Person
@@ -48,6 +50,7 @@ class UserAccountViewModel @Inject constructor(
     private val getUsersByIdsUseCase: GetUsersByIdsUseCase,
     private val setProfilePictureUseCase: SetProfilePictureUseCase,
     private val followUnfollowCompanyUseCase: FollowUnfollowCompanyUseCase,
+    private val startConversationUseCase: StartConversationUseCase,
     private val getUserAccountDetailsUseCase: GetUserAccountDetailsUseCase,
     private val loadMorePostsByUserIdUseCase: LoadMorePostsByUserIdUseCase,
     private val getPostsWherePersonReactedUseCase: GetPostsWherePersonReactedUseCase,
@@ -79,6 +82,9 @@ class UserAccountViewModel @Inject constructor(
 
     private val _followUnfollowCompanyEvent: MutableSharedFlow<FollowUnfollowCompanyEvent> = MutableSharedFlow()
     val followUnfollowCompanyEvent = _followUnfollowCompanyEvent.asSharedFlow()
+
+    private val _startConversationEvent: MutableSharedFlow<StartConversationEvent> = MutableSharedFlow()
+    val startConversationEvent = _startConversationEvent.asSharedFlow()
 
     private var isLoadingMore = false
     private var endReached = false
@@ -237,6 +243,26 @@ class UserAccountViewModel @Inject constructor(
                 it.copy(
                     isLoadingFollowRequest = false
                 )
+            }
+        }
+    }
+
+    fun startConversation(userId: String, userType: UserType) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when(val result = startConversationUseCase.invoke(userId, userType)) {
+                is Result.Success -> {
+                    val conversationId = result.data
+
+                    _startConversationEvent.emit(
+                        StartConversationEvent.Success(conversationId)
+                    )
+                }
+
+                is Result.Error -> {
+                    _startConversationEvent.emit(
+                        StartConversationEvent.ShowError(result.error)
+                    )
+                }
             }
         }
     }

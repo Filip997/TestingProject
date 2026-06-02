@@ -11,8 +11,6 @@ import com.example.localinformant.core.domain.usecases.SaveNotificationToDatabas
 import com.example.localinformant.core.domain.usecases.UpdateFcmTokenUseCase
 import com.example.localinformant.core.presentation.util.AppStateManager
 import com.example.localinformant.core.presentation.util.MyNotificationManager
-import com.example.localinformant.core.presentation.util.toBody
-import com.example.localinformant.core.presentation.util.toTitle
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,6 +58,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             runCatching { NotificationType.valueOf(it) }.getOrNull()
         } ?: return
         val postId = dataMessage["postId"] ?: ""
+        val messageText = dataMessage["message"] ?: ""
 
         if (notificationType != NotificationType.NEW_MESSAGE) {
             serviceScope.launch {
@@ -93,19 +92,17 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 }
 
                 myNotificationManager.createNotification(
-                    title = notificationType.toTitle(this@MyFirebaseMessagingService),
-                    message = notificationType.toBody(
-                        this@MyFirebaseMessagingService,
-                        userName
-                    ),
-                    profileImageUrl = userProfileImageUrl
+                    notificationType = notificationType,
+                    userName = userName,
+                    profileImageUrl = userProfileImageUrl,
+                    messageText = messageText
                 )
             }
-        } else {
-            when(notificationType) {
-                NotificationType.NEW_MESSAGE -> myNotificationManager.incrementMessagesCount()
-                else -> myNotificationManager.incrementNotificationsCount()
-            }
+        }
+
+        when(notificationType) {
+            NotificationType.NEW_MESSAGE -> myNotificationManager.incrementMessagesCount(fromUserId)
+            else -> myNotificationManager.incrementNotificationsCount()
         }
     }
 

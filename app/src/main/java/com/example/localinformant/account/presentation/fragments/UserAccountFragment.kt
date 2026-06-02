@@ -28,6 +28,7 @@ import androidx.core.view.isGone
 import com.example.localinformant.account.presentation.events.FollowUnfollowCompanyEvent
 import com.example.localinformant.account.presentation.events.OpenFollowersFollowingPopUpWindowEvent
 import com.example.localinformant.account.presentation.events.SetProfilePictureEvent
+import com.example.localinformant.account.presentation.events.StartConversationEvent
 import com.example.localinformant.account.presentation.util.FollowersFollowingPopUpWindow
 import com.example.localinformant.core.presentation.dialogs.CustomInfoDialog
 import com.example.localinformant.core.presentation.util.toString
@@ -259,6 +260,30 @@ class UserAccountFragment : Fragment() {
                 }
             }
         }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                userAccountViewModel.startConversationEvent.collect { event ->
+                    when (event) {
+                        is StartConversationEvent.Success -> {
+                            val conversationId = event.conversationId
+
+                            bundle.putString(IntentKeys.USER_ID, userId)
+                            bundle.putString(IntentKeys.CONVERSATION_ID, conversationId)
+
+                            screensNavigator.navigateToChatFragment(bundle)
+                        }
+
+                        is StartConversationEvent.ShowError -> {
+                            CustomInfoDialog(
+                                title = getString(R.string.error),
+                                message = event.message.toString(requireContext())
+                            ).show(parentFragmentManager, "info_dialog")
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun setupRecyclerViewPosts() {
@@ -323,6 +348,12 @@ class UserAccountFragment : Fragment() {
 
         binding.tglbtnFollowAccount.setOnClickListener {
             userAccountViewModel.followUnfollowCompany(userId, binding.tglbtnFollowAccount.isChecked)
+        }
+
+        binding.btnMessageAccount.setOnClickListener {
+            if (userId != null && userType != null) {
+                userAccountViewModel.startConversation(userId!!, userType!!)
+            }
         }
 
         binding.rgTabsAccount.setOnCheckedChangeListener { group, checkedId ->

@@ -3,6 +3,7 @@ package com.example.localinformant.core.domain.repositories
 import com.example.localinformant.core.domain.error.NetworkError
 import com.example.localinformant.core.domain.models.Comment
 import com.example.localinformant.core.domain.models.Company
+import com.example.localinformant.core.domain.models.Conversation
 import com.example.localinformant.core.domain.models.NotificationType
 import com.example.localinformant.core.domain.models.Person
 import com.example.localinformant.core.domain.models.Post
@@ -20,6 +21,8 @@ interface GlobalRepository {
     suspend fun getPersonById(id: String): Person?
     suspend fun getCompanyById(id: String): Company?
 
+    suspend fun getUserTypeByUserId(userId: String): Result<UserType, NetworkError>
+
     suspend fun observeUsersByIds(userTypeIds: Map<String, UserType>): Flow<List<User>>
 
     suspend fun submitReaction(id: String, postId: String, user: User, userType: UserType): Result<Post, NetworkError>
@@ -29,6 +32,9 @@ interface GlobalRepository {
     fun observeComments(postIds: List<String>): Flow<List<Comment>>
 
     suspend fun getUsersWhoCommentedByPostId(postId: String, postUserId: String): Result<List<String>, NetworkError>
+
+    suspend fun checkIfConversationExists(otherUserId: String, otherUserType: UserType): Result<Conversation?, NetworkError>
+    suspend fun createNewConversation(otherUserId: String, otherUserType: UserType): Result<String, NetworkError>
 
     suspend fun saveNotificationToDatabase(
         id: String,

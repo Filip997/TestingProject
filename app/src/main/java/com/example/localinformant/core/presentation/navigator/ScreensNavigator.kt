@@ -10,6 +10,7 @@ import com.example.localinformant.R
 import com.example.localinformant.auth.presentation.activities.ForgotPasswordActivity
 import com.example.localinformant.auth.presentation.activities.LoginActivity
 import com.example.localinformant.auth.presentation.activities.RegisterActivity
+import com.example.localinformant.conversations.presentation.fragments.NewConversationDialogFragment
 import com.example.localinformant.core.presentation.util.NavFunctions
 import com.example.localinformant.core.presentation.util.NavFunctions.isFragmentInBackStack
 import com.example.localinformant.setup.presentation.activities.LanguageActivity
@@ -155,5 +156,34 @@ class ScreensNavigator @Inject constructor(
                 )
             }
             ?.start()
+    }
+
+    fun navigateToConversationsFragment() {
+        if (navController?.isFragmentInBackStack(R.id.conversationsFragment) == true) {
+            navController?.popBackStack(R.id.conversationsFragment, false)
+        } else {
+            navController?.navigate(
+                R.id.conversationsFragment, null,
+                NavFunctions.popUpDefaultNavigation()
+            )
+        }
+    }
+
+    fun navigateToChatFragment(bundle: Bundle? = null) {
+        if (navController?.isFragmentInBackStack(R.id.chatFragment) == true) {
+            navController?.popBackStack(R.id.chatFragment, false)
+        } else {
+            navController?.navigate(
+                R.id.chatFragment, bundle,
+                NavFunctions.popUpDefaultNavigation()
+            )
+        }
+    }
+
+    fun openNewConversationDialogFragment() {
+        NewConversationDialogFragment().show(
+            (activity as AppCompatActivity).supportFragmentManager,
+            "NewConversationDialogFragment"
+        )
     }
 }

@@ -8,6 +8,7 @@ data class PersonDto(
     val lastName: String = "",
     val lastNameLowerCase: String = "",
     val email: String = "",
+    val status: String = "",
     val token: String = "",
     val following: List<String> = listOf()
 )

@@ -8,6 +8,7 @@ data class Company(
     val email: String = "",
     val firstName: String = "",
     val lastName: String = "",
+    val status: UserStatus? = null,
     val token: String = "",
     val followers: List<String> = listOf(),
     val following: List<String> = listOf(),

@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_homeFragment_to_userAccountFragment"
             app:destination="@id/userAccountFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_conversationsFragment"
+            app:destination="@id/conversationsFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -64,5 +67,32 @@
         <action
             android:id="@+id/action_userAccountFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_userAccountFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/conversationsFragment"
+        android:name="com.example.localinformant.conversations.presentation.fragments.ConversationsFragment"
+        android:label="fragment_conversations"
+        tools:layout="@layout/fragment_conversations" >
+        <action
+            android:id="@+id/action_conversationsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_conversationsFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.localinformant.conversations.presentation.fragments.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" >
+        <action
+            android:id="@+id/action_chatFragment_to_conversationsFragment"
+            app:destination="@id/conversationsFragment" />
+        <action
+            android:id="@+id/action_chatFragment_to_userAccountFragment"
+            app:destination="@id/userAccountFragment" />
     </fragment>
 </navigation>

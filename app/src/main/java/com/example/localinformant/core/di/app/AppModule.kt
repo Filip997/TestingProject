@@ -7,6 +7,8 @@ import com.example.localinformant.account.domain.repositories.UserAccountReposit
 import com.example.localinformant.core.data.api.FcmApi
 import com.example.localinformant.auth.data.repositories.FirebaseAuthRepositoryImpl
 import com.example.localinformant.auth.domain.repositories.FirebaseAuthRepository
+import com.example.localinformant.conversations.data.repositories.ConversationsRepositoryImpl
+import com.example.localinformant.conversations.domain.repositories.ConversationsRepository
 import com.example.localinformant.core.data.constants.FirebaseApiConstants
 import com.example.localinformant.core.presentation.constants.SharedPrefKeys
 import com.example.localinformant.core.data.repositories.PreferencesRepositoryImpl
@@ -156,4 +158,10 @@ abstract class AppModule {
     abstract fun bindUserAccountRepository(
         impl: UserAccountRepositoryImpl
     ): UserAccountRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindConversationsRepository(
+        impl: ConversationsRepositoryImpl
+    ): ConversationsRepository
 }

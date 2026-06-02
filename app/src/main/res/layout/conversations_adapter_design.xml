@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_conversations_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_padding_size_xlarge">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_conversations_user_profile_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/default_profile_pic"
+            android:contentDescription="User profile image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="@dimen/margin_padding_size_xlarge"
+            app:layout_constraintStart_toEndOf="@+id/civ_conversations_user_profile_image"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_conversations_last_message_time">
+
+            <TextView
+                android:id="@+id/tv_conversations_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_large_title"
+                android:textStyle="bold"
+                android:maxLines="1"
+                tools:text="Lotarija" />
+
+            <TextView
+                android:id="@+id/tv_conversations_last_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_padding_size_small"
+                android:textSize="@dimen/text_size_medium"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="Very very long last message, Very very long last message" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_conversations_last_message_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_small"
+            android:maxLines="1"
+            tools:text="5m"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <View
+            android:id="@+id/unread_message_circle_home"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="@dimen/margin_padding_size_small"
+            android:background="@drawable/bg_unread_message"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/tv_conversations_last_message_time"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/md_theme_outlineVariant"/>
+
+</LinearLayout>

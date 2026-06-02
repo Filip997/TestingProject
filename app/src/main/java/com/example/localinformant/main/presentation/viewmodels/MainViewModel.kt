@@ -3,10 +3,12 @@ package com.example.localinformant.main.presentation.viewmodels
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.localinformant.core.domain.models.UserStatus
 import com.example.localinformant.core.domain.models.UserType
 import com.example.localinformant.core.domain.result.Result
 import com.example.localinformant.core.domain.usecases.GetUserTypeUseCase
 import com.example.localinformant.main.domain.usecases.CreateAPostUseCase
+import com.example.localinformant.main.domain.usecases.UpdateCurrentUserStatusUseCase
 import com.example.localinformant.main.presentation.events.CreatePostEvent
 import com.example.localinformant.main.presentation.models.MainUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    private val updateCurrentUserStatusUseCase: UpdateCurrentUserStatusUseCase,
     private val getUserTypeUseCase: GetUserTypeUseCase,
     private val createAPostUseCase: CreateAPostUseCase
 ) : ViewModel() {
@@ -40,6 +43,12 @@ class MainViewModel @Inject constructor(
 
     private val _createPostEvent: MutableSharedFlow<CreatePostEvent> = MutableSharedFlow()
     val createPostEvent = _createPostEvent.asSharedFlow()
+
+    fun updateCurrentUserStatus(status: UserStatus) {
+        viewModelScope.launch(Dispatchers.IO) {
+            updateCurrentUserStatusUseCase.invoke(status)
+        }
+    }
 
     fun loadUserType() {
         viewModelScope.launch(Dispatchers.IO) {

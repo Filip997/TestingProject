@@ -21,6 +21,7 @@ import com.example.localinformant.home.presentation.events.SubmitCommentEvent
 import com.example.localinformant.home.presentation.util.ReactionsPopUpWindow
 import com.example.localinformant.home.presentation.viewmodels.HomeViewModel
 import com.example.localinformant.core.presentation.adapters.CompanyPostsAdapter
+import com.example.localinformant.core.presentation.util.MyNotificationManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,6 +35,7 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by viewModels()
 
     @Inject lateinit var screensNavigator: ScreensNavigator
+    @Inject lateinit var myNotificationManager: MyNotificationManager
     @Inject lateinit var reactionsPopUpWindow: ReactionsPopUpWindow
 
     private lateinit var bundle: Bundle
@@ -67,6 +69,7 @@ class HomeFragment : Fragment() {
         setupViewModels()
         setupRecyclerViewPosts()
         setOnSwipeRefresh()
+        setupClickListeners()
 
         return binding.root
     }
@@ -109,6 +112,20 @@ class HomeFragment : Fragment() {
                                 message = event.message.toString(requireContext())
                             ).show(parentFragmentManager, "info_dialog")
                         }
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                myNotificationManager.unreadMessagesCount.collect {
+                    if (it.isNotEmpty()) {
+                        binding.tvMessageNotificationsCountHome.visibility = View.VISIBLE
+                        binding.tvMessageNotificationsCountHome.text = it.size.toString()
+                    } else {
+                        binding.tvMessageNotificationsCountHome.text = "0"
+                        binding.tvMessageNotificationsCountHome.visibility = View.GONE
                     }
                 }
             }
@@ -194,6 +211,12 @@ class HomeFragment : Fragment() {
             } else {
                 binding.swipeRefreshLayoutHome.isRefreshing = false
             }
+        }
+    }
+
+    private fun setupClickListeners() {
+        binding.ivUserMessagesHome.setOnClickListener {
+            screensNavigator.navigateToConversationsFragment()
         }
     }
 }
